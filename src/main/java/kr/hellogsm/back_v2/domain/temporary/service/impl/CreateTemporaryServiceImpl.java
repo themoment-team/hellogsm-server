@@ -23,8 +23,11 @@ public class CreateTemporaryServiceImpl implements CreateTemporaryService {
     }
 
     private void checkExistTemporary(CreateTemporaryReqDto createTemporaryReqDto) {
-        if (temporaryRepository
-                .existsByProviderAndProviderId(createTemporaryReqDto.provider(), createTemporaryReqDto.providerId()))
+        Boolean isExist = temporaryRepository.existsByProviderAndProviderId(
+                createTemporaryReqDto.provider(),
+                createTemporaryReqDto.providerId()
+        );
+        if (isExist)
             throw new ExpectedException("이미 존재하는 Temporary 입니다.", HttpStatus.BAD_REQUEST);
     }
 }
