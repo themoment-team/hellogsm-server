@@ -1,16 +1,13 @@
 package kr.hellogsm.back_v2.domain.temporary.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "temporary")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@Getter
 public class Temporary {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "temporary_id")
@@ -20,5 +17,5 @@ public class Temporary {
     String provider;
 
     @Column(name = "provider_id;")
-    Long providerId;
+    String providerId;
 }
