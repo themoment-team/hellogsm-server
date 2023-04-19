@@ -18,8 +18,13 @@ public class CreateTemporaryServiceImpl implements CreateTemporaryService {
 
     @Override
     public void execute(CreateTemporaryReqDto createTemporaryReqDto) {
-        if (temporaryRepository.existsByProviderAndProviderId(createTemporaryReqDto.provider(), createTemporaryReqDto.providerId()))
-            throw new ExpectedException("이미 존재하는 Temporary 입니다.", HttpStatus.BAD_REQUEST);
+        checkExistTemporary(createTemporaryReqDto);
         temporaryRepository.save(createTemporaryReqDto.toEntity());
+    }
+
+    private void checkExistTemporary(CreateTemporaryReqDto createTemporaryReqDto) {
+        if (temporaryRepository
+                .existsByProviderAndProviderId(createTemporaryReqDto.provider(), createTemporaryReqDto.providerId()))
+            throw new ExpectedException("이미 존재하는 Temporary 입니다.", HttpStatus.BAD_REQUEST);
     }
 }
