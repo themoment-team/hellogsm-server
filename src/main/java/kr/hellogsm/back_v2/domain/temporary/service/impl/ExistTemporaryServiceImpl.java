@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(rollbackFor = {Exception.class})
 public class ExistTemporaryServiceImpl implements ExistTemporaryService {
 
     private final TemporaryRepository temporaryRepository;
