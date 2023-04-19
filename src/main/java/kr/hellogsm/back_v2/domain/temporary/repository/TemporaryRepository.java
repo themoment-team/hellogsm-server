@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TemporaryRepository extends JpaRepository<Temporary, Long> {
+    Boolean existsByProviderAndProviderId(String provider, String providerId);
 }
