@@ -1,31 +1,36 @@
 package kr.hellogsm.back_v2.domain.user.entity;
 
 import jakarta.persistence.*;
-import kr.hellogsm.back_v2.domain.temporary.entity.Temporary;
-import lombok.*;
+import kr.hellogsm.back_v2.domain.user.enums.Role;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "`USER`")
+@Table(name = "`user`")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
-@ToString
+@Getter
 public class User {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    Long id;
+    private Long id;
 
-    @Column(name = "name")
-    String name;
+    @Column(name = "provider")
+    private String provider;
 
-    @Column(name = "phone_number")
-    String phoneNumber;
+    @Column(name = "provider_id")
+    private String providerId;
 
-    @OneToOne(optional = false) // 설정 추가
-    Temporary temporary;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
-    // Repo에서 FindByTemporary 해서 없으면 본인인증 X
-    // 세션에 본인인증 가능 세션 가지고 있으면 Repo에서 있는지 확인하고, 반환 - 동시접속 가능 긱기를 하나로 고정하면 안 생길 문제긴 한데, 혹시 모르니까?
-    // User 생성 시, Temporary 찾는 건 SecurityContext에서 Provider, Provider_id 읽고 DB에서 찾기
+    @PrePersist
+    private void prePersist() {
+        this.role = this.role == null ? Role.UNAUTHENTICATED : this.role;
+    }
+
 }
