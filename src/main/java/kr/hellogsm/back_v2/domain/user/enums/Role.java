@@ -1,7 +1,7 @@
 package kr.hellogsm.back_v2.domain.user.enums;
 
 public enum Role {
-    UNAUTHENTICATED,
-    USER,
-    ADMIN
+    ROLE_UNAUTHENTICATED,
+    ROLE_USER,
+    ROLE_ADMIN
 }
