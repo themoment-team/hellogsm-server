@@ -3,7 +3,7 @@ package kr.hellogsm.back_v2.domain.user.service.impl;
 import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
 import kr.hellogsm.back_v2.domain.user.entity.User;
 import kr.hellogsm.back_v2.domain.user.repository.UserRepository;
-import kr.hellogsm.back_v2.domain.user.service.FindUserQuery;
+import kr.hellogsm.back_v2.domain.user.service.UserByProviderQuery;
 import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class FindUserQueryImpl implements FindUserQuery {
+public class UserByProviderQueryImpl implements UserByProviderQuery {
     private final UserRepository userRepository;
 
     @Override
