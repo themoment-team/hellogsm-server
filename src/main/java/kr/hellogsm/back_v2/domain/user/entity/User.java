@@ -30,7 +30,7 @@ public class User {
 
     @PrePersist
     private void prePersist() {
-        this.role = this.role == null ? Role.UNAUTHENTICATED : this.role;
+        this.role = this.role == null ? Role.ROLE_UNAUTHENTICATED : this.role;
     }
 
 }
