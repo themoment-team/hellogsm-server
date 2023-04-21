@@ -17,7 +17,7 @@ public class UserByProviderQueryImpl implements UserByProviderQuery {
     @Override
     public UserResDto execute(String provider, String providerId) {
         User user = userRepository.findByProviderAndProviderId(provider, providerId)
-                .orElseThrow(() -> new ExpectedException("이미 존재하는 Identity 입니다", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST));
         return UserResDto.from(user);
     }
 }
