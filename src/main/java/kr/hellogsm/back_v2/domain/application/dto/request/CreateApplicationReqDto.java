@@ -1,6 +1,7 @@
 package kr.hellogsm.back_v2.domain.application.dto.request;
 
-import jakarta.validation.Valid;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import kr.hellogsm.back_v2.domain.application.entity.Application;
@@ -26,10 +27,9 @@ public record CreateApplicationReqDto(
         @NotBlank
         String applicantName,
 
-        @NotBlank
+        @Enumerated(EnumType.STRING)
         Gender applicantGender,
 
-        @NotBlank
         LocalDate applicantBirth,
 
         @NotBlank
@@ -38,10 +38,10 @@ public record CreateApplicationReqDto(
         @NotBlank
         String detailAddress,
 
-        @NotBlank
+        @Enumerated(EnumType.STRING)
         GraduationStatus graduation,
 
-        @Pattern(regexp = "^ +$")
+        @Pattern(regexp = "^(?!\\s*$).+")
         String telephone,
 
         @NotBlank
@@ -56,13 +56,12 @@ public record CreateApplicationReqDto(
         @NotBlank
         String guardianPhoneNumber,
 
-        @Pattern(regexp = "^ +$")
+        @Pattern(regexp = "^(?!\\s*$).+")
         String teacherName,
 
-        @Pattern(regexp = "^ +$")
+        @Pattern(regexp = "^(?!\\s*$).+")
         String teacherPhoneNumber,
 
-        @Valid
         DesiredMajor desiredMajorResponseDto,
 
         @NotBlank
