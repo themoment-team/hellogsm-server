@@ -2,7 +2,7 @@ package kr.hellogsm.back_v2.domain.identity.controller;
 
 import jakarta.validation.Valid;
 import kr.hellogsm.back_v2.domain.identity.dto.request.CreateIdentityReqDto;
-import kr.hellogsm.back_v2.domain.identity.dto.response.IdentityResDto;
+import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
 import kr.hellogsm.back_v2.domain.identity.service.CreateIdentityService;
 import kr.hellogsm.back_v2.domain.identity.service.IdentityQuery;
 import kr.hellogsm.back_v2.global.security.oauth.UserInfo;
@@ -20,41 +20,40 @@ public class IdentityController {
     private final CreateIdentityService createIdentityService;
     private final IdentityQuery identityQuery;
 
-
     /*
-    Identity 생성 기능은 나중에 핸드폰 본인인증 도입했을 때, 삭제 될 예정
+        Identity 생성 기능은 나중에 핸드폰 본인인증 도입했을 때, 삭제 될 예정
     */
     @PostMapping("/identity/{userId}")
-    public ResponseEntity<IdentityResDto> createByUserId(
+    public ResponseEntity<IdentityDto> createByUserId(
             @RequestBody @Valid CreateIdentityReqDto identityReqDto,
             @PathVariable Long userId
     ) {
-        IdentityResDto identityResDto = createIdentityService.execute(identityReqDto, userId);
+        IdentityDto identityResDto = createIdentityService.execute(identityReqDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
 
     @PostMapping("/identity")
-    public ResponseEntity<IdentityResDto> create(
+    public ResponseEntity<IdentityDto> create(
             @RequestBody @Valid CreateIdentityReqDto userDto,
             @AuthenticationPrincipal UserInfo userInfo
     ) {
-        IdentityResDto identityResDto = createIdentityService.execute(userDto, userInfo.getUserId());
+        IdentityDto identityResDto = createIdentityService.execute(userDto, userInfo.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
 
     @GetMapping("/identity")
-    public ResponseEntity<IdentityResDto> find(
+    public ResponseEntity<IdentityDto> find(
             @AuthenticationPrincipal UserInfo userInfo
     ) {
-        IdentityResDto identityResDto = identityQuery.execute(userInfo.getUserId());
+        IdentityDto identityResDto = identityQuery.execute(userInfo.getUserId());
         return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
     }
 
     @GetMapping("/identity/{identityId}")
-    public ResponseEntity<IdentityResDto> findByIdentityId(
+    public ResponseEntity<IdentityDto> findByIdentityId(
             @PathVariable Long identityId
     ) {
-        IdentityResDto identityResDto = identityQuery.execute(identityId);
+        IdentityDto identityResDto = identityQuery.execute(identityId);
         return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
 }

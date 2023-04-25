@@ -1,6 +1,6 @@
 package kr.hellogsm.back_v2.domain.identity.service;
 
-import kr.hellogsm.back_v2.domain.identity.dto.response.IdentityResDto;
+import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
 
 /**
  * 주어진 userId에 해당하는 Identity를 조회하는 인터페이스입니다.
@@ -9,5 +9,5 @@ import kr.hellogsm.back_v2.domain.identity.dto.response.IdentityResDto;
  *  * @since 1.0.0
  */
 public interface IdentityQuery {
-    IdentityResDto execute(Long userId);
+    IdentityDto execute(Long userId);
 }

@@ -1,15 +1,15 @@
-package kr.hellogsm.back_v2.domain.identity.dto.response;
+package kr.hellogsm.back_v2.domain.identity.dto.domain;
 
 import kr.hellogsm.back_v2.domain.identity.entity.Identity;
 
-public record IdentityResDto(
+public record IdentityDto(
         Long id,
         String name,
         String phoneNumber
 
 ) {
-    public static IdentityResDto from(Identity identity) {
-        return new IdentityResDto(
+    public static IdentityDto from(Identity identity) {
+        return new IdentityDto(
                 identity.getId(),
                 identity.getName(),
                 identity.getPhoneNumber()
