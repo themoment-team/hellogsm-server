@@ -33,7 +33,8 @@ jobs:
       
       - name: Create application.yml
         run: |
-          mkdir ./hello-gsm-back-v2/src/main/resources/
+          cd ./hello-gsm-back-v2/src/main/
+          mkdir resources
           touch ./hello-gsm-back-v2/src/main/resources/application.yml
           echo ${{ secrets.APPLICATION }} >> ./hello-gsm-back-v2/src/main/resources/application.yml
         shell: bash
