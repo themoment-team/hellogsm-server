@@ -1,7 +1,7 @@
 package kr.hellogsm.back_v2.domain.identity.service.impl;
 
 import kr.hellogsm.back_v2.domain.identity.dto.request.CreateIdentityReqDto;
-import kr.hellogsm.back_v2.domain.identity.dto.response.IdentityResDto;
+import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
 import kr.hellogsm.back_v2.domain.identity.entity.Identity;
 import kr.hellogsm.back_v2.domain.identity.repository.IdentityRepository;
 import kr.hellogsm.back_v2.domain.identity.service.CreateIdentityService;
@@ -36,12 +36,12 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
      * @throws ExpectedException 존재하지 않는 User나 이미 존재하는 Identity일 경우 발생
      */
     @Override
-    public IdentityResDto execute(CreateIdentityReqDto identityReqDto, Long userId) {
+    public IdentityDto execute(CreateIdentityReqDto identityReqDto, Long userId) {
         if (!userRepository.existsById(userId))
             throw new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST);
         if (identityRepository.existsByUserId(userId))
             throw new ExpectedException("이미 존재하는 Identity 입니다", HttpStatus.BAD_REQUEST);
         Identity identity = identityRepository.save(identityReqDto.toEntity(userId));
-        return IdentityResDto.from(identity);
+        return IdentityDto.from(identity);
     }
 }

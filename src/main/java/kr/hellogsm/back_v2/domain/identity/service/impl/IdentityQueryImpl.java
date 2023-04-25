@@ -1,6 +1,6 @@
 package kr.hellogsm.back_v2.domain.identity.service.impl;
 
-import kr.hellogsm.back_v2.domain.identity.dto.response.IdentityResDto;
+import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
 import kr.hellogsm.back_v2.domain.identity.entity.Identity;
 import kr.hellogsm.back_v2.domain.identity.repository.IdentityRepository;
 import kr.hellogsm.back_v2.domain.identity.service.IdentityQuery;
@@ -29,9 +29,9 @@ public class IdentityQueryImpl implements IdentityQuery {
      * @throws ExpectedException 존재하지 않는 Identity일 경우 발생
      */
     @Override
-    public IdentityResDto execute(Long userId) {
+    public IdentityDto execute(Long userId) {
         Identity identity = identityRepository.findByUserId(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 Identity 입니다", HttpStatus.BAD_REQUEST));
-        return IdentityResDto.from(identity);
+        return IdentityDto.from(identity);
     }
 }
