@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'adopt'
+          distribution: 'temurin'
           cache: gradle
       
       - name: Set up JDK 17 job has success
@@ -33,10 +33,9 @@ jobs:
       
       - name: Create application.yml
         run: |
-          pwd
           mkdir ./src/main/resources
           touch ./src/main/resources/application.yml
-          echo ${{ secrets.APPLICATION }} >> ./src/main/resources/application.yml
+          echo ${{ secrets.APPLICATION }} > /src/main/resources/application.yml
         shell: bash
         
       - name: Run build with Gradle wrapper
