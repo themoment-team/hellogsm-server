@@ -33,7 +33,7 @@ jobs:
       
       - name: Create application.yml
         run: |
-          mkdir ./sms-infrastructure/src/main/resources
+          mkdir ./hello-gsm-back-v2/src/main/resources
           echo ${{ secrets.APPLICATION_OAUTH }} > ./hello-gsm-back-v2/src/main/resources/application-oauth.yml
           echo ${{ secrets.APPLICATION_SCHEDULE }} > ./hello-gsm-back-v2/src/main/resources/application-schedule.yml
           echo ${{ secrets.APPLICATION }} > ./hello-gsm-back-v2/src/main/resources/application.yml
@@ -41,19 +41,3 @@ jobs:
         
       - name: Build with Gradle
         run : ./gradlew clean build --exclude-task test
-      
-      - name: hellogsm-Backend CI Discord Notification
-        uses: sarisia/actions-status-discord@v1
-        if: ${{ success() }}
-        with:
-          title: ✅ Hello, GSM Backend CI success ✅
-          webhook: ${{ secrets.HELLO_WEBHOOK }}
-          color: 00FF00
-
-      - name: hellogsm-Backend CI Discord Notification
-        uses: sarisia/actions-status-discord@v1
-        if: ${{ failure() }}
-        with:
-          title: ❗️ Hello, GSM Backend CI failed ❗️
-          webhook: ${{ secrets.HELLO_WEBHOOK }}
-          color: FF0000
