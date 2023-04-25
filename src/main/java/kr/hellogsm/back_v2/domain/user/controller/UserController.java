@@ -1,6 +1,6 @@
 package kr.hellogsm.back_v2.domain.user.controller;
 
-import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
 import kr.hellogsm.back_v2.domain.user.service.UserByIdQuery;
 import kr.hellogsm.back_v2.global.security.oauth.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +20,18 @@ public class UserController {
     private final UserByIdQuery userByIdQuery;
 
     @GetMapping("/user")
-    public ResponseEntity<UserResDto> find(
+    public ResponseEntity<UserDto> find(
             @AuthenticationPrincipal UserInfo userInfo
     ) {
-        UserResDto userResDto = userByIdQuery.execute(userInfo.getUserId());
-        return ResponseEntity.status(HttpStatus.OK).body(userResDto);
+        UserDto userDto = userByIdQuery.execute(userInfo.getUserId());
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<UserResDto> findByUserId(
+    public ResponseEntity<UserDto> findByUserId(
             @PathVariable Long userId
     ) {
-        UserResDto userResDto = userByIdQuery.execute(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(userResDto);
+        UserDto userDto = userByIdQuery.execute(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
-
 }

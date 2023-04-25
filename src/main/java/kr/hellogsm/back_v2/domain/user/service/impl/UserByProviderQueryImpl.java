@@ -1,6 +1,6 @@
 package kr.hellogsm.back_v2.domain.user.service.impl;
 
-import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
 import kr.hellogsm.back_v2.domain.user.entity.User;
 import kr.hellogsm.back_v2.domain.user.repository.UserRepository;
 import kr.hellogsm.back_v2.domain.user.service.UserByProviderQuery;
@@ -15,9 +15,9 @@ public class UserByProviderQueryImpl implements UserByProviderQuery {
     private final UserRepository userRepository;
 
     @Override
-    public UserResDto execute(String provider, String providerId) {
+    public UserDto execute(String provider, String providerId) {
         User user = userRepository.findByProviderAndProviderId(provider, providerId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST));
-        return UserResDto.from(user);
+        return UserDto.from(user);
     }
 }

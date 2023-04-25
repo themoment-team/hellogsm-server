@@ -1,6 +1,6 @@
 package kr.hellogsm.back_v2.global.security.oauth;
 
-import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
 import kr.hellogsm.back_v2.domain.user.dto.request.CreateUserReqDto;
 import kr.hellogsm.back_v2.domain.user.entity.User;
 import kr.hellogsm.back_v2.domain.user.repository.UserRepository;
@@ -33,7 +33,7 @@ public class CustomOauth2UserService implements OAuth2UserService {
 
         User user = getUser(provider, providerId);
 
-        return new UserInfo(UserResDto.from(user), LocalDateTime.now());
+        return new UserInfo(UserDto.from(user), LocalDateTime.now());
     }
 
     private User getUser(String provider, String providerId) {

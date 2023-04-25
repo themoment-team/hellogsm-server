@@ -1,6 +1,6 @@
 package kr.hellogsm.back_v2.global.security.oauth;
 
-import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
 import kr.hellogsm.back_v2.domain.user.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,25 +13,25 @@ import java.util.List;
 import java.util.Map;
 
 public class UserInfo implements OAuth2User, Serializable {
-    private final UserResDto userResDto;
+    private final UserDto userDto;
     private final LocalDateTime lastLoginTime;
 
-    public UserInfo(UserResDto userResDto, LocalDateTime lastLoginTime) {
-        this.userResDto = userResDto;
+    public UserInfo(UserDto userDto, LocalDateTime lastLoginTime) {
+        this.userDto = userDto;
         this.lastLoginTime = lastLoginTime;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userResDto.role().name()));
+        return List.of(new SimpleGrantedAuthority(userDto.role().name()));
     }
 
     public Role getUserRole() {
-        return userResDto.role();
+        return userDto.role();
     }
 
     public Long getUserId() {
-        return userResDto.id();
+        return userDto.id();
     }
 
     public LocalDateTime getLastLoginTime() {
@@ -40,7 +40,7 @@ public class UserInfo implements OAuth2User, Serializable {
 
     @Override
     public String getName() {
-        return userResDto.provider() + "_" + userResDto.providerId();
+        return userDto.provider() + "_" + userDto.providerId();
     }
 
     /**
