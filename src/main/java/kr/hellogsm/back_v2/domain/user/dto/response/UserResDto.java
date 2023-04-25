@@ -14,8 +14,7 @@ public record UserResDto(
 
         @Enumerated(EnumType.STRING)
         Role role
-) implements Serializable
-{
+) implements Serializable {
     public static UserResDto from(User user) {
         return new UserResDto(
                 user.getId(),
