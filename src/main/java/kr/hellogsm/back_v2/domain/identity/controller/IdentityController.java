@@ -56,3 +56,4 @@ public class IdentityController {
         IdentityDto identityResDto = identityQuery.execute(identityId);
         return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
+}
