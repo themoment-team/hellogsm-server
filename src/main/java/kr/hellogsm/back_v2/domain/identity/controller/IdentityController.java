@@ -5,9 +5,11 @@ import kr.hellogsm.back_v2.domain.identity.dto.request.CreateIdentityReqDto;
 import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
 import kr.hellogsm.back_v2.domain.identity.service.CreateIdentityService;
 import kr.hellogsm.back_v2.domain.identity.service.IdentityQuery;
+import kr.hellogsm.back_v2.global.security.oauth.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,20 +20,39 @@ public class IdentityController {
     private final CreateIdentityService createIdentityService;
     private final IdentityQuery identityQuery;
 
-
     /*
-    Identity 생성 기능은 나중에 핸드폰 본인인증 도입했을 때, 삭제 될 예정
+        Identity 생성 기능은 나중에 핸드폰 본인인증 도입했을 때, 삭제 될 예정
     */
     @PostMapping("/identity/{userId}")
-    public ResponseEntity<IdentityDto> createByTempId(@RequestBody @Valid CreateIdentityReqDto identityReqDto, @PathVariable Long userId) {
-        IdentityDto identityDto = createIdentityService.execute(identityReqDto, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(identityDto);
+    public ResponseEntity<IdentityDto> createByUserId(
+            @RequestBody @Valid CreateIdentityReqDto identityReqDto,
+            @PathVariable Long userId
+    ) {
+        IdentityDto identityResDto = createIdentityService.execute(identityReqDto, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
+    }
+
+    @PostMapping("/identity")
+    public ResponseEntity<IdentityDto> create(
+            @RequestBody @Valid CreateIdentityReqDto userDto,
+            @AuthenticationPrincipal UserInfo userInfo
+    ) {
+        IdentityDto identityResDto = createIdentityService.execute(userDto, userInfo.getUserId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
+    }
+
+    @GetMapping("/identity")
+    public ResponseEntity<IdentityDto> find(
+            @AuthenticationPrincipal UserInfo userInfo
+    ) {
+        IdentityDto identityResDto = identityQuery.execute(userInfo.getUserId());
+        return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
     }
 
     @GetMapping("/identity/{identityId}")
-    public ResponseEntity<IdentityDto> findByUserId(@PathVariable Long identityId) {
-        IdentityDto identityDto = identityQuery.execute(identityId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(identityDto);
+    public ResponseEntity<IdentityDto> findByIdentityId(
+            @PathVariable Long identityId
+    ) {
+        IdentityDto identityResDto = identityQuery.execute(identityId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
-
-}

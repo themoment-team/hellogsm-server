@@ -5,6 +5,8 @@ import jakarta.persistence.Enumerated;
 import kr.hellogsm.back_v2.domain.user.entity.User;
 import kr.hellogsm.back_v2.domain.user.enums.Role;
 
+import java.io.Serializable;
+
 public record UserDto(
         Long id,
         String provider,
@@ -12,9 +14,9 @@ public record UserDto(
 
         @Enumerated(EnumType.STRING)
         Role role
-) {
+) implements Serializable {
     public static UserDto from(User user) {
-        return new UserDto(
+        return new UserDto (
                 user.getId(),
                 user.getProvider(),
                 user.getProvider(),
