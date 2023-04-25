@@ -1,7 +1,7 @@
 package kr.hellogsm.back_v2.domain.user.service.impl;
 
 import kr.hellogsm.back_v2.domain.user.dto.request.CreateUserReqDto;
-import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
 import kr.hellogsm.back_v2.domain.user.entity.User;
 import kr.hellogsm.back_v2.domain.user.repository.UserRepository;
 import kr.hellogsm.back_v2.domain.user.service.CreateUserService;
@@ -19,10 +19,10 @@ public class CreateUserServiceImpl implements CreateUserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserResDto execute(CreateUserReqDto createUserReqDto) {
+    public UserDto execute(CreateUserReqDto createUserReqDto) {
         checkExistUser(createUserReqDto);
         User savedTemp = userRepository.save(createUserReqDto.toEntity());
-        return UserResDto.from(savedTemp);
+        return UserDto.from(savedTemp);
     }
 
     private void checkExistUser(CreateUserReqDto createUserReqDto) {

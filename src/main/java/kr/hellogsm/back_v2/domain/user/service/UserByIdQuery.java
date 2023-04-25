@@ -1,7 +1,7 @@
 package kr.hellogsm.back_v2.domain.user.service;
 
-import kr.hellogsm.back_v2.domain.user.dto.response.UserResDto;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
 
 public interface UserByIdQuery {
-    UserResDto execute(Long userId);
+    UserDto execute(Long userId);
 }
