@@ -1,4 +1,4 @@
-name: Spring Boot & Gradle CI/CD 
+name: Hello,GSM Back-V2 CI
 
 on:
   push:
