@@ -1,0 +1,62 @@
+name: Spring Boot & Gradle CI/CD 
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "*" ]
+
+  
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      
+      - name: Set up JDK 17 job has success
+        if: ${{ success() }}
+        run: echo "jdk 17 job succeeded"
+          
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      
+      - name : Setup Gradls's permission
+        run : chmod +x gradlew 
+      
+      - name: Create application.yml
+        run: |
+          mkdir ./sms-infrastructure/src/main/resources
+          touch ./sms-infrastructure/src/main/resources/application.yml
+          echo ${{ secrets.APPLICATION_OAUTH }}
+          >> ./hello-gsm-back-v2/src/main/resources/application-oauth.yml && echo ${{ secrets.APPLICATION_SCHEDULE }}
+          >> ./hello-gsm-back-v2/src/main/resources/application-schedule.yml && echo ${{ secrets.APPLICATION }}
+          >> ./hello-gsm-back-v2/src/main/resources/application.yml
+
+        shell: bash
+        
+      - name: Build with Gradle
+        run : ./gradlew clean build --exclude-task test
+      
+      - name: hellogsm-Backend CI Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ success() }}
+        with:
+          title: ✅ Hello, GSM Backend CI success ✅
+          webhook: ${{ secrets.HELLO_WEBHOOK }}
+          color: 00FF00
+
+      - name: hellogsm-Backend CI Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ failure() }}
+        with:
+          title: ❗️ Hello, GSM Backend CI failed ❗️
+          webhook: ${{ secrets.HELLO_WEBHOOK }}
+          color: FF0000
