@@ -33,11 +33,10 @@ jobs:
       
       - name: Create application.yml
         run: |
-          echo ${{ secrets.APPLICATION_OAUTH }}
-          >> ./hello-gsm-back-v2/src/main/resources/application-oauth.yml && echo ${{ secrets.APPLICATION_SCHEDULE }}
-          >> ./hello-gsm-back-v2/src/main/resources/application-schedule.yml && echo ${{ secrets.APPLICATION }}
-          >> ./hello-gsm-back-v2/src/main/resources/application.yml
-
+          mkdir ./sms-infrastructure/src/main/resources
+          echo ${{ secrets.APPLICATION_OAUTH }} > ./hello-gsm-back-v2/src/main/resources/application-oauth.yml
+          echo ${{ secrets.APPLICATION_SCHEDULE }} > ./hello-gsm-back-v2/src/main/resources/application-schedule.yml
+          echo ${{ secrets.APPLICATION }} > ./hello-gsm-back-v2/src/main/resources/application.yml
         shell: bash
         
       - name: Build with Gradle
