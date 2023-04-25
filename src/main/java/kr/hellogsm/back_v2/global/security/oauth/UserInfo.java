@@ -23,15 +23,15 @@ public class UserInfo implements OAuth2User, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole().name()));
+        return List.of(new SimpleGrantedAuthority(userResDto.role().name()));
     }
 
     public Role getUserRole() {
-        return user.getRole();
+        return userResDto.role();
     }
 
     public Long getUserId() {
-        return user.getId();
+        return userResDto.id();
     }
 
     public LocalDateTime getLastLoginTime() {
@@ -40,7 +40,7 @@ public class UserInfo implements OAuth2User, Serializable {
 
     @Override
     public String getName() {
-        return user.getProvider() + "_" + user.getProviderId();
+        return userResDto.provider() + "_" + userResDto.providerId();
     }
 
     /**
