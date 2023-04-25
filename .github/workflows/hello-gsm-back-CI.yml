@@ -2,7 +2,7 @@ name: Spring Boot & Gradle CI/CD
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "develop" ]
   pull_request:
     branches: [ "*" ]
 
@@ -38,5 +38,5 @@ jobs:
           echo ${{ secrets.APPLICATION }} > ./hello-gsm-back-v2/src/main/resources/application.yml
         shell: bash
         
-      - name: Build with Gradle
-        run : ./gradlew clean build --exclude-task test
+      - name: Run build with Gradle wrapper
+        run: ./gradlew clean build
