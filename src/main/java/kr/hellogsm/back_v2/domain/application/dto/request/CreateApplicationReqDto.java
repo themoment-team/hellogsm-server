@@ -3,6 +3,7 @@ package kr.hellogsm.back_v2.domain.application.dto.request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import kr.hellogsm.back_v2.domain.application.entity.Application;
@@ -63,12 +64,19 @@ public record CreateApplicationReqDto(
         @Pattern(regexp = "^(?!\\s*$).+")
         String teacherPhoneNumber,
 
-        DesiredMajor desiredMajorResponseDto,
+        @Valid
+        DesiredMajorReqDto desiredMajorReqDto,
 
         @NotBlank
         String MiddleSchoolGrade
 ) {
     public Application toEntity() throws JsonProcessingException {
+        DesiredMajor desiredMajor = DesiredMajor.builder()
+                .firstDesiredMajor(desiredMajorReqDto.firstDesiredMajor())
+                .secondDesiredMajor(desiredMajorReqDto.secondDesiredMajor())
+                .thirdDesiredMajor(desiredMajorReqDto.thirdDesiredMajor())
+                .build();
+
         AdmissionInfo admissionInfo = AdmissionInfo.builder()
                 .applicantImageUri(this.applicantImageUri)
                 .applicantName(this.applicantName)
@@ -84,7 +92,7 @@ public record CreateApplicationReqDto(
                 .guardianPhoneNumber(this.guardianPhoneNumber)
                 .teacherName(this.teacherName)
                 .teacherPhoneNumber(this.teacherPhoneNumber)
-                .desiredMajor(this.desiredMajorResponseDto)
+                .desiredMajor(desiredMajor)
                 .build();
 
         AdmissionStatus admissionStatus = AdmissionStatus.init();
