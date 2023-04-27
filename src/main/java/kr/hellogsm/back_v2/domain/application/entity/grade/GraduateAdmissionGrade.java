@@ -6,8 +6,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import kr.hellogsm.back_v2.domain.application.service.data.ScoreData;
+import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -71,7 +73,12 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
 
     public GraduateAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        ScoreData result = objectMapper.readValue(middleSchoolGrade.getMiddleSchoolGradeText(), ScoreData.class);
+        ScoreData result = null;
+        try {
+            result = objectMapper.readValue(middleSchoolGrade.getMiddleSchoolGradeText(), ScoreData.class);
+        } catch (JsonProcessingException e) {
+            throw new ExpectedException("MiddleSchoolGrade값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
+        }
 
         grade1Semester1Score = calc(result.score1_1(), result.system().equals("자유학년제") ? 54 : 18);
         if (result.system().equals("자유학년제"))
@@ -106,6 +113,10 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
 
         // 비 교과 성적
         extracurricularSubtotalScore = attendanceScore.add(volunteerScore).setScale(4, RoundingMode.HALF_UP);
+
+        totalScore = curricularSubtotalScore.add(extracurricularSubtotalScore).setScale(3, RoundingMode.HALF_UP);
+
+        percentileRank = calcPercentileRank(totalScore);
     }
 
     private BigDecimal calc(List<BigDecimal> scoreArray, int maxPoint) {
@@ -162,6 +173,11 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
                 // 기본 접수
             else return current.add(BigDecimal.valueOf(2));
         });
+    }
+
+    private BigDecimal calcPercentileRank(BigDecimal scoreTotal) {
+        return BigDecimal.ONE.subtract(scoreTotal.divide(BigDecimal.valueOf(300), 3, RoundingMode.HALF_UP))
+                .multiply(BigDecimal.valueOf(100));
     }
 }
 

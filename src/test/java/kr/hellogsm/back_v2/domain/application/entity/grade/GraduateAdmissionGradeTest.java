@@ -29,6 +29,8 @@ public class GraduateAdmissionGradeTest {
         assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
         assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
         assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+        assertThat(a.totalScore).isEqualTo(toBigDecimal(276, 3));
+        assertThat(a.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
     @Test
@@ -47,6 +49,8 @@ public class GraduateAdmissionGradeTest {
         assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
         assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
         assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+        assertThat(a.totalScore).isEqualTo(toBigDecimal(276, 3));
+        assertThat(a.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
     @Test
@@ -65,6 +69,8 @@ public class GraduateAdmissionGradeTest {
         assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
         assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
         assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+        assertThat(a.totalScore).isEqualTo(toBigDecimal(276, 3));
+        assertThat(a.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
     @Test
@@ -82,6 +88,8 @@ public class GraduateAdmissionGradeTest {
         assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
         assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
         assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+        assertThat(a.totalScore).isEqualTo(toBigDecimal(276, 3));
+        assertThat(a.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
     @Test
@@ -99,6 +107,8 @@ public class GraduateAdmissionGradeTest {
         assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
         assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
         assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+        assertThat(a.totalScore).isEqualTo(toBigDecimal(276, 3));
+        assertThat(a.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
     @Test
@@ -116,6 +126,8 @@ public class GraduateAdmissionGradeTest {
         assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
         assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
         assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+        assertThat(a.totalScore).isEqualTo(toBigDecimal(276, 3));
+        assertThat(a.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
     private BigDecimal toBigDecimal(int value, int scale) {
