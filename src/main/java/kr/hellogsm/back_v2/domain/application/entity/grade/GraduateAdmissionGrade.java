@@ -73,8 +73,11 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         ObjectMapper objectMapper = new ObjectMapper();
         ScoreData result = objectMapper.readValue(middleSchoolGrade.getMiddleSchoolGradeText(), ScoreData.class);
 
-        grade1Semester1Score = calc(result.score1_1(), 18);
-        grade1Semester2Score = calc(result.score1_2(), result.freeSemester().equals("1-2") ? 36 : 18);
+        grade1Semester1Score = calc(result.score1_1(), result.system().equals("자유학년제") ? 54 : 18);
+        if (result.system().equals("자유학년제"))
+            grade1Semester2Score = calc(result.score1_2(), 54);
+        else
+            grade1Semester2Score = calc(result.score1_2(), result.freeSemester().equals("2-1") ? 36 : 18);
         grade2Semester1Score = calc(result.score2_1(), result.system().equals("자유학년제") ? 54 : 36);
         grade2Semester2Score = calc(result.score2_2(), 54);
         grade3Semester1Score = calc(result.score3_1(), 72);
