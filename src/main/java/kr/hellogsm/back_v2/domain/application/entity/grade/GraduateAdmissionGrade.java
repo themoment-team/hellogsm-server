@@ -91,7 +91,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         artisticScore = artSportsCalc(result.artSportsScore());
 
         // 예체능 성적 + 교과 성적
-        curricularSubtotalScore = generalCurriculumScoreSubtotal
+        curricularSubtotalScore = artisticScore
                 .add(generalCurriculumScoreSubtotal)
                 .setScale(4, RoundingMode.HALF_UP);
 
@@ -105,17 +105,17 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         extracurricularSubtotalScore = attendanceScore.add(volunteerScore).setScale(4, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal calc(List<BigDecimal> scoreArray, int maxPoint) {
+    private BigDecimal calc(List<BigDecimal> scoreArray, int maxPoint) {
         if (scoreArray == null) return BigDecimal.valueOf(0);
         // (A 개수 * 5) + (B 개수 * 4) + (C 개수 * 3) + (D 개수 * 2) + (E 개수 * 1)
         BigDecimal reduceResult = scoreArray.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         // reduceResult / (과목 수 * 5) (소수점 6째자리 반올림)
-        BigDecimal divideResult = reduceResult.divide(BigDecimal.valueOf(scoreArray.size() * 5L), 6, RoundingMode.HALF_UP);
+        BigDecimal divideResult = reduceResult.divide(BigDecimal.valueOf(scoreArray.size() * 5L), 5, RoundingMode.HALF_UP);
         // 각 학년 당 배점 * divideResult (소수점 4째자리에서 반올림)
-        return divideResult.multiply(BigDecimal.valueOf(maxPoint)).setScale(4, RoundingMode.HALF_UP);
+        return divideResult.multiply(BigDecimal.valueOf(maxPoint)).setScale(3, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal artSportsCalc(List<BigDecimal> scoreArray) {
+    private BigDecimal artSportsCalc(List<BigDecimal> scoreArray) {
         if (scoreArray == null) return BigDecimal.valueOf(0);
 
         // (A의 개수 * 5) + (B의 개수 * 4) + (C의 개수 * 3)
@@ -125,7 +125,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         return divideResult.multiply(BigDecimal.valueOf(60)).setScale(3, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal calcAttendance(List<BigDecimal> absentScore, List<BigDecimal> attendanceScore) {
+    private BigDecimal calcAttendance(List<BigDecimal> absentScore, List<BigDecimal> attendanceScore) {
         BigDecimal absent = absentScore.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         // 결석이 10번 이상이면 0점
         if (absent.compareTo(BigDecimal.valueOf(10)) != -1) return BigDecimal.valueOf(0);
@@ -142,8 +142,8 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         return result;
     }
 
-    public BigDecimal calcVolunteer(List<BigDecimal> scoreArray) {
-        return scoreArray.stream().reduce(BigDecimal.valueOf(0), (hour, current) -> {
+    private BigDecimal calcVolunteer(List<BigDecimal> scoreArray) {
+        return scoreArray.stream().reduce(BigDecimal.valueOf(0), (current, hour) -> {
             // 7 이상
             if (hour.compareTo(new BigDecimal("7")) >= 0)
                 return current.add(BigDecimal.valueOf(7));

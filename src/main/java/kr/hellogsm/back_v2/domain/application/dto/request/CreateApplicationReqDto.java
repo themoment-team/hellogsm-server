@@ -1,5 +1,6 @@
 package kr.hellogsm.back_v2.domain.application.dto.request;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
@@ -67,7 +68,7 @@ public record CreateApplicationReqDto(
         @NotBlank
         String MiddleSchoolGrade
 ) {
-    public Application toEntity() {
+    public Application toEntity() throws JsonProcessingException {
         AdmissionInfo admissionInfo = AdmissionInfo.builder()
                 .applicantImageUri(this.applicantImageUri)
                 .applicantName(this.applicantName)

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 학기별 성적을 저장하는 record 입니다
@@ -50,7 +51,10 @@ public record ScoreData(
         @NotBlank
         String system,
 
-        @NotBlank
         String freeSemester
 ) {
+        public String freeSemester() {
+                if (freeSemester == null) return "0";
+                return freeSemester;
+        }
 }

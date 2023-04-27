@@ -1,5 +1,6 @@
 package kr.hellogsm.back_v2.domain.application.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import kr.hellogsm.back_v2.domain.application.dto.request.CreateApplicationReqDto;
 import kr.hellogsm.back_v2.domain.application.repository.ApplicationRepository;
 import kr.hellogsm.back_v2.domain.application.service.CreateApplicationService;
@@ -15,7 +16,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Override
-    public void execute(CreateApplicationReqDto body) {
+    public void execute(CreateApplicationReqDto body) throws JsonProcessingException {
         applicationRepository.save(body.toEntity());
     }
 }
