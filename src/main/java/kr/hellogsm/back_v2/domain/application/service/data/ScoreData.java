@@ -54,7 +54,10 @@ public record ScoreData(
         String freeSemester
 ) {
         public String freeSemester() {
-                if (freeSemester == null) return "0";
-                return freeSemester;
+                return freeSemester == null ? "0" : freeSemester;
+        }
+
+        public String system() {
+                return system == null ? "0" : system;
         }
 }

@@ -26,7 +26,7 @@ public class GraduateAdmissionGradeMock {
                 new ArrayList<String>(),
                 new ArrayList<String>(),
                 new ArrayList<String>(),
-                "자유학년제",
+                null,
                 null
         );
 

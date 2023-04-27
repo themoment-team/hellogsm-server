@@ -79,7 +79,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         else
             grade1Semester2Score = calc(result.score1_2(), result.freeSemester().equals("2-1") ? 36 : 18);
         grade2Semester1Score = calc(result.score2_1(), result.system().equals("자유학년제") ? 54 : 36);
-        grade2Semester2Score = calc(result.score2_2(), 54);
+        grade2Semester2Score = calc(result.score2_2(), result.system().equals("0") ? 36 : 54);
         grade3Semester1Score = calc(result.score3_1(), 72);
 
         BigDecimal generalCurriculumScoreSubtotal = Stream.of(
