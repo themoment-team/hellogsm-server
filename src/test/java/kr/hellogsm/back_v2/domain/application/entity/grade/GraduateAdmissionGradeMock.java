@@ -12,6 +12,27 @@ public class GraduateAdmissionGradeMock {
     ObjectMapper objectMapper = new ObjectMapper();
     List<BigDecimal> subjectPerfectScore = createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5});
 
+    public String perfectTest() throws JsonProcessingException {
+        ScoreData value = new ScoreData(
+                subjectPerfectScore,
+                subjectPerfectScore,
+                subjectPerfectScore,
+                subjectPerfectScore,
+                subjectPerfectScore,
+                createBigDecimalArray(new int[] {5,5,5,5,5,5,5,5,5}),
+                createBigDecimalArray(new int[] {0,0,0}),
+                createBigDecimalArray(new int[] {0,0,0,0,0,0,0,0,0}),
+                createBigDecimalArray(new int[] {0,0,0}),
+                new ArrayList<String>(),
+                new ArrayList<String>(),
+                new ArrayList<String>(),
+                "자유학년제",
+                null
+        );
+
+        return objectMapper.writeValueAsString(value);
+    }
+
     public String grad1FreeSchoolYearPerfectScore() throws JsonProcessingException {
         ScoreData value = new ScoreData(
                 null,

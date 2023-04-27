@@ -11,6 +11,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GraduateAdmissionGradeTest {
     GraduateAdmissionGradeMock graduateAdmissionGradeMock = new GraduateAdmissionGradeMock();
+
+
+    @Test
+    @DisplayName("일반 만점 테스트")
+    public void perfectTest() throws JsonProcessingException {
+        // given
+        String value = graduateAdmissionGradeMock.perfectTest();
+        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
+
+        // when
+        GraduateAdmissionGrade a = new GraduateAdmissionGrade(middleSchoolGrade);
+
+        // then
+        assertThat(a.getArtisticScore()).isEqualTo(toBigDecimal(60, 3));
+        assertThat(a.getCurricularSubtotalScore()).isEqualTo(toBigDecimal(180 + 60, 4));
+        assertThat(a.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
+        assertThat(a.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
+        assertThat(a.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
+    }
+
     @Test
     @DisplayName("1학년 자유 학년제 만점 테스트")
     public void grad1FreeSchoolYearPerfectScoreTest() throws JsonProcessingException {
