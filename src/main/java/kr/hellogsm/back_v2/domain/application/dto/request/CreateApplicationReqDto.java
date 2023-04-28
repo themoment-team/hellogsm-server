@@ -3,7 +3,6 @@ package kr.hellogsm.back_v2.domain.application.dto.request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import kr.hellogsm.back_v2.domain.application.entity.Application;
@@ -13,6 +12,7 @@ import kr.hellogsm.back_v2.domain.application.entity.grade.MiddleSchoolGrade;
 import kr.hellogsm.back_v2.domain.application.entity.status.AdmissionStatus;
 import kr.hellogsm.back_v2.domain.application.enums.Gender;
 import kr.hellogsm.back_v2.domain.application.enums.GraduationStatus;
+import kr.hellogsm.back_v2.domain.application.enums.Major;
 
 import java.time.LocalDate;
 
@@ -64,17 +64,26 @@ public record CreateApplicationReqDto(
         @Pattern(regexp = "^(?!\\s*$).+")
         String teacherPhoneNumber,
 
-        @Valid
-        DesiredMajorReqDto desiredMajorReqDto,
+        @Pattern(regexp = "^(AI|SW|IOT)$")
+        @NotBlank
+        String firstDesiredMajor,
+
+        @Pattern(regexp = "^(AI|SW|IOT)$")
+        @NotBlank
+        String secondDesiredMajor,
+
+        @Pattern(regexp = "^(AI|SW|IOT)$")
+        @NotBlank
+        String thirdDesiredMajor,
 
         @NotBlank
         String MiddleSchoolGrade
 ) {
     public Application toEntity() throws JsonProcessingException {
         DesiredMajor desiredMajor = DesiredMajor.builder()
-                .firstDesiredMajor(desiredMajorReqDto.firstDesiredMajor())
-                .secondDesiredMajor(desiredMajorReqDto.secondDesiredMajor())
-                .thirdDesiredMajor(desiredMajorReqDto.thirdDesiredMajor())
+                .firstDesiredMajor(Major.valueOf(this.firstDesiredMajor))
+                .secondDesiredMajor(Major.valueOf(this.secondDesiredMajor))
+                .thirdDesiredMajor(Major.valueOf(this.thirdDesiredMajor))
                 .build();
 
         AdmissionInfo admissionInfo = AdmissionInfo.builder()
