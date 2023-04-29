@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 학기별 성적을 저장하는 record 입니다
@@ -12,7 +11,7 @@ import java.util.Optional;
  * @author 변찬우
  * @since 1.0.0
  */
-public record ScoreData(
+public record GeneralScoreData(
         // 국어, 도덕, 사회, 역사, 수학, 과학, 기가, 영어, ...
         List<BigDecimal> score1_1,
 

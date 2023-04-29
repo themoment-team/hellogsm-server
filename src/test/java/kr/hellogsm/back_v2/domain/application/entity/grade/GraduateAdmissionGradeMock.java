@@ -2,7 +2,7 @@ package kr.hellogsm.back_v2.domain.application.entity.grade;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hellogsm.back_v2.domain.application.service.data.ScoreData;
+import kr.hellogsm.back_v2.domain.application.service.data.GeneralScoreData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class GraduateAdmissionGradeMock {
     List<BigDecimal> subjectPerfectScore = createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5});
 
     public String perfectTest() throws JsonProcessingException {
-        ScoreData value = new ScoreData(
+        GeneralScoreData value = new GeneralScoreData(
                 subjectPerfectScore,
                 subjectPerfectScore,
                 subjectPerfectScore,
@@ -34,7 +34,7 @@ public class GraduateAdmissionGradeMock {
     }
 
     public String grad1FreeSchoolYearPerfectScore() throws JsonProcessingException {
-        ScoreData value = new ScoreData(
+        GeneralScoreData value = new GeneralScoreData(
                 null,
                 null,
                 subjectPerfectScore,
@@ -55,7 +55,7 @@ public class GraduateAdmissionGradeMock {
     }
 
     public String grad2FreeSchoolYearPerfectScore() throws JsonProcessingException {
-        ScoreData value = new ScoreData(
+        GeneralScoreData value = new GeneralScoreData(
                 subjectPerfectScore,
                 subjectPerfectScore,
                 null,
@@ -76,7 +76,7 @@ public class GraduateAdmissionGradeMock {
     }
 
     public String grade1Semester1PerfectScore() throws JsonProcessingException {
-        ScoreData scoreData = new ScoreData(
+        GeneralScoreData scoreData = new GeneralScoreData(
                 null,
                 subjectPerfectScore,
                 subjectPerfectScore,
@@ -97,7 +97,7 @@ public class GraduateAdmissionGradeMock {
     }
 
     public String grade1Semester2PerfectScore() throws JsonProcessingException {
-        ScoreData scoreData = new ScoreData(
+        GeneralScoreData scoreData = new GeneralScoreData(
                 subjectPerfectScore,
                 null,
                 subjectPerfectScore,
@@ -118,7 +118,7 @@ public class GraduateAdmissionGradeMock {
     }
 
     public String grade2Semester1PerfectScore() throws JsonProcessingException {
-        ScoreData scoreData = new ScoreData(
+        GeneralScoreData scoreData = new GeneralScoreData(
                 subjectPerfectScore,
                 subjectPerfectScore,
                 null,

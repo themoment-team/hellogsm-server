@@ -35,6 +35,7 @@ public class GedAdmissionGrade extends AdmissionGrade {
     private BigDecimal gedMaxScore;
 
     public GedAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) {
+
     }
 
     public GedAdmissionGrade(Long id, BigDecimal totalScore, BigDecimal percentileRank, BigDecimal gedTotalScore, BigDecimal gedMaxScore) {

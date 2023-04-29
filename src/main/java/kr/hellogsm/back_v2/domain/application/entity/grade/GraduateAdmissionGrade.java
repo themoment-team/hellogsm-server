@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import kr.hellogsm.back_v2.domain.application.service.data.ScoreData;
+import kr.hellogsm.back_v2.domain.application.service.data.GeneralScoreData;
 import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -73,9 +73,9 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
 
     public GraduateAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        ScoreData result = null;
+        GeneralScoreData result = null;
         try {
-            result = objectMapper.readValue(middleSchoolGrade.getMiddleSchoolGradeText(), ScoreData.class);
+            result = objectMapper.readValue(middleSchoolGrade.getMiddleSchoolGradeText(), GeneralScoreData.class);
         } catch (JsonProcessingException e) {
             throw new ExpectedException("MiddleSchoolGrade값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
         }
