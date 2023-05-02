@@ -71,7 +71,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
     @Column(name = "extracurricular_subtotal_score")
     private BigDecimal extracurricularSubtotalScore;
 
-    public GraduateAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) throws JsonProcessingException {
+    public GraduateAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) {
         ObjectMapper objectMapper = new ObjectMapper();
         GeneralScoreData result = null;
         try {
