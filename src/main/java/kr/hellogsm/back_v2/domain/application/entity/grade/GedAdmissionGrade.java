@@ -1,7 +1,6 @@
 package kr.hellogsm.back_v2.domain.application.entity.grade;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -31,7 +30,7 @@ import static lombok.AccessLevel.*;
 @SuperBuilder
 @ToString
 public class GedAdmissionGrade extends AdmissionGrade {
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Column(name = "ged_total_score", nullable = true)
     private BigDecimal gedTotalScore;
@@ -48,14 +47,16 @@ public class GedAdmissionGrade extends AdmissionGrade {
             throw new ExpectedException("MiddleSchoolGrade값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
         }
 
+        if (result.nonCurriculumScoreSubtotal().compareTo(result.curriculumScoreSubtotal()) > 0)
+            throw new ExpectedException("계산 결과가 올바르지 않습니다", HttpStatus.BAD_REQUEST);
+
         gedTotalScore = result.curriculumScoreSubtotal();
         gedMaxScore = result.nonCurriculumScoreSubtotal();
         this.percentileRank = calcPercentileRank(result.curriculumScoreSubtotal(), result.nonCurriculumScoreSubtotal());
-        this.gedTotalScore = calcTotalScore(this.percentileRank);
+        this.totalScore = calcTotalScore(result.rankPercentage());
 
         if (result.rankPercentage().compareTo(this.percentileRank) != 0 || result.scoreTotal().compareTo(this.totalScore) != 0)
             throw new ExpectedException("계산 결과가 올바르지 않습니다", HttpStatus.BAD_REQUEST);
-
     }
 
     public GedAdmissionGrade(Long id, BigDecimal totalScore, BigDecimal percentileRank, BigDecimal gedTotalScore, BigDecimal gedMaxScore) {
@@ -71,12 +72,14 @@ public class GedAdmissionGrade extends AdmissionGrade {
                 .multiply(BigDecimal.valueOf(100));
     }
 
-    // ((300 - (300 * rankPercentage) / 100) * 0.87).toFixed(3),
+    // ((300 - (300 * rankpercentage) / 100) * 0.87).tofixed(3),
     private BigDecimal calcTotalScore(BigDecimal percentileRank) {
-        return percentileRank
+        BigDecimal a = percentileRank
                 .multiply(BigDecimal.valueOf(300))
-                .divide(BigDecimal.valueOf(100), 3, RoundingMode.HALF_UP)
-                .subtract(BigDecimal.valueOf(300))
-                .multiply(BigDecimal.valueOf(0.87));
+                .divide(BigDecimal.valueOf(100), 3, RoundingMode.HALF_UP);
+
+        return BigDecimal.valueOf(300)
+                .subtract(a)
+                .multiply(BigDecimal.valueOf(0.87)).setScale(3, RoundingMode.HALF_UP);
     }
 }
