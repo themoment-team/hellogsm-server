@@ -1,6 +1,5 @@
 package kr.hellogsm.back_v2.domain.application.dto.request;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +12,8 @@ import kr.hellogsm.back_v2.domain.application.entity.status.AdmissionStatus;
 import kr.hellogsm.back_v2.domain.application.enums.Gender;
 import kr.hellogsm.back_v2.domain.application.enums.GraduationStatus;
 import kr.hellogsm.back_v2.domain.application.enums.Major;
+import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 
@@ -40,8 +41,8 @@ public record CreateApplicationReqDto(
         @NotBlank
         String detailAddress,
 
-        @Enumerated(EnumType.STRING)
-        GraduationStatus graduation,
+        @NotBlank
+        String graduation,
 
         @Pattern(regexp = "^(?!\\s*$).+")
         String telephone,
@@ -79,7 +80,15 @@ public record CreateApplicationReqDto(
         @NotBlank
         String MiddleSchoolGrade
 ) {
-    public Application toEntity() throws JsonProcessingException {
+    public Application toEntity() {
+
+        GraduationStatus graduationStatus = null;
+        try {
+            graduationStatus = GraduationStatus.valueOf(this.graduation);
+        } catch (IllegalArgumentException e) {
+            throw new ExpectedException("graduation 값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
+        }
+
         DesiredMajor desiredMajor = DesiredMajor.builder()
                 .firstDesiredMajor(Major.valueOf(this.firstDesiredMajor))
                 .secondDesiredMajor(Major.valueOf(this.secondDesiredMajor))
@@ -93,7 +102,7 @@ public record CreateApplicationReqDto(
                 .applicantBrith(this.applicantBirth)
                 .address(this.address)
                 .detailAddress(this.detailAddress)
-                .graduation(this.graduation)
+                .graduation(graduationStatus)
                 .telephone(this.telephone)
                 .applicantPhoneNumber(this.applicantPhoneNumber)
                 .guardianName(this.guardianName)

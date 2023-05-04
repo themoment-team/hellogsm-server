@@ -1,7 +1,6 @@
 package kr.hellogsm.back_v2.domain.application.entity;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import kr.hellogsm.back_v2.domain.application.entity.admission.AdmissionInfo;
@@ -45,7 +44,7 @@ public class Application {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, optional = false)
     private AdmissionGrade admissionGrade;
 
-    public Application(Long id, AdmissionInfo admissionInfo, AdmissionStatus admissionStatus, MiddleSchoolGrade middleSchoolGrade) throws JsonProcessingException {
+    public Application(Long id, AdmissionInfo admissionInfo, AdmissionStatus admissionStatus, MiddleSchoolGrade middleSchoolGrade) {
         this.id = id;
         this.admissionInfo = admissionInfo;
         this.admissionStatus = admissionStatus;

@@ -1,7 +1,6 @@
 package kr.hellogsm.back_v2.domain.application.entity.grade;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import kr.hellogsm.back_v2.domain.application.enums.GraduationStatus;
 import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class AdmissionGradeFactory {
      * @return 생성된 입학 원서 성적 Entity
      * @throws ExpectedException 지원하는 졸업 상태가 아닌 경우 예외 발생
      */
-    public static AdmissionGrade create(GraduationStatus graduationStatus, MiddleSchoolGrade middleSchoolGrades) throws JsonProcessingException {
+    public static AdmissionGrade create(GraduationStatus graduationStatus, MiddleSchoolGrade middleSchoolGrades) {
         if (graduationStatus.equals(GraduationStatus.CANDIDATE) || graduationStatus.equals(GraduationStatus.GRADUATE)) {
             return new GraduateAdmissionGrade(middleSchoolGrades);
         } else if (graduationStatus.equals(GraduationStatus.GED)) {

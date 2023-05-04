@@ -1,6 +1,5 @@
 package kr.hellogsm.back_v2.domain.application.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import kr.hellogsm.back_v2.domain.application.dto.request.CreateApplicationReqDto;
 import kr.hellogsm.back_v2.domain.application.service.CreateApplicationService;
@@ -27,7 +26,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
 
     @PostMapping("/application")
-    public ResponseEntity<Map<String, String>> create(@RequestBody @Valid CreateApplicationReqDto body) throws JsonProcessingException {
+    public ResponseEntity<Map<String, String>> create(@RequestBody @Valid CreateApplicationReqDto body) {
         createApplicationService.execute(body);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
     }
