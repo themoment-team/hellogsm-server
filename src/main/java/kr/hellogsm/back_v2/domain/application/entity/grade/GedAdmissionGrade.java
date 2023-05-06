@@ -30,8 +30,6 @@ import static lombok.AccessLevel.*;
 @SuperBuilder
 @ToString
 public class GedAdmissionGrade extends AdmissionGrade {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Column(name = "ged_total_score", nullable = true)
     private BigDecimal gedTotalScore;
 
@@ -40,6 +38,7 @@ public class GedAdmissionGrade extends AdmissionGrade {
     private BigDecimal gedMaxScore;
 
     public GedAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) {
+        ObjectMapper objectMapper = new ObjectMapper();
         GedScoreData result;
         try {
             result = objectMapper.readValue(middleSchoolGrade.getMiddleSchoolGradeText(), GedScoreData.class);
