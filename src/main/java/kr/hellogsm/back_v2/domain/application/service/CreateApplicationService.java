@@ -9,5 +9,5 @@ import kr.hellogsm.back_v2.domain.application.dto.request.CreateApplicationReqDt
  * @since 1.0.0
  */
 public interface CreateApplicationService {
-    void execute(CreateApplicationReqDto body);
+    void execute(CreateApplicationReqDto body, Long userId);
 }

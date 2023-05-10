@@ -80,8 +80,7 @@ public record CreateApplicationReqDto(
         @NotBlank
         String MiddleSchoolGrade
 ) {
-    public Application toEntity() {
-
+    public Application toEntity(Long userId) {
         GraduationStatus graduationStatus = null;
         try {
             graduationStatus = GraduationStatus.valueOf(this.graduation);
@@ -120,7 +119,8 @@ public record CreateApplicationReqDto(
                 null,
                 admissionInfo,
                 admissionStatus,
-                middleSchoolGrade
+                middleSchoolGrade,
+                userId
         );
     }
 }
