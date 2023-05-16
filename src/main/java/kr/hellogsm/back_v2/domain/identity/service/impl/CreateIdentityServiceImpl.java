@@ -5,6 +5,9 @@ import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
 import kr.hellogsm.back_v2.domain.identity.entity.Identity;
 import kr.hellogsm.back_v2.domain.identity.repository.IdentityRepository;
 import kr.hellogsm.back_v2.domain.identity.service.CreateIdentityService;
+import kr.hellogsm.back_v2.domain.user.dto.domain.UserDto;
+import kr.hellogsm.back_v2.domain.user.entity.User;
+import kr.hellogsm.back_v2.domain.user.enums.Role;
 import kr.hellogsm.back_v2.domain.user.repository.UserRepository;
 import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +40,17 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
      */
     @Override
     public IdentityDto execute(CreateIdentityReqDto identityReqDto, Long userId) {
-        if (!userRepository.existsById(userId))
-            throw new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST));
         if (identityRepository.existsByUserId(userId))
             throw new ExpectedException("이미 존재하는 Identity 입니다", HttpStatus.BAD_REQUEST);
+        User identifiedUser = new User(
+                user.getId(),
+                user.getProvider(),
+                user.getProvider(),
+                Role.ROLE_USER
+        );
+        userRepository.save(identifiedUser);
         Identity identity = identityRepository.save(identityReqDto.toEntity(userId));
         return IdentityDto.from(identity);
     }
