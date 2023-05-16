@@ -19,7 +19,7 @@ public record UserDto(
         return new UserDto (
                 user.getId(),
                 user.getProvider(),
-                user.getProvider(),
+                user.getProviderId(),
                 user.getRole()
         );
     }
