@@ -42,12 +42,14 @@ public record CreateApplicationReqDto(
         String detailAddress,
 
         @NotBlank
+        @Pattern(regexp = "^(CANDIDATE|GRADUATE|GED)$")
         String graduation,
 
-        @Pattern(regexp = "^(?!\\s*$).+")
+        @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
         String telephone,
 
         @NotBlank
+        @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
         String applicantPhoneNumber,
 
         @NotBlank
@@ -57,12 +59,13 @@ public record CreateApplicationReqDto(
         String relationWithApplicant,
 
         @NotBlank
+        @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
         String guardianPhoneNumber,
 
         @Pattern(regexp = "^(?!\\s*$).+")
         String teacherName,
 
-        @Pattern(regexp = "^(?!\\s*$).+")
+        @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
         String teacherPhoneNumber,
 
         @Pattern(regexp = "^(AI|SW|IOT)$")
