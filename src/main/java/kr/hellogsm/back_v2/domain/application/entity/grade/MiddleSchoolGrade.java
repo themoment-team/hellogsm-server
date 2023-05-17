@@ -1,10 +1,7 @@
 package kr.hellogsm.back_v2.domain.application.entity.grade;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * 학생의 입학 중학교 성적을 저장하는 Entity입니다.
@@ -16,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "middle_school_grade")
+@Getter
 @ToString
 public class MiddleSchoolGrade {
 

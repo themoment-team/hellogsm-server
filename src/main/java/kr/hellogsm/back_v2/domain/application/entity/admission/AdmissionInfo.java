@@ -60,7 +60,7 @@ public class AdmissionInfo {
     private GraduationStatus graduation;
 
     
-    @Column(name = "telephone", nullable = false)
+    @Column(name = "telephone", nullable = true)
     private String telephone;
 
     
@@ -80,11 +80,11 @@ public class AdmissionInfo {
     private String guardianPhoneNumber;
 
     
-    @Column(name = "teacher_name", nullable = false)
+    @Column(name = "teacher_name", nullable = true)
     private String teacherName;
 
     
-    @Column(name = "teacher_phone_number", nullable = false)
+    @Column(name = "teacher_phone_number", nullable = true)
     private String teacherPhoneNumber;
 
     @Valid
