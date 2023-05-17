@@ -98,7 +98,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
                 .setScale(3, RoundingMode.HALF_UP);
 
         // 예체능 성적
-        artisticScore = artSportsCalc(result.artSportsScore());
+        artisticScore = calcArtSports(result.artSportsScore());
 
         // 예체능 성적 + 교과 성적
         curricularSubtotalScore = artisticScore
@@ -129,7 +129,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         return divideResult.multiply(BigDecimal.valueOf(maxPoint)).setScale(3, RoundingMode.HALF_UP);
     }
 
-    private BigDecimal artSportsCalc(List<BigDecimal> scoreArray) {
+    private BigDecimal calcArtSports(List<BigDecimal> scoreArray) {
         if (scoreArray == null) return BigDecimal.valueOf(0);
 
         // (A의 개수 * 5) + (B의 개수 * 4) + (C의 개수 * 3)
