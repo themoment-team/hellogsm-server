@@ -44,12 +44,16 @@ public class Application {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, optional = false)
     private AdmissionGrade admissionGrade;
 
-    public Application(Long id, AdmissionInfo admissionInfo, AdmissionStatus admissionStatus, MiddleSchoolGrade middleSchoolGrade) {
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    public Application(Long id, AdmissionInfo admissionInfo, AdmissionStatus admissionStatus, MiddleSchoolGrade middleSchoolGrade, Long userId) {
         this.id = id;
         this.admissionInfo = admissionInfo;
         this.admissionStatus = admissionStatus;
         this.middleSchoolGrade = middleSchoolGrade;
         this.admissionGrade = AdmissionGradeFactory.create(admissionInfo.getGraduation(), middleSchoolGrade);
+        this.userId = userId;
     }
 
     /**

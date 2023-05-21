@@ -70,4 +70,12 @@ public class AdmissionStatus {
     public Boolean isPrintsArrived() {
         return isPrintsArrived;
     }
+
+    @PrePersist
+    public void prePersist() {
+        isFinalSubmitted = isFinalSubmitted == null ? false : isFinalSubmitted;
+        isPrintsArrived = isPrintsArrived == null ? false : isPrintsArrived;
+        firstEvaluation = firstEvaluation == null ? EvaluationStatus.NOT_YET : firstEvaluation;
+        secondEvaluation = secondEvaluation == null ? EvaluationStatus.NOT_YET : secondEvaluation;
+    }
 }
