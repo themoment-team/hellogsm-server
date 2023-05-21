@@ -1,6 +1,6 @@
 # application
-src/main/resources/*.yml
-
+src/main/resources/oauth.yml
+src/main/resources/auth.yml
 
 # gitignore.io 사용
 

@@ -2,8 +2,8 @@ package kr.hellogsm.back_v2.global.security;
 
 import kr.hellogsm.back_v2.domain.user.enums.Role;
 import kr.hellogsm.back_v2.global.data.profile.ServerProfile;
+import kr.hellogsm.back_v2.global.security.auth.AuthEnvironment;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -31,13 +31,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Value("${auth.redirect-base-uri}")
-    private String redirectBaseUri;
-
-    @Value("${auth.allowed-origins}")
-    private List<String> AllowedOrigins;
-
+    private final AuthEnvironment authEnv;
     private static final String logoutUri = "/auth/v1/logout";
     private static final String oauth2LoginEndpointBaseUri = "/auth/v1/oauth2/authorization";
     private static final String oauth2LoginProcessingUri = "/auth/v1/oauth2/code/*";
@@ -92,7 +86,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(AllowedOrigins);
+        configuration.setAllowedOrigins(authEnv.allowedOrigins());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -108,7 +102,7 @@ public class SecurityConfig {
                 oauth2Login
                         .authorizationEndpoint().baseUri(oauth2LoginEndpointBaseUri).and()
                         .loginProcessingUrl(oauth2LoginProcessingUri)
-                        .defaultSuccessUrl(redirectBaseUri)
+                        .defaultSuccessUrl(authEnv.redirectBaseUri())
 
         );
     }
@@ -116,7 +110,7 @@ public class SecurityConfig {
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout -> logout
                 .logoutUrl(logoutUri)
-                .logoutSuccessUrl(redirectBaseUri)
+                .logoutSuccessUrl(authEnv.redirectBaseUri())
         );
     }
 
