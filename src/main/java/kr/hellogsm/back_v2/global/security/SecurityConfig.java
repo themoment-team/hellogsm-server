@@ -126,7 +126,6 @@ public class SecurityConfig {
                         Role.ROLE_ADMIN.getRole()
                 )
                 .requestMatchers("/identity/v1/**").hasAnyRole(
-                        Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole(),
                         Role.ROLE_ADMIN.getRole()
                 )
