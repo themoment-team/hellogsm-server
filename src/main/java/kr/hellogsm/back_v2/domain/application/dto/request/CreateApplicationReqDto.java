@@ -138,7 +138,7 @@ public record CreateApplicationReqDto(
     }
 
     @AssertFalse(message = "중복된 전공이 있습니다")
-    private boolean isDesiredMajorNull() {
+    private boolean isDuplicateMajor() {
         return Objects.equals(firstDesiredMajor, secondDesiredMajor) || Objects.equals(secondDesiredMajor, thirdDesiredMajor) || Objects.equals(thirdDesiredMajor, firstDesiredMajor);
     }
 }

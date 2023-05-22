@@ -32,6 +32,7 @@ public class ApplicationController {
             @RequestBody @Valid CreateApplicationReqDto body,
             @AuthenticationPrincipal UserInfo userInfo
     ) {
+        System.out.println("hello world");
         createApplicationService.execute(body, userInfo.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
     }
