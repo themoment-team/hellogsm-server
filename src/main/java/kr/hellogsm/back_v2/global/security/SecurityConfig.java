@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -50,9 +51,9 @@ public class SecurityConfig {
             http
                     .formLogin().disable()
                     .httpBasic().disable()
+                    .headers().frameOptions().sameOrigin().and()
                     .cors().disable()
-                    .headers().frameOptions().sameOrigin();
-            csrf(http);
+                    .csrf().disable();
             logout(http);
             oauth2Login(http);
             http.authorizeHttpRequests(
@@ -74,8 +75,8 @@ public class SecurityConfig {
             http
                     .formLogin().disable()
                     .httpBasic().disable()
-                    .cors().configurationSource(corsConfigurationSource());
-            csrf(http);
+                    .cors().configurationSource(corsConfigurationSource()).and()
+                    .csrf().disable();
             logout(http);
             oauth2Login(http);
             authorizeHttpRequests(http);
@@ -91,10 +92,6 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    private void csrf(HttpSecurity http) throws Exception {
-        http.csrf();
     }
 
     private void oauth2Login(HttpSecurity http) throws Exception {
@@ -116,6 +113,7 @@ public class SecurityConfig {
 
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
+                .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v1/**").permitAll()
                 .requestMatchers("/user/v1/**").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
@@ -128,6 +126,7 @@ public class SecurityConfig {
                         Role.ROLE_ADMIN.getRole()
                 )
                 .requestMatchers("/identity/v1/**").hasAnyRole(
+                        Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole(),
                         Role.ROLE_ADMIN.getRole()
                 )
@@ -135,7 +134,7 @@ public class SecurityConfig {
                         Role.ROLE_USER.getRole(),
                         Role.ROLE_ADMIN.getRole()
                 )
-                .anyRequest().denyAll()
+                .anyRequest().permitAll()
         );
     }
 
