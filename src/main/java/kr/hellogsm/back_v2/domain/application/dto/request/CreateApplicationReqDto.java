@@ -1,12 +1,9 @@
 package kr.hellogsm.back_v2.domain.application.dto.request;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.AssertFalse;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
+import kr.hellogsm.back_v2.domain.application.annotation.NotSpace;
 import kr.hellogsm.back_v2.domain.application.entity.Application;
 import kr.hellogsm.back_v2.domain.application.entity.admission.AdmissionInfo;
 import kr.hellogsm.back_v2.domain.application.entity.admission.DesiredMajor;
@@ -87,10 +84,10 @@ public record CreateApplicationReqDto(
         @NotBlank
         String MiddleSchoolGrade,
 
-        @Pattern(regexp = "^\\s*$")
+        @NotSpace
         String schoolName,
 
-        @Pattern(regexp = "^\\s*$")
+        @NotSpace
         String schoolLocation
 ) {
     public Application toEntity(Long userId) {

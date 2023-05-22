@@ -1,6 +1,7 @@
 # application
 src/main/resources/oauth.yml
 src/main/resources/auth.yml
+src/main/java/kr/hellogsm/back_v2/global/data/mock/**
 
 # gitignore.io 사용
 
