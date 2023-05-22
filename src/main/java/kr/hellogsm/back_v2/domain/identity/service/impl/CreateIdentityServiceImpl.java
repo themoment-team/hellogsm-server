@@ -47,7 +47,7 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
         User identifiedUser = new User(
                 user.getId(),
                 user.getProvider(),
-                user.getProvider(),
+                user.getProviderId(),
                 Role.ROLE_USER
         );
         userRepository.save(identifiedUser);
