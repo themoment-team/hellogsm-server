@@ -5,6 +5,9 @@ on:
     branches: [ "develop" ]
   pull_request:
     branches: [ "*" ]
+
+env:
+  REDIS_HOST: ${{secrets.REDIS_HOST}}
   
 jobs:
   CI:
@@ -36,13 +39,6 @@ jobs:
       
       - name : Setup Gradls's permission
         run : chmod +x gradlew 
-      
-      - name: Create application.yml
-        run: |
-          mkdir ./src/main/resources
-          touch ./src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
-        shell: bash
         
       - name: Run build with Gradle wrapper
         run: ./gradlew clean build
