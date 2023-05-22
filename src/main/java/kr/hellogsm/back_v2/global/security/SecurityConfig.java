@@ -2,8 +2,8 @@ package kr.hellogsm.back_v2.global.security;
 
 import kr.hellogsm.back_v2.domain.user.enums.Role;
 import kr.hellogsm.back_v2.global.data.profile.ServerProfile;
+import kr.hellogsm.back_v2.global.security.auth.AuthEnvironment;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,13 +32,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Value("${auth.redirect-base-uri}")
-    private String redirectBaseUri;
-
-    @Value("${auth.allowed-origins}")
-    private List<String> AllowedOrigins;
-
+    private final AuthEnvironment authEnv;
     private static final String logoutUri = "/auth/v1/logout";
     private static final String oauth2LoginEndpointBaseUri = "/auth/v1/oauth2/authorization";
     private static final String oauth2LoginProcessingUri = "/auth/v1/oauth2/code/*";
@@ -56,9 +51,9 @@ public class SecurityConfig {
             http
                     .formLogin().disable()
                     .httpBasic().disable()
+                    .headers().frameOptions().sameOrigin().and()
                     .cors().disable()
-                    .headers().frameOptions().sameOrigin();
-            csrf(http);
+                    .csrf().disable();
             logout(http);
             oauth2Login(http);
             http.authorizeHttpRequests(
@@ -80,8 +75,8 @@ public class SecurityConfig {
             http
                     .formLogin().disable()
                     .httpBasic().disable()
-                    .cors().configurationSource(corsConfigurationSource());
-            csrf(http);
+                    .cors().configurationSource(corsConfigurationSource()).and()
+                    .csrf().disable();
             logout(http);
             oauth2Login(http);
             authorizeHttpRequests(http);
@@ -92,15 +87,11 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(AllowedOrigins);
+        configuration.setAllowedOrigins(authEnv.allowedOrigins());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    private void csrf(HttpSecurity http) throws Exception {
-        http.csrf();
     }
 
     private void oauth2Login(HttpSecurity http) throws Exception {
@@ -108,7 +99,7 @@ public class SecurityConfig {
                 oauth2Login
                         .authorizationEndpoint().baseUri(oauth2LoginEndpointBaseUri).and()
                         .loginProcessingUrl(oauth2LoginProcessingUri)
-                        .defaultSuccessUrl(redirectBaseUri)
+                        .defaultSuccessUrl(authEnv.redirectBaseUri())
 
         );
     }
@@ -116,12 +107,13 @@ public class SecurityConfig {
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout -> logout
                 .logoutUrl(logoutUri)
-                .logoutSuccessUrl(redirectBaseUri)
+                .logoutSuccessUrl(authEnv.redirectBaseUri())
         );
     }
 
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
+                .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v1/**").permitAll()
                 .requestMatchers("/user/v1/**").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
@@ -141,7 +133,7 @@ public class SecurityConfig {
                         Role.ROLE_USER.getRole(),
                         Role.ROLE_ADMIN.getRole()
                 )
-                .anyRequest().denyAll()
+                .anyRequest().permitAll()
         );
     }
 

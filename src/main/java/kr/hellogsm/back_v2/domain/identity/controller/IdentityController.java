@@ -1,16 +1,20 @@
 package kr.hellogsm.back_v2.domain.identity.controller;
 
 import jakarta.validation.Valid;
-import kr.hellogsm.back_v2.domain.identity.dto.request.CreateIdentityReqDto;
 import kr.hellogsm.back_v2.domain.identity.dto.domain.IdentityDto;
+import kr.hellogsm.back_v2.domain.identity.dto.request.CreateIdentityReqDto;
 import kr.hellogsm.back_v2.domain.identity.service.CreateIdentityService;
 import kr.hellogsm.back_v2.domain.identity.service.IdentityQuery;
 import kr.hellogsm.back_v2.global.security.oauth.UserInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/identity/v1")
@@ -33,12 +37,20 @@ public class IdentityController {
     }
 
     @PostMapping("/identity")
-    public ResponseEntity<IdentityDto> create(
+    public ResponseEntity<Object> create(
             @RequestBody @Valid CreateIdentityReqDto userDto,
             @AuthenticationPrincipal UserInfo userInfo
     ) {
-        IdentityDto identityResDto = createIdentityService.execute(userDto, userInfo.getUserId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
+        createIdentityService.execute(userDto, userInfo.getUserId());
+        URI redirectUri = null;
+        try {
+            redirectUri = new URI("/auth/v1/logout");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("redirectUri의 syntax가 잘못되었습니다.", e);
+        }
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(redirectUri);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/identity")
