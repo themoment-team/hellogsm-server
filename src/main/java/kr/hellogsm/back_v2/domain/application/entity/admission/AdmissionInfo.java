@@ -79,7 +79,12 @@ public class AdmissionInfo {
     @Column(name = "guardian_phone_number", nullable = false)
     private String guardianPhoneNumber;
 
-    
+    @Column(name = "school_name", nullable = true)
+    private String schoolName;
+
+    @Column(name = "school_location", nullable = true)
+    private String schoolLocation;
+
     @Column(name = "teacher_name", nullable = true)
     private String teacherName;
 

@@ -2,8 +2,8 @@ package kr.hellogsm.back_v2.domain.application.dto.request;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
+import kr.hellogsm.back_v2.domain.application.annotation.NotSpace;
 import kr.hellogsm.back_v2.domain.application.entity.Application;
 import kr.hellogsm.back_v2.domain.application.entity.admission.AdmissionInfo;
 import kr.hellogsm.back_v2.domain.application.entity.admission.DesiredMajor;
@@ -16,6 +16,7 @@ import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
+import java.util.*;
 
 /**
  * 원서 생성을 담당하는 dto 입니다
@@ -81,7 +82,13 @@ public record CreateApplicationReqDto(
         String thirdDesiredMajor,
 
         @NotBlank
-        String MiddleSchoolGrade
+        String MiddleSchoolGrade,
+
+        @NotSpace
+        String schoolName,
+
+        @NotSpace
+        String schoolLocation
 ) {
     public Application toEntity(Long userId) {
         GraduationStatus graduationStatus = null;
@@ -125,5 +132,12 @@ public record CreateApplicationReqDto(
                 middleSchoolGrade,
                 userId
         );
+    }
+
+    @AssertTrue(message = "중복된 전공이 있습니다")
+    private boolean isDuplicateMajor() {
+        Set<String> majorSet = new HashSet<>(List.of(firstDesiredMajor, secondDesiredMajor, thirdDesiredMajor));
+
+        return majorSet.size() == 3;
     }
 }
