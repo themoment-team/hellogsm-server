@@ -16,7 +16,7 @@ import kr.hellogsm.back_v2.global.exception.error.ExpectedException;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 원서 생성을 담당하는 dto 입니다
@@ -134,8 +134,10 @@ public record CreateApplicationReqDto(
         );
     }
 
-    @AssertFalse(message = "중복된 전공이 있습니다")
+    @AssertTrue(message = "중복된 전공이 있습니다")
     private boolean isDuplicateMajor() {
-        return Objects.equals(firstDesiredMajor, secondDesiredMajor) || Objects.equals(secondDesiredMajor, thirdDesiredMajor) || Objects.equals(thirdDesiredMajor, firstDesiredMajor);
+        Set<String> majorSet = new HashSet<>(List.of(firstDesiredMajor, secondDesiredMajor, thirdDesiredMajor));
+
+        return majorSet.size() == 3;
     }
 }
