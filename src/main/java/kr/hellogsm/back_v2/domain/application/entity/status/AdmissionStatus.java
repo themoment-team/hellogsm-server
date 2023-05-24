@@ -52,9 +52,9 @@ public class AdmissionStatus {
      *
      * @return 초기 상태의 {@code AdmissionStatus} 객체
      */
-    public static AdmissionStatus init() {
+    public static AdmissionStatus init(Long id) {
         return AdmissionStatus.builder()
-                .id(null)
+                .id(id)
                 .isFinalSubmitted(false)
                 .isPrintsArrived(false)
                 .firstEvaluation(EvaluationStatus.NOT_YET)

@@ -24,7 +24,7 @@ import java.util.*;
  * @author 변찬우
  * @since 1.0.0
  */
-public record CreateApplicationReqDto(
+public record ApplicationReqDto(
         @NotBlank
         String applicantImageUri,
 
@@ -90,7 +90,7 @@ public record CreateApplicationReqDto(
         @NotSpace
         String schoolLocation
 ) {
-    public Application toEntity(Long userId) {
+    public Application toEntity(Long id, Long userId) {
         GraduationStatus graduationStatus = null;
         try {
             graduationStatus = GraduationStatus.valueOf(this.graduation);
@@ -105,6 +105,7 @@ public record CreateApplicationReqDto(
                 .build();
 
         AdmissionInfo admissionInfo = AdmissionInfo.builder()
+                .id(id)
                 .applicantImageUri(this.applicantImageUri)
                 .applicantName(this.applicantName)
                 .applicantGender(this.applicantGender)
@@ -122,11 +123,11 @@ public record CreateApplicationReqDto(
                 .desiredMajor(desiredMajor)
                 .build();
 
-        AdmissionStatus admissionStatus = AdmissionStatus.init();
-        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, this.MiddleSchoolGrade);
+        AdmissionStatus admissionStatus = AdmissionStatus.init(id);
+        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(id, this.MiddleSchoolGrade);
 
         return new Application(
-                null,
+                id,
                 admissionInfo,
                 admissionStatus,
                 middleSchoolGrade,
