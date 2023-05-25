@@ -1,0 +1,8 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+	implementation 'jakarta.persistence:jakarta.persistence-api'
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // @NotNull도 대체 가능하고, @AsserTrue도 대체 가능한데 일단 모듈 분리하는게 우선순위라 코드 수정 줄이기 위해 추가
+	implementation 'com.fasterxml.jackson.core:jackson-databind' //TODO 어플리케이션 Grade 리팩토링 할 때 지울 예정
+}
