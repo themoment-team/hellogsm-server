@@ -14,10 +14,6 @@ allprojects {
     }
 }
 
-dependencies {
-    implementation 'org.projectlombok:lombok:1.18.26'
-}
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
