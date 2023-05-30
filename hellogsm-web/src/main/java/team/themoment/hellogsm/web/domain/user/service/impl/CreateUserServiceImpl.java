@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.themoment.hellogsm.entity.domain.user.entity.User;
+import team.themoment.hellogsm.web.domain.user.dto.mapper.UserMapper;
 import team.themoment.hellogsm.web.domain.user.dto.domain.UserDto;
 import team.themoment.hellogsm.web.domain.user.dto.request.CreateUserReqDto;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
@@ -15,14 +16,13 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 @RequiredArgsConstructor
 @Transactional(rollbackFor = {Exception.class})
 public class CreateUserServiceImpl implements CreateUserService {
-
     private final UserRepository userRepository;
 
     @Override
     public UserDto execute(CreateUserReqDto createUserReqDto) {
         checkExistUser(createUserReqDto);
-        User savedTemp = userRepository.save(createUserReqDto.toEntity());
-        return UserDto.from(savedTemp);
+        User savedTemp = userRepository.save(UserMapper.INSTANCE.createUserReqDtoToUser(createUserReqDto));
+        return UserMapper.INSTANCE.userToUserDto(savedTemp);
     }
 
     private void checkExistUser(CreateUserReqDto createUserReqDto) {
