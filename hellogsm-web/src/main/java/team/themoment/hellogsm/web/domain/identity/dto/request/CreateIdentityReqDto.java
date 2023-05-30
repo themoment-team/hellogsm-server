@@ -10,12 +10,4 @@ public record CreateIdentityReqDto(
         @NotNull
         String phoneNumber
 ) {
-    public Identity toEntity(Long userId) {
-        return new Identity(
-                null,
-                name,
-                phoneNumber,
-                userId
-        );
-    }
 }
