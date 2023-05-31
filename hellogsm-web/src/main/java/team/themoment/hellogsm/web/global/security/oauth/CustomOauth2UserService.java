@@ -1,7 +1,7 @@
 package team.themoment.hellogsm.web.global.security.oauth;
 
 import team.themoment.hellogsm.entity.domain.user.entity.User;
-import team.themoment.hellogsm.web.domain.user.dto.domain.UserDto;
+import team.themoment.hellogsm.web.domain.user.dto.mapper.UserMapper;
 import team.themoment.hellogsm.web.domain.user.dto.request.CreateUserReqDto;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -33,14 +33,14 @@ public class CustomOauth2UserService implements OAuth2UserService {
 
         User user = getUser(provider, providerId);
 
-        return new UserInfo(UserDto.from(user), LocalDateTime.now());
+        return new UserInfo(UserMapper.INSTANCE.userToUserDto(user), LocalDateTime.now());
     }
 
     private User getUser(String provider, String providerId) {
         User savedUser = userRepository.findByProviderAndProviderId(provider, providerId)
                 .orElse(null);
         if (savedUser == null) {
-            User user = new CreateUserReqDto(provider, providerId).toEntity();
+            User user = UserMapper.INSTANCE.createUserReqDtoToUser(new CreateUserReqDto(provider, providerId));
             return userRepository.save(user);
         }
         return savedUser;

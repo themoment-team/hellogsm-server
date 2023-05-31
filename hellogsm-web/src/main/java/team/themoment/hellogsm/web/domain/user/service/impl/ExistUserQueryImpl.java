@@ -8,7 +8,6 @@ import team.themoment.hellogsm.web.domain.user.service.ExistUserQuery;
 @Service
 @RequiredArgsConstructor
 public class ExistUserQueryImpl implements ExistUserQuery {
-
     private final UserRepository userRepository;
 
     @Override

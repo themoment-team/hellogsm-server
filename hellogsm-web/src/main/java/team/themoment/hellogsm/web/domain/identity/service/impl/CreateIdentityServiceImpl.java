@@ -9,6 +9,7 @@ import team.themoment.hellogsm.entity.domain.user.entity.User;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.mapper.IdentityMapper;
 import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
@@ -50,7 +51,8 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
                 Role.ROLE_USER
         );
         userRepository.save(identifiedUser);
-        Identity identity = identityRepository.save(identityReqDto.toEntity(userId));
-        return IdentityDto.from(identity);
+        Identity newIdentity = IdentityMapper.INSTANCE.CreateIdentityReqDtoToIdentity(identityReqDto, userId);
+        Identity savedidentity = identityRepository.save(newIdentity);
+        return IdentityMapper.INSTANCE.identityToIdentityDto(savedidentity);
     }
 }

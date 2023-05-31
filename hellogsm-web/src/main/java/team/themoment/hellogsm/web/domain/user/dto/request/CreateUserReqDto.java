@@ -10,12 +10,4 @@ public record CreateUserReqDto(
         @NotNull
         String providerId
 ) {
-    public User toEntity() {
-        return new User(
-                null,
-                provider,
-                providerId,
-                null
-        );
-    }
 }

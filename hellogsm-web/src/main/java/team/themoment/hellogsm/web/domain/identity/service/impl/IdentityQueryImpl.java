@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
+import team.themoment.hellogsm.web.domain.identity.mapper.IdentityMapper;
 import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
@@ -32,6 +33,6 @@ public class IdentityQueryImpl implements IdentityQuery {
     public IdentityDto execute(Long userId) {
         Identity identity = identityRepository.findByUserId(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 Identity 입니다", HttpStatus.BAD_REQUEST));
-        return IdentityDto.from(identity);
+        return IdentityMapper.INSTANCE.identityToIdentityDto(identity);
     }
 }
