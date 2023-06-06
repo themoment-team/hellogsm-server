@@ -6,6 +6,7 @@ import jakarta.validation.constraints.AssertFalse;
 import lombok.*;
 import team.themoment.hellogsm.entity.domain.application.enums.Gender;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
+import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 
 import java.time.LocalDate;
 
@@ -90,6 +91,9 @@ public class AdmissionInfo {
 
     @Column(name = "teacher_phone_number", nullable = true)
     private String teacherPhoneNumber;
+
+    @Embedded
+    Screening screening;
 
     @Embedded
     DesiredMajor desiredMajor;
