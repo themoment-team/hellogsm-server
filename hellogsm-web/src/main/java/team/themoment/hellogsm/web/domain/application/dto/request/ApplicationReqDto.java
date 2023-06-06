@@ -14,6 +14,7 @@ import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleScho
 import team.themoment.hellogsm.entity.domain.application.enums.Gender;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
+import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 import team.themoment.hellogsm.web.domain.application.annotation.NotSpace;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
@@ -92,12 +93,18 @@ public record ApplicationReqDto(
         String schoolName,
 
         @NotSpace
-        String schoolLocation
+        String schoolLocation,
+
+        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL)$")
+        @NotBlank
+        String screening
 ) {
     public Application toEntity(Long id, Long userId) {
         GraduationStatus graduationStatus = null;
+        Screening screening = null;
         try {
             graduationStatus = GraduationStatus.valueOf(this.graduation);
+            screening = Screening.valueOf(this.screening);
         } catch (IllegalArgumentException e) {
             throw new ExpectedException("graduation 값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
         }
@@ -124,6 +131,7 @@ public record ApplicationReqDto(
                 .guardianPhoneNumber(this.guardianPhoneNumber)
                 .teacherName(this.teacherName)
                 .teacherPhoneNumber(this.teacherPhoneNumber)
+                .screening(screening)
                 .desiredMajor(desiredMajor)
                 .build();
 
