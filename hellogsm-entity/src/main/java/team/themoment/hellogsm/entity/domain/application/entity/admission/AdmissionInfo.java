@@ -75,9 +75,11 @@ public class AdmissionInfo {
     @Column(name = "relation_with_applicant", nullable = false)
     private String relationWithApplicant;
 
-
     @Column(name = "guardian_phone_number", nullable = false)
     private String guardianPhoneNumber;
+
+    @Column(name = "screening", nullable = false)
+    private Screening screening;
 
     @Column(name = "school_name", nullable = true)
     private String schoolName;
@@ -88,12 +90,8 @@ public class AdmissionInfo {
     @Column(name = "teacher_name", nullable = true)
     private String teacherName;
 
-
     @Column(name = "teacher_phone_number", nullable = true)
     private String teacherPhoneNumber;
-
-    @Embedded
-    Screening screening;
 
     @Embedded
     DesiredMajor desiredMajor;
