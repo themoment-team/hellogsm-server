@@ -102,11 +102,16 @@ public record ApplicationReqDto(
     public Application toEntity(Long id, Long userId) {
         GraduationStatus graduationStatus = null;
         Screening screening = null;
+
         try {
             graduationStatus = GraduationStatus.valueOf(this.graduation);
-            screening = Screening.valueOf(this.screening);
         } catch (IllegalArgumentException e) {
             throw new ExpectedException("graduation 값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            screening = Screening.valueOf(this.screening);
+        } catch (IllegalArgumentException e) {
+            throw new ExpectedException("screening 값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
         }
 
         DesiredMajor desiredMajor = DesiredMajor.builder()
