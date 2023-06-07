@@ -43,7 +43,7 @@ public class AdmissionInfo {
 
 
     @Column(name = "applicant_brith", nullable = false)
-    private LocalDate applicantBrith;
+    private LocalDate applicantBirth;
 
 
     @Column(name = "address", nullable = false)
