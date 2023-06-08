@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @ToString
+@Getter
 public class AdmissionStatus {
 
     @Id

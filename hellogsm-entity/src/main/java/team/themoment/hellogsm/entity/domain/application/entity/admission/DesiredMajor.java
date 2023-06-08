@@ -27,6 +27,7 @@ import java.util.Set;
 @Builder
 @ToString
 @Slf4j
+@Getter
 public class DesiredMajor {
 
 
