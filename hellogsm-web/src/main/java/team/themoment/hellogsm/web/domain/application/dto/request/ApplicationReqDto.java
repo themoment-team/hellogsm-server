@@ -125,7 +125,7 @@ public record ApplicationReqDto(
                 .applicantImageUri(this.applicantImageUri)
                 .applicantName(this.applicantName)
                 .applicantGender(this.applicantGender)
-                .applicantBrith(this.applicantBirth)
+                .applicantBirth(this.applicantBirth)
                 .address(this.address)
                 .detailAddress(this.detailAddress)
                 .graduation(graduationStatus)
