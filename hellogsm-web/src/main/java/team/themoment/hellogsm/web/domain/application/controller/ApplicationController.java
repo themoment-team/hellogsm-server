@@ -2,6 +2,7 @@ package team.themoment.hellogsm.web.domain.application.controller;
 
 import jakarta.validation.Valid;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationGrade;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
@@ -29,12 +30,12 @@ public class ApplicationController {
     private final QuerySingleApplicationService querySingleApplicationService;
 
     @GetMapping("/application/{applicationId}")
-    public Object readOne(@PathVariable("applicationId") Long applicationId) {
+    public SingleApplicationGrade readOne(@PathVariable("applicationId") Long applicationId) {
         return querySingleApplicationService.execute(applicationId);
     }
 
     @GetMapping("/application")
-    public Object readMe(@AuthenticationPrincipal UserInfo userInfo) {
+    public SingleApplicationGrade readMe(@AuthenticationPrincipal UserInfo userInfo) {
         return querySingleApplicationService.execute(userInfo.getUserId());
     }
 

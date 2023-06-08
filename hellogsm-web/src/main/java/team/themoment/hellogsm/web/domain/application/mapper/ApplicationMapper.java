@@ -6,10 +6,7 @@ import team.themoment.hellogsm.entity.domain.application.entity.admission.Admiss
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
-import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionInfoDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionStatusDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.GedAdmissionGradeDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.GeneralAdmissionGradeDto;
+import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 
 @Mapper(
         componentModel = "spring",

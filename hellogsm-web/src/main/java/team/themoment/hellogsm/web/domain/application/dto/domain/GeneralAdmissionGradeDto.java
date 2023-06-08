@@ -15,5 +15,5 @@ public record GeneralAdmissionGradeDto(
         BigDecimal attendanceScore,
         BigDecimal volunteerScore,
         BigDecimal extracurricularSubtotalScore
-) {
+) implements SuperGrade {
 }

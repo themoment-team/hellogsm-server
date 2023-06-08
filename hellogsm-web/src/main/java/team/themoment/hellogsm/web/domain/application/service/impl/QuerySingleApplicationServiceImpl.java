@@ -8,13 +8,9 @@ import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.AdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
-import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
-import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionInfoDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionStatusDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.GedAdmissionGradeDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.GeneralAdmissionGradeDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationGedRes;
-import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationGeneralRes;
+import team.themoment.hellogsm.web.domain.application.dto.domain.*;
+import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationGrade;
 import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
@@ -26,31 +22,23 @@ public class QuerySingleApplicationServiceImpl implements QuerySingleApplication
     final private ApplicationRepository applicationRepository;
 
     @Override
-    public Object execute(Long applicant) {
+    public SingleApplicationGrade execute(Long applicant) {
         Application application = applicationRepository.findByUserId(applicant)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다", HttpStatus.NOT_FOUND));
 
         AdmissionInfoDto admissionInfo = ApplicationMapper.INSTANCE.admissionInfoToAdmissionInfoDto(application.getAdmissionInfo());
         AdmissionStatusDto admissionStatus = ApplicationMapper.INSTANCE.admissionStatusToAdmissionStatusDto(application.getAdmissionStatus());
-        Object admissionGrade = toConvertAdmissionGradeDto(application.getAdmissionGrade());
+        SuperGrade admissionGrade = toConvertAdmissionGradeDto(application.getAdmissionGrade());
 
-        if (application.getAdmissionInfo().getGraduation().equals(GraduationStatus.GED))
-            return new SingleApplicationGedRes(
-                    application.getId(),
-                    admissionInfo,
-                    application.getMiddleSchoolGrade().getMiddleSchoolGradeText(),
-                    (GedAdmissionGradeDto) admissionGrade, admissionStatus
-            );
-
-        return new SingleApplicationGeneralRes(
+        return new SingleApplicationRes(
                 application.getId(),
                 admissionInfo,
                 application.getMiddleSchoolGrade().getMiddleSchoolGradeText(),
-                (GeneralAdmissionGradeDto) admissionGrade, admissionStatus
+                admissionGrade, admissionStatus
         );
     }
 
-    private Object toConvertAdmissionGradeDto(AdmissionGrade admissionGrade) {
+    private SuperGrade toConvertAdmissionGradeDto(AdmissionGrade admissionGrade) {
         Object unProxyAdmissionGrade = Hibernate.unproxy(admissionGrade);
 
         if (unProxyAdmissionGrade instanceof GraduateAdmissionGrade) {

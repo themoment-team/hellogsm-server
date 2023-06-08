@@ -7,5 +7,5 @@ public record GedAdmissionGradeDto (
         BigDecimal percentileRank,
         BigDecimal gedTotalScore,
         BigDecimal gedMaxScore
-) {
+) implements SuperGrade {
 }

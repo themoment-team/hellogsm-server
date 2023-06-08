@@ -2,14 +2,13 @@ package team.themoment.hellogsm.web.domain.application.dto.response;
 
 import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionInfoDto;
 import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionStatusDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.GedAdmissionGradeDto;
+import team.themoment.hellogsm.web.domain.application.dto.domain.SuperGrade;
 
-public record SingleApplicationGedRes (
+public record SingleApplicationRes(
         Long id,
         AdmissionInfoDto admissionInfo,
         String middleSchoolGrade,
-        GedAdmissionGradeDto admissionGrade,
+        SuperGrade admissionGrade,
         AdmissionStatusDto admissionStatus
-
-) {
+) implements SingleApplicationGrade {
 }
