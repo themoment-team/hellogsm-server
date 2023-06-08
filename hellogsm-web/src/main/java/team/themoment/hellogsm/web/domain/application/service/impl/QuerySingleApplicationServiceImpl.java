@@ -26,8 +26,8 @@ public class QuerySingleApplicationServiceImpl implements QuerySingleApplication
     final private ApplicationRepository applicationRepository;
 
     @Override
-    public Object execute() {
-        Application application = applicationRepository.findByUserId(1L)
+    public Object execute(Long applicant) {
+        Application application = applicationRepository.findByUserId(applicant)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다", HttpStatus.NOT_FOUND));
 
         AdmissionInfoDto admissionInfo = ApplicationMapper.INSTANCE.admissionInfoToAdmissionInfoDto(application.getAdmissionInfo());

@@ -30,7 +30,12 @@ public class ApplicationController {
 
     @GetMapping("/application/{applicationId}")
     public Object readOne(@PathVariable("applicationId") Long applicationId) {
-        return querySingleApplicationService.execute();
+        return querySingleApplicationService.execute(applicationId);
+    }
+
+    @GetMapping("/application")
+    public Object readMe(@AuthenticationPrincipal UserInfo userInfo) {
+        return querySingleApplicationService.execute(userInfo.getUserId());
     }
 
     @PostMapping("/application")
