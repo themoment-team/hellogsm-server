@@ -78,6 +78,7 @@ public class AdmissionInfo {
     @Column(name = "guardian_phone_number", nullable = false)
     private String guardianPhoneNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "screening", nullable = false)
     private Screening screening;
 
