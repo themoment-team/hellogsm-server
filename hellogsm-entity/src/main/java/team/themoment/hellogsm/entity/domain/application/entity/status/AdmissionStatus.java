@@ -33,9 +33,11 @@ public class AdmissionStatus {
     @Column(name = "is_prints_arrived", nullable = false)
     private Boolean isPrintsArrived;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "first_evaluation", nullable = false)
     private EvaluationStatus firstEvaluation;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "second_evaluation", nullable = false)
     private EvaluationStatus secondEvaluation;
 
@@ -45,6 +47,7 @@ public class AdmissionStatus {
     @Column(name = "second_score", nullable = true) // TODO 이름 바꾸기 - 2차 시험 점수
     private BigDecimal secondScore;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "final_major", nullable = true)
     private Major finalMajor; // "배정되지 않음" 상태를 표현하기 애패해서 일단은 null로 둠
 
