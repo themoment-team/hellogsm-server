@@ -1,7 +1,7 @@
 package team.themoment.hellogsm.web.domain.application.service;
 
-import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationGrade;
+import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 
 public interface QuerySingleApplicationService {
-    SingleApplicationGrade execute(Long applicantId);
+    SingleApplicationRes execute(Long applicantId);
 }

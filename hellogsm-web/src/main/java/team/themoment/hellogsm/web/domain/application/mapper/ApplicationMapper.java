@@ -2,11 +2,14 @@ package team.themoment.hellogsm.web.domain.application.mapper;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
+import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
+import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 
 @Mapper(
         componentModel = "spring",
@@ -16,6 +19,30 @@ import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 )
 public interface ApplicationMapper {
     ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
+
+
+    default SingleApplicationRes CreateSingleApplicationDto(Application application) {
+        AdmissionInfoDto admissionInfo = ApplicationMapper.INSTANCE.admissionInfoToAdmissionInfoDto(application.getAdmissionInfo());
+        AdmissionStatusDto admissionStatus = ApplicationMapper.INSTANCE.admissionStatusToAdmissionStatusDto(application.getAdmissionStatus());
+        SuperGrade admissionGrade;
+
+
+        if (application.getAdmissionInfo().getGraduation().equals(GraduationStatus.GED)) {
+            admissionGrade = gedAdmissionGradeToGedAdmissionGradeDto((GedAdmissionGrade) application.getAdmissionGrade());
+        } else {
+            admissionGrade = graduateAdmissionGradeToAdmissionGradeDto((GraduateAdmissionGrade) application.getAdmissionGrade());
+        }
+
+        // TODO admissionGrade가 SuperGrade 타입이면 막기
+
+        return new SingleApplicationRes(
+                application.getId(),
+                admissionInfo,
+                application.getMiddleSchoolGrade().getMiddleSchoolGradeText(),
+                admissionGrade,
+                admissionStatus
+        );
+    }
 
     @BeanMapping(ignoreUnmappedSourceProperties = "id")
     @Mappings({

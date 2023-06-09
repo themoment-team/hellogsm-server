@@ -10,5 +10,5 @@ public record SingleApplicationRes(
         String middleSchoolGrade,
         SuperGrade admissionGrade,
         AdmissionStatusDto admissionStatus
-) implements SingleApplicationGrade {
+) {
 }
