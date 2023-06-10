@@ -20,6 +20,6 @@ public class QuerySingleApplicationServiceImpl implements QuerySingleApplication
         Application application = applicationRepository.findByUserIdEgerFetch(applicationId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다", HttpStatus.NOT_FOUND));
 
-        return ApplicationMapper.INSTANCE.CreateSingleApplicationDto(application);
+        return ApplicationMapper.INSTANCE.createSingleApplicationDto(application);
     }
 }

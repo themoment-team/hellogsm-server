@@ -21,7 +21,7 @@ public interface ApplicationMapper {
     ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
 
 
-    default SingleApplicationRes CreateSingleApplicationDto(Application application) {
+    default SingleApplicationRes createSingleApplicationDto(Application application) {
         AdmissionInfoDto admissionInfo = ApplicationMapper.INSTANCE.admissionInfoToAdmissionInfoDto(application.getAdmissionInfo());
         AdmissionStatusDto admissionStatus = ApplicationMapper.INSTANCE.admissionStatusToAdmissionStatusDto(application.getAdmissionStatus());
         SuperGrade admissionGrade;
