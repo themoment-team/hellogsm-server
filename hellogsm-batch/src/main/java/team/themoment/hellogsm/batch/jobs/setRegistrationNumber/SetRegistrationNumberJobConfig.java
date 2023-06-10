@@ -48,7 +48,8 @@ public class SetRegistrationNumberJobConfig {
     private final Parameter parameter;
 
     @Getter
-    @AllArgsConstructor    public class Parameter {
+    @AllArgsConstructor
+    public class Parameter {
         @NonNull LocalDateTime dateTime;
     }
 
@@ -76,7 +77,8 @@ public class SetRegistrationNumberJobConfig {
     }
 
     @Bean
-    @JobScope    public Step setRegistrationNumberStep() {
+    @JobScope
+    public Step setRegistrationNumberStep() {
         return new StepBuilder(BEAN_PREFIX + "setRegistrationNumberStep", this.jobRepository)
                 .<Application, AdmissionStatus>chunk(CHUNK_SIZE, this.platformTransactionManager)
                 .listener(new JobExecutionListener() {
@@ -84,6 +86,7 @@ public class SetRegistrationNumberJobConfig {
                     public void beforeJob(JobExecution jobExecution) {
                         registrationNumberSequence.init();
                     }
+
                     @Override
                     public void afterJob(JobExecution jobExecution) {
                         registrationNumberSequence.clear();
@@ -96,7 +99,8 @@ public class SetRegistrationNumberJobConfig {
     }
 
     @Bean
-    @StepScope    public JpaPagingItemReader<Application> setRegistrationNumberItemReader() {
+    @StepScope
+    public JpaPagingItemReader<Application> setRegistrationNumberItemReader() {
         return new JpaPagingItemReaderBuilder<Application>()
                 .name(BEAN_PREFIX + "setRegistrationNumberItemReader")
                 .entityManagerFactory(this.entityManagerFactory)
@@ -111,15 +115,16 @@ public class SetRegistrationNumberJobConfig {
     }
 
     @Bean
-    @StepScope    public ItemProcessor<Application, AdmissionStatus> setRegistrationNumberProcessor() {
+    @StepScope
+    public ItemProcessor<Application, AdmissionStatus> setRegistrationNumberProcessor() {
         return application -> {
             AdmissionStatus admissionStatus = application.getAdmissionStatus();
             Screening screening = application.getAdmissionInfo().getScreening();
             registrationNumberSequence.add(screening);
             Long registrationNumber = null;
-            switch(screening) {
+            switch (screening) {
                 case GENERAL -> registrationNumber = 1000L + registrationNumberSequence.get(screening);
-                case SOCIAL ->  registrationNumber = 2000L + registrationNumberSequence.get(screening);
+                case SOCIAL -> registrationNumber = 2000L + registrationNumberSequence.get(screening);
                 case SPECIAL -> registrationNumber = 3000L + registrationNumberSequence.get(screening);
             }
             AdmissionStatus newAdmissionStatus = AdmissionStatus.builder()
@@ -137,7 +142,8 @@ public class SetRegistrationNumberJobConfig {
     }
 
     @Bean
-    @StepScope    public JpaItemWriter<AdmissionStatus> setRegistrationNumberItemWriter() {
+    @StepScope
+    public JpaItemWriter<AdmissionStatus> setRegistrationNumberItemWriter() {
         return new JpaItemWriterBuilder<AdmissionStatus>()
                 .usePersist(false)
                 .entityManagerFactory(this.entityManagerFactory)
