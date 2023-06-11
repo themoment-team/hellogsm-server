@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.global.security.oauth;
 
+import team.themoment.hellogsm.entity.domain.user.entity.User;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.user.dto.domain.UserDto;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,25 +14,29 @@ import java.util.List;
 import java.util.Map;
 
 public class UserInfo implements OAuth2User, Serializable {
-    private final UserDto userDto;
+    private final Long userId;
+    private final Role userRole;
+    private final String userName;
     private final LocalDateTime lastLoginTime;
 
-    public UserInfo(UserDto userDto, LocalDateTime lastLoginTime) {
-        this.userDto = userDto;
+    public UserInfo(User user, LocalDateTime lastLoginTime) {
+        this.userId = user.getId();
+        this.userRole = user.getRole();
+        this.userName = user.getProvider() + "_" + user.getProviderId();
         this.lastLoginTime = lastLoginTime;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userDto.role().name()));
+        return List.of(new SimpleGrantedAuthority(userRole.name()));
     }
 
     public Role getUserRole() {
-        return userDto.role();
+        return userRole;
     }
 
     public Long getUserId() {
-        return userDto.id();
+        return userId;
     }
 
     public LocalDateTime getLastLoginTime() {
@@ -40,7 +45,7 @@ public class UserInfo implements OAuth2User, Serializable {
 
     @Override
     public String getName() {
-        return userDto.provider() + "_" + userDto.providerId();
+        return userName;
     }
 
     /**

@@ -33,7 +33,7 @@ public class CustomOauth2UserService implements OAuth2UserService {
 
         User user = getUser(provider, providerId);
 
-        return new UserInfo(UserMapper.INSTANCE.userToUserDto(user), LocalDateTime.now());
+        return new UserInfo(user, LocalDateTime.now());
     }
 
     private User getUser(String provider, String providerId) {
