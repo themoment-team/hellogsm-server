@@ -10,8 +10,7 @@ public record UserDto(
         Long id,
         String provider,
         String providerId,
-
         @Enumerated(EnumType.STRING)
         Role role
-) implements Serializable {
+) {
 }
