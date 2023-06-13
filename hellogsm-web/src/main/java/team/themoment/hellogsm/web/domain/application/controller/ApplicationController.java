@@ -34,12 +34,12 @@ public class ApplicationController {
         return querySingleApplicationService.execute(applicationId);
     }
 
-    @GetMapping("/application")
+    @GetMapping("/application/me")
     public SingleApplicationRes readMe() {
         return querySingleApplicationService.execute(manager.getId());
     }
 
-    @PostMapping("/application")
+    @PostMapping("/application/me")
     public ResponseEntity<Map<String, String>> create(
             @RequestBody @Valid ApplicationReqDto body
     ) {
@@ -47,7 +47,7 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
     }
 
-    @PutMapping("/application")
+    @PutMapping("/application/me")
     public ResponseEntity<Map<String, String>> modify(
             @RequestBody @Valid ApplicationReqDto body
     ) {

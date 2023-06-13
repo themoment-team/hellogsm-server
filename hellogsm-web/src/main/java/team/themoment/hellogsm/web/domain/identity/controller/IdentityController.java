@@ -35,7 +35,7 @@ public class IdentityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
 
-    @PostMapping("/identity")
+    @PostMapping("/identity/me")
     public ResponseEntity<Object> create(
             @RequestBody @Valid CreateIdentityReqDto userDto
     ) {
@@ -51,7 +51,7 @@ public class IdentityController {
         return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 
-    @GetMapping("/identity")
+    @GetMapping("/identity/me")
     public ResponseEntity<IdentityDto> find() {
         IdentityDto identityResDto = identityQuery.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(identityResDto);

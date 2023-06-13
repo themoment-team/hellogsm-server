@@ -18,7 +18,7 @@ public class UserController {
     private final AuthenticatedUserManager manager;
     private final UserByIdQuery userByIdQuery;
 
-    @GetMapping("/user")
+    @GetMapping("/user/me")
     public ResponseEntity<UserDto> find() {
         UserDto userDto = userByIdQuery.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
