@@ -6,6 +6,7 @@ import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplica
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
+import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 import team.themoment.hellogsm.web.global.security.oauth.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/application/v1")
 public class ApplicationController {
+    private final AuthenticatedUserManager manager;
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
@@ -35,16 +37,15 @@ public class ApplicationController {
     }
 
     @GetMapping("/application")
-    public SingleApplicationRes readMe(@AuthenticationPrincipal UserInfo userInfo) {
-        return querySingleApplicationService.execute(userInfo.getUserId());
+    public SingleApplicationRes readMe() {
+        return querySingleApplicationService.execute(manager.getId());
     }
 
     @PostMapping("/application")
     public ResponseEntity<Map<String, String>> create(
-            @RequestBody @Valid ApplicationReqDto body,
-            @AuthenticationPrincipal UserInfo userInfo
+            @RequestBody @Valid ApplicationReqDto body
     ) {
-        createApplicationService.execute(body, userInfo.getUserId());
+        createApplicationService.execute(body, manager.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
     }
 
@@ -53,7 +54,7 @@ public class ApplicationController {
             @RequestBody @Valid ApplicationReqDto body,
             @AuthenticationPrincipal UserInfo userInfo
     ) {
-        modifyApplicationService.execute(body, userInfo.getUserId());
+        modifyApplicationService.execute(body, manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 }

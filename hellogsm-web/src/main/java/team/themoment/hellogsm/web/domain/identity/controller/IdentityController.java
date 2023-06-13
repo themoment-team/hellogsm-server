@@ -11,6 +11,7 @@ import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
+import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 import team.themoment.hellogsm.web.global.security.oauth.UserInfo;
 
 import java.net.URI;
@@ -20,7 +21,7 @@ import java.net.URISyntaxException;
 @RequestMapping("/identity/v1")
 @RequiredArgsConstructor
 public class IdentityController {
-
+    private final AuthenticatedUserManager manager;
     private final CreateIdentityService createIdentityService;
     private final IdentityQuery identityQuery;
 
@@ -38,10 +39,9 @@ public class IdentityController {
 
     @PostMapping("/identity")
     public ResponseEntity<Object> create(
-            @RequestBody @Valid CreateIdentityReqDto userDto,
-            @AuthenticationPrincipal UserInfo userInfo
+            @RequestBody @Valid CreateIdentityReqDto userDto
     ) {
-        createIdentityService.execute(userDto, userInfo.getUserId());
+        createIdentityService.execute(userDto, manager.getId());
         URI redirectUri = null;
         try {
             redirectUri = new URI("/auth/v1/logout");
@@ -54,10 +54,8 @@ public class IdentityController {
     }
 
     @GetMapping("/identity")
-    public ResponseEntity<IdentityDto> find(
-            @AuthenticationPrincipal UserInfo userInfo
-    ) {
-        IdentityDto identityResDto = identityQuery.execute(userInfo.getUserId());
+    public ResponseEntity<IdentityDto> find() {
+        IdentityDto identityResDto = identityQuery.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
     }
 
