@@ -7,11 +7,9 @@ import team.themoment.hellogsm.web.domain.application.service.CreateApplicationS
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
-import team.themoment.hellogsm.web.global.security.oauth.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -51,8 +49,7 @@ public class ApplicationController {
 
     @PutMapping("/application")
     public ResponseEntity<Map<String, String>> modify(
-            @RequestBody @Valid ApplicationReqDto body,
-            @AuthenticationPrincipal UserInfo userInfo
+            @RequestBody @Valid ApplicationReqDto body
     ) {
         modifyApplicationService.execute(body, manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
