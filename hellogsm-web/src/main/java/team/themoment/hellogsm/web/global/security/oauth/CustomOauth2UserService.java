@@ -1,6 +1,9 @@
 package team.themoment.hellogsm.web.global.security.oauth;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import team.themoment.hellogsm.entity.domain.user.entity.User;
+import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.user.dto.mapper.UserMapper;
 import team.themoment.hellogsm.web.domain.user.dto.request.CreateUserReqDto;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
@@ -12,6 +15,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class CustomOauth2UserService implements OAuth2UserService {
@@ -29,11 +33,24 @@ public class CustomOauth2UserService implements OAuth2UserService {
         OAuth2User oAuth2User = delegateOauth2UserService.loadUser(userRequest);
 
         String provider = userRequest.getClientRegistration().getRegistrationId();
-        String providerId = getProviderIdByProvider(provider, oAuth2User);
+        String providerId = oAuth2User.getName();
 
         User user = getUser(provider, providerId);
 
-        return new UserInfo(user, LocalDateTime.now());
+        String nameAttribute = "id";
+        Long id = user.getId();
+        Role role = user.getRole();
+        Map<String, Object> attributes = new HashMap<>(Map.of(
+                nameAttribute, id,
+                "role", role,
+                "provider", provider,
+                "provider_id", providerId,
+                "last_login_time", LocalDateTime.now()
+                ));
+        Collection<GrantedAuthority> authorities = new ArrayList<>(oAuth2User.getAuthorities());
+        authorities.add(new SimpleGrantedAuthority(role.name()));
+
+        return new UserInfo(authorities, attributes, nameAttribute);
     }
 
     private User getUser(String provider, String providerId) {
@@ -44,26 +61,5 @@ public class CustomOauth2UserService implements OAuth2UserService {
             return userRepository.save(user);
         }
         return savedUser;
-    }
-
-    private String getProviderIdByProvider(String provider, OAuth2User oAuth2User) {
-        final String nameAttributesKey = getNameAttributesKeyByProvider(provider);
-        final Object providerIdObject = oAuth2User.getAttribute(nameAttributesKey);
-        if (providerIdObject == null) {
-            throw new IllegalArgumentException("provider는 null일 수 없습니다");
-        }
-        return providerIdObject.toString();
-    }
-
-
-    private static String getNameAttributesKeyByProvider(String provider) {
-        final String GOOGLE_PROVIDER = "google";
-        final String KAKAO_PROVIDER = "kakao";
-        final String GITHUB_PROVIDER = "github";
-        return switch (provider) {
-            case GOOGLE_PROVIDER -> "sub";
-            case KAKAO_PROVIDER, GITHUB_PROVIDER -> "id";
-            default -> throw new IllegalArgumentException("유효하지 않은 provider입니다");
-        };
     }
 }
