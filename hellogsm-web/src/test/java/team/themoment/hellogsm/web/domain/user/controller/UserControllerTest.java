@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -37,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ExtendWith(RestDocumentationExtension.class)
 class UserControllerTest {
+
+    private RestDocumentationResultHandler documentationHandler;
+
     @Autowired
     private WebApplicationContext context;
 
@@ -49,11 +53,24 @@ class UserControllerTest {
     private AuthenticatedUserManager manager;
 
     @BeforeEach
-    public void setUp(RestDocumentationContextProvider restDocumentation) {
+    void setUp(RestDocumentationContextProvider restDocumentation) {
+        this.documentationHandler = document("{method-name}",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()));
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(restDocumentation))
+                .alwaysDo(this.documentationHandler)
                 .build();
     }
+
+
+    protected final FieldDescriptor[] userResponseFields = new FieldDescriptor[]{
+            fieldWithPath("id").type(NUMBER).description("USER 식별자"),
+            fieldWithPath("provider").type(STRING).description("OAuth2 제공자"),
+            fieldWithPath("providerId").type(STRING).description("OAuth2 제공자의 회원 식별자"),
+            fieldWithPath("role").type(STRING).description("USER 권한")
+    };
 
     @Test
     @DisplayName("인증된 유저 정보로  USER 조회")
@@ -63,13 +80,6 @@ class UserControllerTest {
         Mockito.when(userByIdQuery.execute(any(Long.class))).thenReturn(user);
         Mockito.when(manager.getId()).thenReturn(id);
 
-        var fieldDescriptors = new FieldDescriptor[]{
-                fieldWithPath("id").type(NUMBER).description("USER 식별자"),
-                fieldWithPath("provider").type(STRING).description("OAuth2 제공자"),
-                fieldWithPath("providerId").type(STRING).description("OAuth2 제공자의 회원 식별자"),
-                fieldWithPath("role").type(STRING).description("USER 권한")
-        };
-
         this.mockMvc.perform(get("/user/v1/user/me", MediaType.APPLICATION_JSON)
                         .header("SESSION", "SESSIONID12345"))
                 .andExpect(status().isOk())
@@ -78,10 +88,9 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.provider").value(user.provider()))
                 .andExpect(jsonPath("$.providerId").value(user.providerId()))
                 .andExpect(jsonPath("$.role").value(user.role().name()))
-                .andDo(document("{class-name}/{method-name}",
-                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                .andDo(this.documentationHandler.document(
                         requestHeaders(headerWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
-                        responseFields(fieldDescriptors)
+                        responseFields(userResponseFields)
                 ));
     }
 
@@ -92,13 +101,6 @@ class UserControllerTest {
         UserDto user = new UserDto(id, "google", "1234567890", Role.ROLE_USER);
         Mockito.when(userByIdQuery.execute(any(Long.class))).thenReturn(user);
 
-        var fieldDescriptors = new FieldDescriptor[]{
-                fieldWithPath("id").type(NUMBER).description("USER 식별자"),
-                fieldWithPath("provider").type(STRING).description("OAuth2 제공자"),
-                fieldWithPath("providerId").type(STRING).description("OAuth2 제공자의 회원 식별자"),
-                fieldWithPath("role").type(STRING).description("USER 권한")
-        };
-
         this.mockMvc.perform(get("/user/v1/user/{userId}", id, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -106,10 +108,9 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.provider").value(user.provider()))
                 .andExpect(jsonPath("$.providerId").value(user.providerId()))
                 .andExpect(jsonPath("$.role").value(user.role().name()))
-                .andDo(document("{class-name}/{method-name}",
-                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()),
+                .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
-                        responseFields(fieldDescriptors)
+                        responseFields(userResponseFields)
                 ));
     }
 }
