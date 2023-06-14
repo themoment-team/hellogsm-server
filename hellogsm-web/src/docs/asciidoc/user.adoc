@@ -1,0 +1,35 @@
+= 회원(User)
+
+회원의 인증 정보(id, 권한 등)를 조회할 수 있습니다.
+
+== ID로 USER 조회
+ID로 USER를 조회합니다.
+
+WARNING: `userId` 를 입력해야만 합니다.
+
+[discrete]
+=== 요청
+include::{snippets}/user-controller-test/find-by-user-id/curl-request.adoc[]
+include::{snippets}/user-controller-test/find-by-user-id/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-by-user-id/http-request.adoc[]
+include::{snippets}/user-controller-test/find-by-user-id/path-parameters.adoc[]
+
+[discrete]
+=== 응답
+include::{snippets}/user-controller-test/find-by-user-id/http-response.adoc[]
+include::{snippets}/user-controller-test/find-by-user-id/response-fields.adoc[]
+
+== 인증된 USER 조회
+현재 인증되어있는 회원을 조회합니다.
+
+[discrete]
+=== 요청
+include::{snippets}/user-controller-test/find-by-authenticated/curl-request.adoc[]
+include::{snippets}/user-controller-test/find-by-authenticated/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-by-authenticated/http-request.adoc[]
+include::{snippets}/user-controller-test/find-by-authenticated/request-headers.adoc[]
+
+[discrete]
+=== 응답
+include::{snippets}/user-controller-test/find-by-authenticated/http-response.adoc[]
+include::{snippets}/user-controller-test/find-by-authenticated/response-fields.adoc[]
