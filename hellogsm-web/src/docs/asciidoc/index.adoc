@@ -1,6 +1,6 @@
-ifndef::snippets[]
-:snippets: ./build/generated-snippets
-endif::[]
+// ifndef::snippets[]
+// :snippets: ./build/generated-snippets
+// endif::[]
 = Hello,GSM API 명세서
 양시준, <yangsijun5528@gmail.com>
 v0.1, 2023-06-16
@@ -9,10 +9,18 @@ v0.1, 2023-06-16
 :source-highlighter: rouge
 :description: this is specific of Hello,GSM
 :toc: left
-:toc-title: 목차
-:toclevels: 3
+:toc-title: Index
+:toclevels: 2
 :sectlinks:
-
+:operation-curl-request-title: Curl request
+:operation-http-request-title: HTTP request
+:operation-http-response-title: HTTP response
+:operation-httpie-request-title: HTTPie request
+:operation-links-title: Links
+:operation-request-body-title: Request body
+:operation-request-fields-title: Request fields
+:operation-response-body-title: Response body
+:operation-response-fields-title: Response fields
 
 == 개요
 이 API문서는 'Hello,GSM' 프로젝트의 산출물입니다.
@@ -81,5 +89,27 @@ a|[source,json]
 
 = API 명세
 
-//유저
-include::user.adoc[leveloffset=+1]
+== 회원(User)
+회원의 인증 정보(id, 권한 등)를 조회할 수 있습니다.
+
+=== ID로 USER 조회
+ID로 USER를 조회합니다.
+
+WARNING: `userId` 를 입력해야만 합니다.
+
+==== Request
+operation::find-by-user-id[snippets='curl-request,httpie-request,http-request,path-parameters']
+
+==== Response
+operation::find-by-user-id[snippets='http-response,response-fields']
+
+=== 인증된 USER 조회
+현재 인증되어있는 회원을 조회합니다.
+
+==== Request
+operation::find-by-authenticated[snippets='curl-request,httpie-request,http-request,request-headers']
+
+==== Response
+operation::find-by-authenticated[snippets='http-response,response-fields']
+
+
