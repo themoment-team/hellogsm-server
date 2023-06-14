@@ -57,11 +57,11 @@ public class IdentityController {
         return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
     }
 
-    @GetMapping("/identity/{identityId}")
-    public ResponseEntity<IdentityDto> findByIdentityId(
-            @PathVariable Long identityId
+    @GetMapping("/identity/{userId}")
+    public ResponseEntity<IdentityDto> findByUserId(
+            @PathVariable Long userId
     ) {
-        IdentityDto identityResDto = identityQuery.execute(identityId);
+        IdentityDto identityResDto = identityQuery.execute(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
     }
 }
