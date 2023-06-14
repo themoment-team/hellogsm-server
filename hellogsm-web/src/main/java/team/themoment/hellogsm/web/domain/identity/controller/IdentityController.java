@@ -58,7 +58,7 @@ public class IdentityController {
     }
 
     @GetMapping("/identity/{userId}")
-    public ResponseEntity<IdentityDto> findByIdentityId(
+    public ResponseEntity<IdentityDto> findByUserId(
             @PathVariable Long userId
     ) {
         IdentityDto identityResDto = identityQuery.execute(userId);
