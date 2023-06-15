@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.user.controller;
 
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,7 @@ class UserControllerTest {
         Mockito.when(manager.getId()).thenReturn(id);
 
         this.mockMvc.perform(get("/user/v1/user/me")
-                        .header("SESSION", "SESSIONID12345"))
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(user.id()))
