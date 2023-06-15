@@ -23,7 +23,8 @@ import team.themoment.hellogsm.web.domain.user.service.UserByIdQuery;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -90,7 +91,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.providerId").value(user.providerId()))
                 .andExpect(jsonPath("$.role").value(user.role().name()))
                 .andDo(this.documentationHandler.document(
-                        requestHeaders(headerWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         responseFields(userResponseFields)
                 ));
     }

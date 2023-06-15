@@ -32,6 +32,8 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -105,7 +107,7 @@ class IdentityControllerTest {
                 .andExpect(jsonPath("$.phoneNumber").value(identity.phoneNumber()))
                 .andExpect(jsonPath("$.userId").value(identity.userId()))
                 .andDo(this.documentationHandler.document(
-                        requestHeaders(headerWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         responseFields(identityResponseFields)
                 ));
     }
@@ -145,6 +147,8 @@ class IdentityControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isSeeOther())
-                .andDo(print());
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
+                ));
     }
 }
