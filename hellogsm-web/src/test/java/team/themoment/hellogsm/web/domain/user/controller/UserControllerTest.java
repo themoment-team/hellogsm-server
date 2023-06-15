@@ -80,7 +80,7 @@ class UserControllerTest {
         Mockito.when(userByIdQuery.execute(any(Long.class))).thenReturn(user);
         Mockito.when(manager.getId()).thenReturn(id);
 
-        this.mockMvc.perform(get("/user/v1/user/me", MediaType.APPLICATION_JSON)
+        this.mockMvc.perform(get("/user/v1/user/me")
                         .header("SESSION", "SESSIONID12345"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -101,7 +101,7 @@ class UserControllerTest {
         UserDto user = new UserDto(id, "google", "1234567890", Role.ROLE_USER);
         Mockito.when(userByIdQuery.execute(any(Long.class))).thenReturn(user);
 
-        this.mockMvc.perform(get("/user/v1/user/{userId}", id, MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/user/v1/user/{userId}", id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(user.id()))
