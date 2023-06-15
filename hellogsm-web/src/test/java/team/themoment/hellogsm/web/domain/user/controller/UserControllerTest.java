@@ -54,7 +54,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
-        this.documentationHandler = document("{method-name}",
+        this.documentationHandler = document("user/{method-name}",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()));
 
