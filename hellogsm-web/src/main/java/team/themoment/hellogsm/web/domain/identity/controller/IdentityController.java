@@ -62,6 +62,6 @@ public class IdentityController {
             @PathVariable Long userId
     ) {
         IdentityDto identityResDto = identityQuery.execute(userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
+        return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
     }
 }
