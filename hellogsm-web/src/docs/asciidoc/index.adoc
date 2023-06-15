@@ -98,18 +98,52 @@ ID로 USER를 조회합니다.
 WARNING: `userId` 를 입력해야만 합니다.
 
 ==== Request
-operation::find-by-user-id[snippets='curl-request,httpie-request,http-request,path-parameters']
+operation::user/find-by-user-id[snippets='curl-request,httpie-request,http-request,path-parameters']
 
 ==== Response
-operation::find-by-user-id[snippets='http-response,response-fields']
+operation::user/find-by-user-id[snippets='http-response,response-fields']
 
 === 인증된 USER 조회
 현재 인증되어있는 회원을 조회합니다.
 
 ==== Request
-operation::find-by-authenticated[snippets='curl-request,httpie-request,http-request,request-headers']
+operation::user/find-by-authenticated[snippets='curl-request,httpie-request,http-request,request-headers']
 
 ==== Response
-operation::find-by-authenticated[snippets='http-response,response-fields']
+operation::user/find-by-authenticated[snippets='http-response,response-fields']
 
+== 신원(Identity)
+회원의 본인인증 정보(실명, 전화번호)를 생성,조회 할 수 있습니다.
 
+=== ID로 IDENTITY 조회
+ID로  IDENTITY를 조회합니다.
+
+WARNING: `userId` 를 입력해야만 합니다.
+
+==== Request
+operation::identity/find-by-user-id[snippets='curl-request,httpie-request,http-request,path-parameters']
+
+==== Response
+operation::identity/find-by-user-id[snippets='http-response,response-fields']
+
+=== 인증 중인 정보로 IDENTITY 조회
+현재 인증되어있는 사용자 정보로 신원을 조회합니다.
+
+==== Request
+operation::identity/find-by-authenticated[snippets='curl-request,httpie-request,http-request,request-headers']
+
+==== Response
+operation::identity/find-by-authenticated[snippets='http-response,response-fields']
+
+=== 인증 중인 정보로 IDENTITY 생성
+현재 인증되어있는 사용자 정보로 신원을 생성합니다.
+
+사용자의 개인정보(본인인증 정보)를 등록하고 권한을 `인증된 유저(ROLE_USER)` 로 변경합니다.
+
+==== Request
+operation::identity/create-by-authenticated[snippets='curl-request,httpie-request,http-request,request-body']
+
+==== Response
+사용자의 권한이 업데이트되어 세션 정보를 갱신하기 위해 로그아웃 URI로 리다이렉트됩니다.
+
+operation::identity/create-by-authenticated[snippets='http-response']
