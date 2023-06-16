@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.user.controller;
 
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,8 @@ import team.themoment.hellogsm.web.domain.user.service.UserByIdQuery;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -81,7 +83,7 @@ class UserControllerTest {
         Mockito.when(manager.getId()).thenReturn(id);
 
         this.mockMvc.perform(get("/user/v1/user/me")
-                        .header("SESSION", "SESSIONID12345"))
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(user.id()))
@@ -89,7 +91,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.providerId").value(user.providerId()))
                 .andExpect(jsonPath("$.role").value(user.role().name()))
                 .andDo(this.documentationHandler.document(
-                        requestHeaders(headerWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         responseFields(userResponseFields)
                 ));
     }
