@@ -8,6 +8,7 @@ import team.themoment.hellogsm.web.domain.application.service.ApplicationListQue
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,7 +60,12 @@ public class ApplicationController {
     }
 
     @GetMapping("/application/all")
-    public ApplicationListDto findAll() {
-        return applicationListQuery.execute();
+    public ApplicationListDto findAll(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ) {
+        if (page < 1 || size < 1)
+            throw new ExpectedException("1이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        return applicationListQuery.execute(page, size);
     }
 }

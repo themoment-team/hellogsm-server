@@ -1,5 +1,7 @@
 package team.themoment.hellogsm.web.domain.application.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
@@ -20,6 +22,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("select a from Application a join fetch a.admissionGrade join fetch a.admissionInfo join fetch a.admissionStatus join fetch a.middleSchoolGrade")
     Optional<Application> findByUserIdEagerFetch(Long userId);
 
-    @Query("select a from Application a join fetch a.admissionInfo join fetch a.admissionStatus")
-    List<Application> findAllEagerFetch();
+    Page<Application> findAll(Pageable pageable);
 }

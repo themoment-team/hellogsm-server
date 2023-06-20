@@ -111,7 +111,10 @@ public interface ApplicationMapper {
     AdmissionStatusDto admissionStatusToAdmissionStatusDto(AdmissionStatus admissionStatus);
 
     default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
-        return new ApplicationListDto(new ApplicationListInfoDto(applicationList.size()), applicationListToApplicationsDtoList(applicationList));
+        return new ApplicationListDto(
+                new ApplicationListInfoDto(applicationList.size()),
+                applicationListToApplicationsDtoList(applicationList)
+        );
     }
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"middleSchoolGrade", "admissionGrade", "userId"})
