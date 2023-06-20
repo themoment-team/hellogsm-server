@@ -38,9 +38,9 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class SetRegistrationNumberJobConfig {
-    private final static int CHUNK_SIZE = 100;
-    private final static String JOB_NAME = "setRegistrationNumberJob";
-    private final static String BEAN_PREFIX = JOB_NAME + "_";
+    public final static int CHUNK_SIZE = 100;
+    public final static String JOB_NAME = "setRegistrationNumberJob";
+    public final static String BEAN_PREFIX = JOB_NAME + "_";
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
     private final EntityManagerFactory entityManagerFactory;
