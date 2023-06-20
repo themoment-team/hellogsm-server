@@ -8,7 +8,7 @@ import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationS
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(rollbackFor = {Exception.class})
 public class DeleteApplicationServiceImpl implements DeleteApplicationService {
     private final ApplicationRepository applicationRepository;
 
