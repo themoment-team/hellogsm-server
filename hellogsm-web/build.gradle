@@ -45,11 +45,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 }
 
-
-tasks.named('test').configure {
-    actions.clear() // root에서 시행한 task를 clear
+task restDocsTest(type: Test) {
     outputs.dir snippetsDir
-    useJUnitPlatform()
+    useJUnitPlatform {
+            includeTags 'restDocsTest'
+    }
 }
 
 tasks.named('asciidoctor') {
