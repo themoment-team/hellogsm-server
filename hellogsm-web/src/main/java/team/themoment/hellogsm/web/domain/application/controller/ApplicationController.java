@@ -2,7 +2,9 @@ package team.themoment.hellogsm.web.domain.application.controller;
 
 import jakarta.validation.Valid;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
@@ -28,6 +30,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
+    private final ApplicationListQuery applicationListQuery;
 
     @GetMapping("/application/{applicationId}")
     public SingleApplicationRes readOne(@PathVariable("applicationId") Long applicationId) {
@@ -53,5 +56,10 @@ public class ApplicationController {
     ) {
         modifyApplicationService.execute(body, manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
+    @GetMapping("/application/all")
+    public ApplicationListDto findAll() {
+        return applicationListQuery.execute();
     }
 }

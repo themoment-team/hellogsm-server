@@ -1,0 +1,23 @@
+package team.themoment.hellogsm.web.domain.application.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import team.themoment.hellogsm.entity.domain.application.entity.Application;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
+import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
+import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
+import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ApplicationListQueryImpl implements ApplicationListQuery {
+    final ApplicationRepository applicationRepository;
+
+    @Override
+    public ApplicationListDto execute() {
+        List<Application> applicationList = applicationRepository.findAll();
+        return ApplicationMapper.INSTANCE.createApplicationListDto(applicationList);
+    }
+}
