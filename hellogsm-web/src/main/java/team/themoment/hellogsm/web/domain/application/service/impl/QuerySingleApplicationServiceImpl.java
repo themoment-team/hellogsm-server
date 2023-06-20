@@ -16,8 +16,8 @@ public class QuerySingleApplicationServiceImpl implements QuerySingleApplication
     final private ApplicationRepository applicationRepository;
 
     @Override
-    public SingleApplicationRes execute(Long applicationId) {
-        Application application = applicationRepository.findByUserIdEagerFetch(applicationId)
+    public SingleApplicationRes execute(Long userId) {
+        Application application = applicationRepository.findByUserIdEagerFetch(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다", HttpStatus.NOT_FOUND));
 
         return ApplicationMapper.INSTANCE.createSingleApplicationDto(application);

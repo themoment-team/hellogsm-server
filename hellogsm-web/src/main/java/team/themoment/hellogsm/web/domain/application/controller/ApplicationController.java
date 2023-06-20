@@ -29,9 +29,9 @@ public class ApplicationController {
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
 
-    @GetMapping("/application/{applicationId}")
-    public SingleApplicationRes readOne(@PathVariable("applicationId") Long applicationId) {
-        return querySingleApplicationService.execute(applicationId);
+    @GetMapping("/application/{userId}")
+    public SingleApplicationRes readOne(@PathVariable("userId") Long userId) {
+        return querySingleApplicationService.execute(userId);
     }
 
     @GetMapping("/application/me")
