@@ -81,11 +81,13 @@ public class SetRegistrationNumberJobConfig {
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
+                        // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
                         registrationNumberSequence.init();
                     }
 
                     @Override
                     public void afterJob(JobExecution jobExecution) {
+                        // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
                         registrationNumberSequence.clear();
                     }
                 })
@@ -102,7 +104,7 @@ public class SetRegistrationNumberJobConfig {
                 .name(BEAN_PREFIX + "setRegistrationNumberItemReader")
                 .entityManagerFactory(this.entityManagerFactory)
                 .pageSize(CHUNK_SIZE)
-                .queryString(
+                .queryString( // TODO QueryDSL 도입 + 리팩토링하기
                         "SELECT a " +
                                 "FROM Application a " +
                                 "WHERE a.admissionStatus.isPrintsArrived = true " +
