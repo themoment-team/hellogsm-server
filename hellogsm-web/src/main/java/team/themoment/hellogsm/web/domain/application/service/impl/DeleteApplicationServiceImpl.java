@@ -8,11 +8,11 @@ import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationS
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class DeleteApplicationServiceImpl implements DeleteApplicationService {
     private final ApplicationRepository applicationRepository;
 
     @Override
-    @Transactional
     public void execute(Long userId) {
         applicationRepository.deleteApplicationByUserId(userId);
     }
