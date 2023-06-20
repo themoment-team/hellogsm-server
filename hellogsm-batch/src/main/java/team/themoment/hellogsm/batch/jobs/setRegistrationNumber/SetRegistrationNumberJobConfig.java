@@ -12,7 +12,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
@@ -23,7 +22,6 @@ import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilde
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
@@ -32,8 +30,6 @@ import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -64,7 +60,8 @@ public class SetRegistrationNumberJobConfig {
     public Parameter parameter(
             @Value("#{jobParameters[DATE_TIME]}") String dateTime
     ) {
-        ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss-z"));
+        ZonedDateTime zonedDateTime =
+                ZonedDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss-z"));
         LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
         return new Parameter(localDateTime);
     }
