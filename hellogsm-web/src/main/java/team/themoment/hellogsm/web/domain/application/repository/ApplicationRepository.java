@@ -20,6 +20,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("select a from Application a join fetch a.admissionGrade join fetch a.admissionInfo join fetch a.admissionStatus join fetch a.middleSchoolGrade")
     Optional<Application> findByUserIdEagerFetch(Long userId);
 
-    @Query("select a from Application a join fetch a.admissionGrade join fetch a.admissionInfo join fetch a.admissionStatus join fetch a.middleSchoolGrade")
+    @Query("select a from Application a join fetch a.admissionInfo join fetch a.admissionStatus")
     List<Application> findAllEagerFetch();
 }
