@@ -9,7 +9,12 @@ import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAd
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+
+import java.util.List;
 
 @Mapper(
         componentModel = "spring",
@@ -104,4 +109,28 @@ public interface ApplicationMapper {
             @Mapping(source = "finalMajor", target = "finalMajor"),
     })
     AdmissionStatusDto admissionStatusToAdmissionStatusDto(AdmissionStatus admissionStatus);
+
+    default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
+        return new ApplicationListDto(new ApplicationListInfoDto(applicationList.size()), applicationListToApplicationsDtoList(applicationList));
+    }
+
+    @BeanMapping(ignoreUnmappedSourceProperties = {"middleSchoolGrade", "admissionGrade", "userId"})
+    @Mappings({
+            @Mapping(source = "id", target = "applicationId"),
+            @Mapping(source = "admissionInfo.applicantName", target = "applicantName"),
+            @Mapping(source = "admissionInfo.graduation", target = "graduation"),
+            @Mapping(source = "admissionInfo.applicantPhoneNumber", target = "applicantPhoneNumber"),
+            @Mapping(source = "admissionInfo.guardianPhoneNumber", target = "guardianPhoneNumber"),
+            @Mapping(source = "admissionInfo.teacherName", target = "teacherName"),
+            @Mapping(source = "admissionInfo.teacherPhoneNumber", target = "teacherPhoneNumber"),
+            @Mapping(source = "admissionStatus.isFinalSubmitted", target = "isFinalSubmitted"),
+            @Mapping(source = "admissionStatus.isPrintsArrived", target = "isPrintsArrived"),
+            @Mapping(source = "admissionStatus.firstEvaluation", target = "firstEvaluation"),
+            @Mapping(source = "admissionStatus.secondEvaluation", target = "secondEvaluation"),
+            @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
+            @Mapping(source = "admissionStatus.secondScore", target = "secondScore"),
+    })
+    ApplicationsDto applicationToApplicationsDto(Application applicationList);
+
+    List<ApplicationsDto> applicationListToApplicationsDtoList(List<Application> applicationList);
 }
