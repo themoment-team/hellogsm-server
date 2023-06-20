@@ -1,9 +1,6 @@
 package team.themoment.hellogsm.batch.jobs.setRegistrationNumber;
 
 import jakarta.persistence.EntityManagerFactory;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -23,13 +20,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import team.themoment.hellogsm.batch.common.DateTimeParameter;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
-
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -41,13 +36,7 @@ public class SetRegistrationNumberJobConfig {
     private final PlatformTransactionManager platformTransactionManager;
     private final EntityManagerFactory entityManagerFactory;
     private final RegistrationNumberSequence registrationNumberSequence;
-    private final Parameter parameter;
-
-    @Getter
-    @AllArgsConstructor
-    public class Parameter {
-        @NonNull LocalDateTime dateTime;
-    }
+    private final DateTimeParameter parameter;
 
     @Bean(BEAN_PREFIX + "registrationNumberSequence")
     @JobScope
@@ -57,13 +46,10 @@ public class SetRegistrationNumberJobConfig {
 
     @Bean(BEAN_PREFIX + "parameter")
     @JobScope
-    public Parameter parameter(
-            @Value("#{jobParameters[DATE_TIME]}") String dateTime
+    public DateTimeParameter parameter(
+            @Value("#{jobParameters[DATE_TIME]}") String strDateTime
     ) {
-        ZonedDateTime zonedDateTime =
-                ZonedDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss-z"));
-        LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
-        return new Parameter(localDateTime);
+        return new DateTimeParameter(strDateTime);
     }
 
     @Bean(JOB_NAME)
