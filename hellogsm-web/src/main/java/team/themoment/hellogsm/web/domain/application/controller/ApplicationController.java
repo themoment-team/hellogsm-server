@@ -2,10 +2,12 @@ package team.themoment.hellogsm.web.domain.application.controller;
 
 import jakarta.validation.Valid;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationStatusService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
+    private final ModifyApplicationStatusService modifyApplicationStatusService;
     private final DeleteApplicationService deleteApplicationService;
 
     @GetMapping("/application/{userId}")
@@ -54,6 +57,15 @@ public class ApplicationController {
             @RequestBody @Valid ApplicationReqDto body
     ) {
         modifyApplicationService.execute(body, manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
+    @PutMapping("/status/{userId}")
+    public ResponseEntity<Map<String, String>> modifyStatus(
+            @PathVariable("userId") Long userId,
+            @Valid @RequestBody ApplicationStatusReqDto applicationStatusReqDto
+    ) {
+        modifyApplicationStatusService.execute(userId, applicationStatusReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
