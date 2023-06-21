@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
