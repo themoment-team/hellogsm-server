@@ -5,6 +5,7 @@ import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReq
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationStatusService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
@@ -31,6 +32,7 @@ public class ApplicationController {
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
     private final ModifyApplicationStatusService modifyApplicationStatusService;
+    private final DeleteApplicationService deleteApplicationService;
 
     @GetMapping("/application/{userId}")
     public SingleApplicationRes readOne(@PathVariable("userId") Long userId) {
@@ -65,5 +67,11 @@ public class ApplicationController {
     ) {
         modifyApplicationStatusService.execute(userId, applicationStatusReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
+    @DeleteMapping("/application/me")
+    public ResponseEntity<Map<String, String>> delete() {
+        deleteApplicationService.execute(manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "삭제되었습니다"));
     }
 }
