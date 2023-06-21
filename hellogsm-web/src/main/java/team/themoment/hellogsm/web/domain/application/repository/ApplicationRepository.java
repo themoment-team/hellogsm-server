@@ -1,5 +1,7 @@
 package team.themoment.hellogsm.web.domain.application.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
@@ -23,5 +25,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     void deleteApplicationByUserId(Long userId);
 
-    List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);
+    Page<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus, Pageable pageable);
 }

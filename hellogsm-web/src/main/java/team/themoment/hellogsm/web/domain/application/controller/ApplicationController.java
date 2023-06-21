@@ -6,6 +6,7 @@ import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationSta
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.application.service.*;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -75,7 +76,12 @@ public class ApplicationController {
     }
 
     @GetMapping("/tickets")
-    public List<TicketResDto> tickets() {
-        return queryTicketsService.execute();
+    public List<TicketResDto> tickets(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ) {
+        if (page < 1 || size < 1)
+            throw new ExpectedException("1이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        return queryTicketsService.execute(page, size);
     }
 }
