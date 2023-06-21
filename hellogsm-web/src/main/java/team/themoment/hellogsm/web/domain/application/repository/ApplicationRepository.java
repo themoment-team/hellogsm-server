@@ -3,7 +3,9 @@ package team.themoment.hellogsm.web.domain.application.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
+import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,4 +22,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findByUserIdEagerFetch(Long userId);
 
     void deleteApplicationByUserId(Long userId);
+
+    List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);
 }
