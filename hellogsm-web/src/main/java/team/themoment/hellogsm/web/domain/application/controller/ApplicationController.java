@@ -3,11 +3,13 @@ package team.themoment.hellogsm.web.domain.application.controller;
 import jakarta.validation.Valid;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationStatusService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
@@ -33,6 +35,7 @@ public class ApplicationController {
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
     private final ApplicationListQuery applicationListQuery;
+    private final ModifyApplicationStatusService modifyApplicationStatusService;
     private final DeleteApplicationService deleteApplicationService;
 
     @GetMapping("/application/{userId}")
@@ -69,6 +72,15 @@ public class ApplicationController {
         if (page < 1 || size < 1)
             throw new ExpectedException("1이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return applicationListQuery.execute(page, size);
+    }
+
+    @PutMapping("/status/{userId}")
+    public ResponseEntity<Map<String, String>> modifyStatus(
+            @PathVariable("userId") Long userId,
+            @Valid @RequestBody ApplicationStatusReqDto applicationStatusReqDto
+    ) {
+        modifyApplicationStatusService.execute(userId, applicationStatusReqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
     @DeleteMapping("/application/me")
