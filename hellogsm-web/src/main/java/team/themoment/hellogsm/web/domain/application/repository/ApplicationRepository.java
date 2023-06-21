@@ -23,4 +23,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findByUserIdEagerFetch(Long userId);
 
     Page<Application> findAll(Pageable pageable);
+
+    void deleteApplicationByUserId(Long userId);
 }

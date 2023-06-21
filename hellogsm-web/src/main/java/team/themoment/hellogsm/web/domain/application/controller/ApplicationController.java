@@ -6,6 +6,7 @@ import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationLi
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
@@ -32,10 +33,11 @@ public class ApplicationController {
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
     private final ApplicationListQuery applicationListQuery;
+    private final DeleteApplicationService deleteApplicationService;
 
-    @GetMapping("/application/{applicationId}")
-    public SingleApplicationRes readOne(@PathVariable("applicationId") Long applicationId) {
-        return querySingleApplicationService.execute(applicationId);
+    @GetMapping("/application/{userId}")
+    public SingleApplicationRes readOne(@PathVariable("userId") Long userId) {
+        return querySingleApplicationService.execute(userId);
     }
 
     @GetMapping("/application/me")
@@ -67,5 +69,11 @@ public class ApplicationController {
         if (page < 1 || size < 1)
             throw new ExpectedException("1이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return applicationListQuery.execute(page, size);
+    }
+
+    @DeleteMapping("/application/me")
+    public ResponseEntity<Map<String, String>> delete() {
+        deleteApplicationService.execute(manager.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "삭제되었습니다"));
     }
 }
