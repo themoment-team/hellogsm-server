@@ -22,7 +22,7 @@ public class QueryTicketsServiceImpl implements QueryTicketsService {
 
     @Override
     public List<TicketResDto> execute(int page, int size) {
-        Pageable pageable =  PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable =  PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Application> applicationList =
                 applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS, pageable);
 

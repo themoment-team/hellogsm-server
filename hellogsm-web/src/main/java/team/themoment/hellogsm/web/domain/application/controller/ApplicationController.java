@@ -80,8 +80,8 @@ public class ApplicationController {
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
-        if (page < 1 || size < 1)
-            throw new ExpectedException("1이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        if (page < 0 || size < 0)
+            throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return queryTicketsService.execute(page, size);
     }
 }
