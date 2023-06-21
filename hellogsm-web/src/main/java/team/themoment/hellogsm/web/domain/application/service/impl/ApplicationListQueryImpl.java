@@ -19,7 +19,7 @@ public class ApplicationListQueryImpl implements ApplicationListQuery {
 
     @Override
     public ApplicationListDto execute(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Application> applicationPage = applicationRepository.findAll(pageable);
         return ApplicationMapper.INSTANCE.createApplicationListDto(applicationPage.getContent());
     }
