@@ -77,8 +77,8 @@ public class ApplicationController {
 
     @GetMapping("/tickets")
     public List<TicketResDto> tickets(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
