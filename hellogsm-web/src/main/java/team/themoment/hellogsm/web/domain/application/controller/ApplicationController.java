@@ -4,17 +4,16 @@ import jakarta.validation.Valid;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
-import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
-import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
-import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
-import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationStatusService;
-import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
+import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
+import team.themoment.hellogsm.web.domain.application.service.*;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +32,7 @@ public class ApplicationController {
     private final QuerySingleApplicationService querySingleApplicationService;
     private final ModifyApplicationStatusService modifyApplicationStatusService;
     private final DeleteApplicationService deleteApplicationService;
+    private final QueryTicketsService queryTicketsService;
 
     @GetMapping("/application/{userId}")
     public SingleApplicationRes readOne(@PathVariable("userId") Long userId) {
@@ -73,5 +73,15 @@ public class ApplicationController {
     public ResponseEntity<Map<String, String>> delete() {
         deleteApplicationService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "삭제되었습니다"));
+    }
+
+    @GetMapping("/tickets")
+    public List<TicketResDto> tickets(
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
+    ) {
+        if (page < 0 || size < 0)
+            throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        return queryTicketsService.execute(page, size);
     }
 }
