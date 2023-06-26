@@ -55,7 +55,20 @@ public class SetRegistrationNumberJobConfig {
     @Bean(JOB_NAME)
     public Job setRegistrationNumberJobConfig() {
         return new JobBuilder(JOB_NAME, this.jobRepository)
-                .start(setRegistrationNumberStep())
+                .start(initRegistrationNumberStep())
+                .next(setRegistrationNumberStep())
+                .build();
+    }
+
+    @Bean
+    @JobScope
+    public Step initRegistrationNumberStep() {
+        return new StepBuilder(BEAN_PREFIX + "initStep", this.jobRepository)
+                .<Application, AdmissionStatus>chunk(CHUNK_SIZE, this.platformTransactionManager)
+                .reader(finalSubmittedApplicationIR())
+                .processor(initRegistrationNumberIP())
+                .writer(admissionStatusIW())
+                .transactionManager(this.platformTransactionManager)
                 .build();
     }
 
@@ -70,22 +83,21 @@ public class SetRegistrationNumberJobConfig {
                         // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
                         registrationNumberSequence.init();
                     }
-
                     @Override
                     public void afterJob(JobExecution jobExecution) {
                         // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
                         registrationNumberSequence.clear();
                     }
                 })
-                .reader(setRegistrationNumberItemReader())
-                .processor(setRegistrationNumberProcessor())
-                .writer(setRegistrationNumberItemWriter())
+                .reader(finalSubmittedApplicationIR())
+                .processor(setRegistrationNumberIP())
+                .writer(admissionStatusIW())
                 .build();
     }
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<Application> setRegistrationNumberItemReader() {
+    public JpaPagingItemReader<Application> finalSubmittedApplicationIR() {
         return new JpaPagingItemReaderBuilder<Application>()
                 .name(BEAN_PREFIX + "setRegistrationNumberItemReader")
                 .entityManagerFactory(this.entityManagerFactory)
@@ -101,7 +113,26 @@ public class SetRegistrationNumberJobConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<Application, AdmissionStatus> setRegistrationNumberProcessor() {
+    public ItemProcessor<Application, AdmissionStatus> initRegistrationNumberIP() {
+        return application -> {
+            AdmissionStatus admissionStatus = application.getAdmissionStatus();
+            AdmissionStatus clearAdmissionStatus = AdmissionStatus.builder()
+                    .id(admissionStatus.getId())
+                    .isFinalSubmitted(admissionStatus.isFinalSubmitted())
+                    .isPrintsArrived(admissionStatus.isPrintsArrived())
+                    .firstEvaluation(admissionStatus.getFirstEvaluation())
+                    .secondEvaluation(admissionStatus.getSecondEvaluation())
+                    .registrationNumber(null)
+                    .secondScore(admissionStatus.getSecondScore())
+                    .finalMajor(admissionStatus.getFinalMajor())
+                    .build();
+            return clearAdmissionStatus;
+        };
+    }
+
+    @Bean
+    @StepScope
+    public ItemProcessor<Application, AdmissionStatus> setRegistrationNumberIP() {
         return application -> {
             AdmissionStatus admissionStatus = application.getAdmissionStatus();
             Screening screening = application.getAdmissionInfo().getScreening();
@@ -123,7 +154,7 @@ public class SetRegistrationNumberJobConfig {
 
     @Bean
     @StepScope
-    public JpaItemWriter<AdmissionStatus> setRegistrationNumberItemWriter() {
+    public JpaItemWriter<AdmissionStatus> admissionStatusIW() {
         return new JpaItemWriterBuilder<AdmissionStatus>()
                 .usePersist(false)
                 .entityManagerFactory(this.entityManagerFactory)
