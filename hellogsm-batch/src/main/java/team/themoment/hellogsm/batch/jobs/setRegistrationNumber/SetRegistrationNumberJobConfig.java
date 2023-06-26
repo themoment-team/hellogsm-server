@@ -36,7 +36,7 @@ public class SetRegistrationNumberJobConfig {
     private final PlatformTransactionManager platformTransactionManager;
     private final EntityManagerFactory entityManagerFactory;
     private final RegistrationNumberSequence registrationNumberSequence;
-    private final DateTimeParameter parameter;
+    private final RegistrationNumberParameter parameter;
 
     @Bean(BEAN_PREFIX + "registrationNumberSequence")
     @JobScope
@@ -46,10 +46,10 @@ public class SetRegistrationNumberJobConfig {
 
     @Bean(BEAN_PREFIX + "parameter")
     @JobScope
-    public DateTimeParameter parameter(
+    public RegistrationNumberParameter parameter(
             @Value("#{jobParameters[DATE_TIME]}") String strDateTime
     ) {
-        return new DateTimeParameter(strDateTime);
+        return new RegistrationNumberParameter(strDateTime);
     }
 
     @Bean(JOB_NAME)
