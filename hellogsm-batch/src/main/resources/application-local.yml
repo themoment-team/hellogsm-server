@@ -1,8 +1,4 @@
 spring:
-  data:
-    redis:
-      port: ${REDIS_PORT:6379}
-      host: ${REDIS_HOST:127.0.0.1}
   datasource:
     url: jdbc:h2:tcp://localhost/~/hello-batch
     username: sa
