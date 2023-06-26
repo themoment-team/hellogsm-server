@@ -13,6 +13,9 @@ import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationLi
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -109,6 +112,21 @@ public interface ApplicationMapper {
             @Mapping(source = "finalMajor", target = "finalMajor"),
     })
     AdmissionStatusDto admissionStatusToAdmissionStatusDto(AdmissionStatus admissionStatus);
+
+    @BeanMapping(ignoreUnmappedSourceProperties = {"middleSchoolGrade", "admissionGrade", "userId"})
+    @Mappings({
+            @Mapping(source = "id", target = "applicationId"),
+            @Mapping(source = "admissionInfo.applicantName", target = "applicantName"),
+            @Mapping(source = "admissionInfo.applicantGender", target = "applicantGender"),
+            @Mapping(source = "admissionInfo.applicantBirth", target = "applicantBirth"),
+            @Mapping(source = "admissionInfo.applicantImageUri", target = "applicantImageUri"),
+            @Mapping(source = "admissionInfo.address", target = "address"),
+            @Mapping(source = "admissionInfo.graduation", target = "graduation"),
+            @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
+    })
+    TicketResDto ApplicationToTicketResDto(Application application);
+
+    List<TicketResDto> ApplicationListToTicketResDtoList(List<Application> applicationList);
 
     default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
         return new ApplicationListDto(
