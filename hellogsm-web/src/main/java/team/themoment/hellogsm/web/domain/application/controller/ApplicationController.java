@@ -2,8 +2,15 @@ package team.themoment.hellogsm.web.domain.application.controller;
 
 import jakarta.validation.Valid;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
+import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationService;
+import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationStatusService;
+import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplicationService;
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
@@ -30,6 +37,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
+    private final ApplicationListQuery applicationListQuery;
     private final ModifyApplicationStatusService modifyApplicationStatusService;
     private final DeleteApplicationService deleteApplicationService;
     private final QueryTicketsService queryTicketsService;
@@ -58,6 +66,16 @@ public class ApplicationController {
     ) {
         modifyApplicationService.execute(body, manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
+    @GetMapping("/application/all")
+    public ApplicationListDto findAll(
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
+    ) {
+        if (page < 0 || size < 0)
+            throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        return applicationListQuery.execute(page, size);
     }
 
     @PutMapping("/status/{userId}")

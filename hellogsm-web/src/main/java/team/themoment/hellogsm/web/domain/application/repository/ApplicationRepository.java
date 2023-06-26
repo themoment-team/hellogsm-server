@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,6 +22,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query("select a from Application a join fetch a.admissionGrade join fetch a.admissionInfo join fetch a.admissionStatus join fetch a.middleSchoolGrade")
     Optional<Application> findByUserIdEagerFetch(Long userId);
+
+    Page<Application> findAll(Pageable pageable);
 
     void deleteApplicationByUserId(Long userId);
 
