@@ -4,6 +4,7 @@ import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.global.data.profile.ServerProfile;
 import team.themoment.hellogsm.web.global.security.auth.AuthEnvironment;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -122,6 +123,14 @@ public class SecurityConfig {
                         Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole(),
                         Role.ROLE_ADMIN.getRole()
+                )
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/identity/v1/identity/me/send-code-test",
+                        "/identity/v1/identity/me/send-code"
+                ).hasAnyRole(
+                        Role.ROLE_UNAUTHENTICATED.getRole()
+                        // 추가적으로 비용이 발생 가능한 부분이라 더 제한을 둠
                 )
                 .requestMatchers("/identity/v1/**").hasAnyRole(
                         Role.ROLE_USER.getRole(),
