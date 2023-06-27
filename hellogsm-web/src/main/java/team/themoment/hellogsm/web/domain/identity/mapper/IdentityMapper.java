@@ -2,6 +2,8 @@ package team.themoment.hellogsm.web.domain.identity.mapper;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import team.themoment.hellogsm.entity.domain.application.enums.Gender;
 import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
@@ -20,6 +22,7 @@ public interface IdentityMapper {
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "phoneNumber", target = "phoneNumber"),
             @Mapping(source = "birth", target = "birth"),
+            @Mapping(source = "gender", target = "gender"),
             @Mapping(source = "userId", target = "userId")
     })
     IdentityDto identityToIdentityDto(Identity identity);
@@ -31,6 +34,7 @@ public interface IdentityMapper {
                 createIdentityReqDto.name(),
                 createIdentityReqDto.phoneNumber(),
                 createIdentityReqDto.birth(),
+                Gender.valueOf(createIdentityReqDto.gender()),
                 userId
         );
     }

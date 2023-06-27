@@ -34,6 +34,10 @@ public class Identity {
     @Column(name = "birth")
     private LocalDate birth;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
+
     @Column(name = "user_id", unique = true)
     private Long userId;
 }
