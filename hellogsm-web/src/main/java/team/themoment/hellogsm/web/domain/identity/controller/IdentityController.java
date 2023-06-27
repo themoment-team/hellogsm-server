@@ -2,10 +2,12 @@ package team.themoment.hellogsm.web.domain.identity.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
@@ -16,7 +18,6 @@ import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 @RestController
@@ -42,8 +43,11 @@ public class IdentityController {
     public ResponseEntity<Object> create(
             @RequestBody @Valid CreateIdentityReqDto reqDto
     ) {
-        IdentityDto identityResDto = createIdentityService.execute(reqDto, manager.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
+        createIdentityService.execute(reqDto, manager.getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/auth/v1/logout"));
+        // 인증정보 갱신을 위한 로그아웃 uri로 리다이렉트
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/identity/me")
@@ -63,13 +67,13 @@ public class IdentityController {
     @GetMapping("/identity/me/send-code")
     public ResponseEntity<Map> sendCode() {
         generateCodeService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("Message","전송되었습니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다."));
     }
 
     @GetMapping("/identity/me/send-code-test")
     public ResponseEntity<Map> sendCodeTest() {
         var code = generateCodeService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("Message","전송되었습니다. : " + code));
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
     }
 
     @PostMapping("/identity/me/auth-code")
@@ -77,6 +81,6 @@ public class IdentityController {
             @RequestBody @Valid AuthenticateCodeReqDto reqDto
     ) {
         authenticateCodeService.execute(manager.getId(), reqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("Message","인증되었습니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "인증되었습니다."));
     }
 }
