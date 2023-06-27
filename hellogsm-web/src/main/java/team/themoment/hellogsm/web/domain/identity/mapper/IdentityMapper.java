@@ -19,6 +19,7 @@ public interface IdentityMapper {
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "phoneNumber", target = "phoneNumber"),
+            @Mapping(source = "birth", target = "birth"),
             @Mapping(source = "userId", target = "userId")
     })
     IdentityDto identityToIdentityDto(Identity identity);
@@ -29,6 +30,7 @@ public interface IdentityMapper {
                 null,
                 createIdentityReqDto.name(),
                 createIdentityReqDto.phoneNumber(),
+                createIdentityReqDto.birth(),
                 userId
         );
     }

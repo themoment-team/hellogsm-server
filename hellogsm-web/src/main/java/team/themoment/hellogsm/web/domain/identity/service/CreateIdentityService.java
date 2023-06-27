@@ -10,5 +10,5 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReq
  *  * @since 1.0.0
  */
 public interface CreateIdentityService {
-    IdentityDto execute(CreateIdentityReqDto identityReqDto, Long userId);
+    IdentityDto execute(CreateIdentityReqDto reqDto, Long userId);
 }
