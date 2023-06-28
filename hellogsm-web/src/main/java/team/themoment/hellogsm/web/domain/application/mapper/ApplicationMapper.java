@@ -2,20 +2,27 @@ package team.themoment.hellogsm.web.domain.application.mapper;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import io.micrometer.common.lang.Nullable;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
+import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
+import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleSchoolGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
+import team.themoment.hellogsm.entity.domain.application.enums.Major;
+import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
-
-import java.util.List;
+import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.util.List;
 
@@ -154,4 +161,44 @@ public interface ApplicationMapper {
     ApplicationsDto applicationToApplicationsDto(Application applicationList);
 
     List<ApplicationsDto> applicationListToApplicationsDtoList(List<Application> applicationList);
+
+    default Application applicationReqDtoAndIdentityDtoToApplication(ApplicationReqDto applicationReqDto, IdentityDto identityDto, Long userId, @Nullable Long appId) {
+
+        DesiredMajor desiredMajor = DesiredMajor.builder()
+                .firstDesiredMajor(Major.valueOf(applicationReqDto.firstDesiredMajor()))
+                .secondDesiredMajor(Major.valueOf(applicationReqDto.secondDesiredMajor()))
+                .thirdDesiredMajor(Major.valueOf(applicationReqDto.thirdDesiredMajor()))
+                .build();
+
+        AdmissionInfo admissionInfo = AdmissionInfo.builder()
+                .id(userId)
+                .applicantImageUri(applicationReqDto.applicantImageUri())
+                .applicantName(identityDto.name())
+                .applicantGender(identityDto.gender())
+                .applicantBirth(identityDto.birth())
+                .address(applicationReqDto.address())
+                .detailAddress(applicationReqDto.detailAddress())
+                .graduation(GraduationStatus.valueOf(applicationReqDto.graduation()))
+                .telephone(identityDto.phoneNumber())
+                .applicantPhoneNumber(applicationReqDto.applicantPhoneNumber())
+                .guardianName(applicationReqDto.guardianName())
+                .relationWithApplicant(applicationReqDto.relationWithApplicant())
+                .guardianPhoneNumber(applicationReqDto.guardianPhoneNumber())
+                .teacherName(applicationReqDto.teacherName())
+                .teacherPhoneNumber(applicationReqDto.teacherPhoneNumber())
+                .screening(Screening.valueOf(applicationReqDto.screening()))
+                .desiredMajor(desiredMajor)
+                .build();
+
+        AdmissionStatus admissionStatus = AdmissionStatus.init(userId);
+        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(userId, applicationReqDto.middleSchoolGrade());
+
+        return new Application(
+                userId,
+                admissionInfo,
+                admissionStatus,
+                middleSchoolGrade,
+                userId
+        );
+    }
 }
