@@ -14,6 +14,7 @@ server:
         max-age: 1440m
         http-only: true
         secure: true
+
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
@@ -45,6 +46,7 @@ spring:
       credentials:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
+
 logging:
   level:
     root: info
