@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeReqDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
@@ -32,7 +32,7 @@ public class IdentityController {
 
     @PostMapping("/identity/{userId}")
     public ResponseEntity<IdentityDto> createByUserId(
-            @RequestBody @Valid CreateIdentityReqDto reqDto,
+            @RequestBody @Valid IdentityReqDto reqDto,
             @PathVariable Long userId
     ) {
         IdentityDto identityResDto = createIdentityService.execute(reqDto, userId);
@@ -41,7 +41,7 @@ public class IdentityController {
 
     @PostMapping("/identity/me")
     public ResponseEntity<Object> create(
-            @RequestBody @Valid CreateIdentityReqDto reqDto
+            @RequestBody @Valid IdentityReqDto reqDto
     ) {
         createIdentityService.execute(reqDto, manager.getId());
         HttpHeaders headers = new HttpHeaders();

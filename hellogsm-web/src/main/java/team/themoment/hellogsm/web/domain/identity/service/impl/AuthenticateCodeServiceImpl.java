@@ -8,19 +8,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
-import team.themoment.hellogsm.entity.domain.user.entity.User;
-import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
-import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeReqDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
-import team.themoment.hellogsm.web.domain.identity.mapper.IdentityMapper;
 import team.themoment.hellogsm.web.domain.identity.repository.CodeRepository;
-import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
 import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeService;
-import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
-import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 /**

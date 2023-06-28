@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 import team.themoment.hellogsm.entity.domain.application.enums.Gender;
 import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 
 @Mapper(
         componentModel = "spring",
@@ -28,13 +28,13 @@ public interface IdentityMapper {
     IdentityDto identityToIdentityDto(Identity identity);
 
     // MapStruct 써서 구현하기 힘들어서 걍 함
-    default Identity CreateIdentityReqDtoToIdentity(CreateIdentityReqDto createIdentityReqDto, Long userId) {
+    default Identity CreateIdentityReqDtoToIdentity(IdentityReqDto identityReqDto, Long userId) {
         return new Identity(
                 null,
-                createIdentityReqDto.name(),
-                createIdentityReqDto.phoneNumber(),
-                createIdentityReqDto.birth(),
-                Gender.valueOf(createIdentityReqDto.gender()),
+                identityReqDto.name(),
+                identityReqDto.phoneNumber(),
+                identityReqDto.birth(),
+                Gender.valueOf(identityReqDto.gender()),
                 userId
         );
     }

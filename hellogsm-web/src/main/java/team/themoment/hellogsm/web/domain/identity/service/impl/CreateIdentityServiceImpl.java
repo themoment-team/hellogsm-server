@@ -14,7 +14,7 @@ import team.themoment.hellogsm.entity.domain.user.entity.User;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.mapper.IdentityMapper;
 import team.themoment.hellogsm.web.domain.identity.repository.CodeRepository;
 import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
@@ -48,7 +48,7 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
      * @throws ExpectedException 존재하지 않는 User나 이미 존재하는 Identity일 경우 발생
      */
     @Override
-    public IdentityDto execute(CreateIdentityReqDto identityReqDto, Long userId) {
+    public IdentityDto execute(IdentityReqDto identityReqDto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST));
         if (identityRepository.existsByUserId(userId))
