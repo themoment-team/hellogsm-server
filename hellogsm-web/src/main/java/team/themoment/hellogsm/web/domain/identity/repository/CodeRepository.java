@@ -8,5 +8,4 @@ import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
 
 public interface CodeRepository extends CrudRepository<AuthenticationCode, String> {
     List<AuthenticationCode> findByUserId(Long userId);
-    void deleteAllByUserId(Long userId);
 }

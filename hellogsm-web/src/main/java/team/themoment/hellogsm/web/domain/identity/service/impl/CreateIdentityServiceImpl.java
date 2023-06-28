@@ -68,10 +68,10 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
                 Role.ROLE_USER
         );
         userRepository.save(identifiedUser);
-        Identity newIdentity = IdentityMapper.INSTANCE.CreateIdentityReqDtoToIdentity(identityReqDto, userId);
+        Identity newIdentity = IdentityMapper.INSTANCE.identityReqDtoToIdentity(identityReqDto, userId, null);
         Identity savedidentity = identityRepository.save(newIdentity);
 
-        codeRepository.deleteAllByUserId(userId); // 인증이 성공한 경우 재사용 방지를 위해 해당 유저의 모든 code 제거
+        codes.forEach(code -> codeRepository.deleteById(code.getCode())); // 인증이 성공한 경우 재사용 방지를 위해 해당 유저의 모든 code 제거
 
         return IdentityMapper.INSTANCE.identityToIdentityDto(savedidentity);
     }

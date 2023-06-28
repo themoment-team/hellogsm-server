@@ -15,6 +15,7 @@ import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeServi
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
+import team.themoment.hellogsm.web.domain.identity.service.ModifyIdentityService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.net.URI;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class IdentityController {
     private final AuthenticatedUserManager manager;
     private final CreateIdentityService createIdentityService;
+    private final ModifyIdentityService modifyIdentityService;
     private final GenerateCodeService generateCodeService;
     private final AuthenticateCodeService authenticateCodeService;
     private final IdentityQuery identityQuery;
@@ -54,6 +56,17 @@ public class IdentityController {
     public ResponseEntity<IdentityDto> find() {
         IdentityDto identityResDto = identityQuery.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
+    }
+
+    @PutMapping("/identity/me")
+    public ResponseEntity<IdentityDto> modify(
+            @RequestBody @Valid IdentityReqDto reqDto
+    ) {
+        modifyIdentityService.execute(reqDto, manager.getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/auth/v1/logout"));
+        // 굳이 리다이렉트 할 필요는 없는데, create() 랑 리턴 타입을 맞추기 위해 리다이렉트
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/identity/{userId}")

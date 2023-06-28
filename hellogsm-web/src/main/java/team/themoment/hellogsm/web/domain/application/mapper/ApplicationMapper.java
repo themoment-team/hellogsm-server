@@ -14,6 +14,7 @@ import team.themoment.hellogsm.entity.domain.application.entity.status.Admission
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
+import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
@@ -22,6 +23,7 @@ import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsD
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
+import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.util.List;
@@ -179,8 +181,8 @@ public interface ApplicationMapper {
                 .address(applicationReqDto.address())
                 .detailAddress(applicationReqDto.detailAddress())
                 .graduation(GraduationStatus.valueOf(applicationReqDto.graduation()))
-                .telephone(identityDto.phoneNumber())
-                .applicantPhoneNumber(applicationReqDto.applicantPhoneNumber())
+                .telephone(applicationReqDto.telephone())
+                .applicantPhoneNumber(identityDto.phoneNumber())
                 .guardianName(applicationReqDto.guardianName())
                 .relationWithApplicant(applicationReqDto.relationWithApplicant())
                 .guardianPhoneNumber(applicationReqDto.guardianPhoneNumber())
@@ -201,4 +203,35 @@ public interface ApplicationMapper {
                 userId
         );
     }
+
+    @BeanMapping(ignoreUnmappedSourceProperties = {
+            "applicantName",
+            "applicantGender",
+            "applicantBirth",
+            "applicantPhoneNumber",
+            "code"
+    })
+    @Mappings({
+            @Mapping(source = "admissionInfo.id", target = "id"),
+            @Mapping(source = "admissionInfo.applicantImageUri", target = "applicantImageUri"),
+            @Mapping(source = "identityReqDto.name", target = "applicantName"),
+            @Mapping(source = "identityReqDto.gender", target = "applicantGender"),
+            @Mapping(source = "identityReqDto.birth", target = "applicantBirth"),
+            @Mapping(source = "admissionInfo.address", target = "address"),
+            @Mapping(source = "admissionInfo.detailAddress", target = "detailAddress"),
+            @Mapping(source = "admissionInfo.telephone", target = "telephone"),
+            @Mapping(source = "identityReqDto.phoneNumber", target = "applicantPhoneNumber"),
+            @Mapping(source = "admissionInfo.guardianName", target = "guardianName"),
+            @Mapping(source = "admissionInfo.relationWithApplicant", target = "relationWithApplicant"),
+            @Mapping(source = "admissionInfo.guardianPhoneNumber", target = "guardianPhoneNumber"),
+            @Mapping(source = "admissionInfo.screening", target = "screening"),
+            @Mapping(source = "admissionInfo.schoolName", target = "schoolName"),
+            @Mapping(source = "admissionInfo.schoolLocation", target = "schoolLocation"),
+            @Mapping(source = "admissionInfo.teacherName", target = "teacherName"),
+            @Mapping(source = "admissionInfo.teacherPhoneNumber", target = "teacherPhoneNumber"),
+            @Mapping(source = "admissionInfo.desiredMajor.firstDesiredMajor", target = "desiredMajor.firstDesiredMajor"),
+            @Mapping(source = "admissionInfo.desiredMajor.secondDesiredMajor", target = "desiredMajor.secondDesiredMajor"),
+            @Mapping(source = "admissionInfo.desiredMajor.thirdDesiredMajor", target = "desiredMajor.thirdDesiredMajor"),
+    })
+    AdmissionInfo toConsistentAdmissionInfoWithIdentityReqDto(AdmissionInfo admissionInfo, IdentityReqDto identityReqDto);
 }

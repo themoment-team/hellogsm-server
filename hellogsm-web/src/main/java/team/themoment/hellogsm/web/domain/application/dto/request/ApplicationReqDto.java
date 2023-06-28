@@ -45,7 +45,7 @@ public record ApplicationReqDto(
 
         @NotBlank
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
-        String applicantPhoneNumber,
+        String telephone,
 
         @NotBlank
         String guardianName,

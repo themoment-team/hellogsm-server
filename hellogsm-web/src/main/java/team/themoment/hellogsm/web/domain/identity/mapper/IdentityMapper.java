@@ -28,9 +28,9 @@ public interface IdentityMapper {
     IdentityDto identityToIdentityDto(Identity identity);
 
     // MapStruct 써서 구현하기 힘들어서 걍 함
-    default Identity CreateIdentityReqDtoToIdentity(IdentityReqDto identityReqDto, Long userId) {
+    default Identity identityReqDtoToIdentity(IdentityReqDto identityReqDto, Long userId, Long identityId) {
         return new Identity(
-                null,
+                identityId,
                 identityReqDto.name(),
                 identityReqDto.phoneNumber(),
                 identityReqDto.birth(),
