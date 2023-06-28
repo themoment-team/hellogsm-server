@@ -12,6 +12,7 @@ import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeService;
+import team.themoment.hellogsm.web.domain.identity.service.CodeNotificationService;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
@@ -31,6 +32,8 @@ public class IdentityController {
     private final GenerateCodeService generateCodeService;
     private final AuthenticateCodeService authenticateCodeService;
     private final IdentityQuery identityQuery;
+
+    private final CodeNotificationService codeNotificationService;
 
     @PostMapping("/identity/{userId}")
     public ResponseEntity<IdentityDto> createByUserId(
@@ -95,5 +98,11 @@ public class IdentityController {
     ) {
         authenticateCodeService.execute(manager.getId(), reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "인증되었습니다."));
+    }
+
+    @GetMapping("/identity/sms/code-test")
+    public ResponseEntity<Map> test() {
+        codeNotificationService.execute("01048276160", "123456");
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "발신되었습니다."));
     }
 }
