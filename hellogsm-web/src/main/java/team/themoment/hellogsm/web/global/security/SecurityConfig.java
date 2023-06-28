@@ -58,6 +58,10 @@ public class SecurityConfig {
             http.authorizeHttpRequests(
                     httpRequests -> httpRequests
                             .requestMatchers(toH2Console()).permitAll()
+                            .requestMatchers(HttpMethod.GET, "/identity/v1/identity/me/send-code-test")
+                            .hasAnyRole(
+                                    Role.ROLE_UNAUTHENTICATED.getRole(),
+                                    Role.ROLE_USER.getRole())
             );
             authorizeHttpRequests(http);
             return http.build();
@@ -126,11 +130,9 @@ public class SecurityConfig {
                 )
                 .requestMatchers(
                         HttpMethod.GET,
-                        "/identity/v1/identity/me/send-code-test",
-                        "/identity/v1/identity/me/send-code"
-                ).hasAnyRole(
-                        Role.ROLE_UNAUTHENTICATED.getRole()
-                        // 추가적으로 비용이 발생 가능한 부분이라 더 제한을 둠
+                        "/identity/v1/identity/me/send-code").hasAnyRole(
+                        Role.ROLE_UNAUTHENTICATED.getRole(),
+                        Role.ROLE_USER.getRole()
                 )
                 .requestMatchers("/identity/v1/**").hasAnyRole(
                         Role.ROLE_USER.getRole(),
