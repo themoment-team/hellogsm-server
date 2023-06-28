@@ -51,9 +51,9 @@ spring:
       host: ${REDIS_HOST}
       port: 6379
   cloud:
-    region:
-        static: ap-northeast-2 # javadoc 설명에는 한국 리전을 지원 안한다고 쓰여있긴 함
     aws:
+      region:
+        static: ap-northeast-2 # javadoc 설명에는 한국 리전을 지원 안한다고 쓰여있긴 함
       credentials:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
