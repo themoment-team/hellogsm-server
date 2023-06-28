@@ -60,6 +60,7 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
                         new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : "+userId, HttpStatus.BAD_REQUEST));
         if (!recentCode.getCode().equals(identityReqDto.code()) || !recentCode.getAuthenticated())
             throw new ExpectedException("유효하지 않은 code 입니다. 이전 혹은 잘못되었거나 인증받지 않은 code입니다.", HttpStatus.BAD_REQUEST);
+
         User identifiedUser = new User(
                 user.getId(),
                 user.getProvider(),
@@ -69,6 +70,9 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
         userRepository.save(identifiedUser);
         Identity newIdentity = IdentityMapper.INSTANCE.CreateIdentityReqDtoToIdentity(identityReqDto, userId);
         Identity savedidentity = identityRepository.save(newIdentity);
+
+        codeRepository.deleteAllByUserId(userId); // 인증이 성공한 경우 재사용 방지를 위해 해당 유저의 모든 code 제거
+
         return IdentityMapper.INSTANCE.identityToIdentityDto(savedidentity);
     }
 }
