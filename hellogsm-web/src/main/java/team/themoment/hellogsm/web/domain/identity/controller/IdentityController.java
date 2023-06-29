@@ -9,18 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeReqDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
-import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeService;
-import team.themoment.hellogsm.web.domain.identity.service.CodeNotificationService;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
-import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.domain.identity.service.ModifyIdentityService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.net.URI;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/identity/v1")
@@ -29,11 +24,7 @@ public class IdentityController {
     private final AuthenticatedUserManager manager;
     private final CreateIdentityService createIdentityService;
     private final ModifyIdentityService modifyIdentityService;
-    private final GenerateCodeService generateCodeService;
-    private final AuthenticateCodeService authenticateCodeService;
     private final IdentityQuery identityQuery;
-
-    private final CodeNotificationService codeNotificationService;
 
     @PostMapping("/identity/{userId}")
     public ResponseEntity<IdentityDto> createByUserId(
@@ -78,31 +69,5 @@ public class IdentityController {
     ) {
         IdentityDto identityResDto = identityQuery.execute(userId);
         return ResponseEntity.status(HttpStatus.OK).body(identityResDto);
-    }
-
-    @GetMapping("/identity/me/send-code")
-    public ResponseEntity<Map> sendCode() {
-        generateCodeService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다."));
-    }
-
-    @GetMapping("/identity/me/send-code-test")
-    public ResponseEntity<Map> sendCodeTest() {
-        var code = generateCodeService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
-    }
-
-    @PostMapping("/identity/me/auth-code")
-    public ResponseEntity<Map> authCode(
-            @RequestBody @Valid AuthenticateCodeReqDto reqDto
-    ) {
-        authenticateCodeService.execute(manager.getId(), reqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "인증되었습니다."));
-    }
-
-    @GetMapping("/identity/sms/code-test")
-    public ResponseEntity<Map> test() {
-        codeNotificationService.execute("01048276160", "123456");
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "발신되었습니다."));
     }
 }
