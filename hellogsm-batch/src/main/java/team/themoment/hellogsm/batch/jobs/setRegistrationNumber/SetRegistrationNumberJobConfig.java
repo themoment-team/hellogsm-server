@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import team.themoment.hellogsm.batch.common.DateTimeParameter;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
@@ -55,18 +54,18 @@ public class SetRegistrationNumberJobConfig {
     @Bean(JOB_NAME)
     public Job setRegistrationNumberJobConfig() {
         return new JobBuilder(JOB_NAME, this.jobRepository)
-                .start(initRegistrationNumberStep())
+                .start(clearRegistrationNumberStep())
                 .next(setRegistrationNumberStep())
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step initRegistrationNumberStep() {
+    public Step clearRegistrationNumberStep() {
         return new StepBuilder(BEAN_PREFIX + "initStep", this.jobRepository)
                 .<Application, AdmissionStatus>chunk(CHUNK_SIZE, this.platformTransactionManager)
                 .reader(finalSubmittedApplicationIR())
-                .processor(initRegistrationNumberIP())
+                .processor(clearRegistrationNumberIP())
                 .writer(admissionStatusIW())
                 .transactionManager(this.platformTransactionManager)
                 .build();
@@ -113,7 +112,7 @@ public class SetRegistrationNumberJobConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<Application, AdmissionStatus> initRegistrationNumberIP() {
+    public ItemProcessor<Application, AdmissionStatus> clearRegistrationNumberIP() {
         return application -> {
             AdmissionStatus admissionStatus = application.getAdmissionStatus();
             AdmissionStatus clearAdmissionStatus = AdmissionStatus.builder()
