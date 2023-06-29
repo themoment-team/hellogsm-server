@@ -14,7 +14,6 @@ import team.themoment.hellogsm.entity.domain.application.entity.status.Admission
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
-import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
@@ -24,7 +23,6 @@ import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplica
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
-import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.util.List;
 
@@ -233,5 +231,5 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionInfo.desiredMajor.secondDesiredMajor", target = "desiredMajor.secondDesiredMajor"),
             @Mapping(source = "admissionInfo.desiredMajor.thirdDesiredMajor", target = "desiredMajor.thirdDesiredMajor"),
     })
-    AdmissionInfo toConsistentAdmissionInfoWithIdentityReqDto(AdmissionInfo admissionInfo, IdentityReqDto identityReqDto);
+    AdmissionInfo toConsistentAdmissionInfoWithIdentity(AdmissionInfo admissionInfo, IdentityReqDto identityReqDto);
 }

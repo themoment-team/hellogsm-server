@@ -14,14 +14,16 @@ import team.themoment.hellogsm.web.domain.identity.service.CodeNotificationServi
 @Slf4j
 public class CodeNotificationServiceImpl implements CodeNotificationService {
     private final static String MAX_PRICE = "1.00";
+    private final static String SENDER_ID = "hello-gsm";
+    private final static String KR_CODE = "+82";
     private final SnsSmsTemplate smsTemplate;
 
     @Override
     public void execute(String phoneNumber, String code) {
-        log.warn("send to : " + createPhoneNumber(phoneNumber));
+        //TODO 예외처리 해야 함
         smsTemplate
                 .send(createPhoneNumber(phoneNumber), createMessage(code), SmsMessageAttributes.builder()
-                        .smsType(SmsType.TRANSACTIONAL).maxPrice(MAX_PRICE).build());
+                        .smsType(SmsType.TRANSACTIONAL).maxPrice(MAX_PRICE).senderID(SENDER_ID).build());
     }
 
     private static String createMessage(String code) {
@@ -29,6 +31,6 @@ public class CodeNotificationServiceImpl implements CodeNotificationService {
     }
 
     private static String createPhoneNumber(String phoneNumber) {
-        return "+82" + phoneNumber.replaceFirst("0","");
+        return KR_CODE + phoneNumber;
     }
 }

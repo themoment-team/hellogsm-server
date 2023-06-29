@@ -21,5 +21,6 @@ public class AuthenticationCode {
     @Indexed
     private Long userId;
     private Boolean authenticated;
+    private String phoneNumber;
     private LocalDateTime createdAt; // @RedisHash 의 경우 @CreateAt이나 @PrePersist가 안돼서 저장하기 직전에 직접 생성해서 넣어줄 것
 }

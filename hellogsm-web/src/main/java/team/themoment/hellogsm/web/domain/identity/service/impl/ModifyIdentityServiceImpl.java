@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
 import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
-import team.themoment.hellogsm.entity.domain.user.entity.User;
-import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
@@ -40,15 +38,24 @@ public class ModifyIdentityServiceImpl implements ModifyIdentityService {
     public IdentityDto execute(IdentityReqDto reqDto, Long userId) {
         if(!userRepository.existsById(userId))
                 throw new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST);
+
         Identity savedidentity = identityRepository.findByUserId(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 Identity 입니다", HttpStatus.BAD_REQUEST));
+
         List<AuthenticationCode> codes = codeRepository.findByUserId(userId);
         AuthenticationCode recentCode = codeRepository.findByUserId(userId).stream()
                 .max(Comparator.comparing(AuthenticationCode::getCreatedAt))
                 .orElseThrow(() ->
                         new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + userId, HttpStatus.BAD_REQUEST));
-        if (!recentCode.getCode().equals(reqDto.code()) || !recentCode.getAuthenticated())
-            throw new ExpectedException("유효하지 않은 code 입니다. 이전 혹은 잘못되었거나 인증받지 않은 code입니다.", HttpStatus.BAD_REQUEST);
+
+        if (!recentCode.getAuthenticated())
+            throw new ExpectedException("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", HttpStatus.BAD_REQUEST);
+
+        if (!recentCode.getCode().equals(reqDto.code()))
+            throw new ExpectedException("유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", HttpStatus.BAD_REQUEST);
+
+        if (!recentCode.getPhoneNumber().equals(reqDto.phoneNumber()))
+            throw new ExpectedException("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
 
         // Identity의 인증 정보를 Application의 지원자 정보와 일관되도록 하는 로직
         // 여기서부터
@@ -56,9 +63,9 @@ public class ModifyIdentityServiceImpl implements ModifyIdentityService {
         if (savedApplicationOpt.isPresent()) {
             Application savedApplication = savedApplicationOpt.get();
             AdmissionInfo newAdmissionInfo =
-                    ApplicationMapper.INSTANCE.toConsistentAdmissionInfoWithIdentityReqDto(savedApplication.getAdmissionInfo(), reqDto);
+                    ApplicationMapper.INSTANCE.toConsistentAdmissionInfoWithIdentity(savedApplication.getAdmissionInfo(), reqDto);
 
-            Application a = applicationRepository.save(
+            applicationRepository.save(
                     new Application(
                             savedApplication.getId(),
                             newAdmissionInfo,
@@ -66,7 +73,6 @@ public class ModifyIdentityServiceImpl implements ModifyIdentityService {
                             savedApplication.getMiddleSchoolGrade(),
                             savedApplication.getUserId()
                     ));
-            var a1 = a;
         }
         // 여기까지, Identity 모듈에서 이벤트 발행해서 Application 모듈에서 처리하도록 수정해야 함
 

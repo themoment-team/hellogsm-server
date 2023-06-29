@@ -51,23 +51,33 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
     public IdentityDto execute(IdentityReqDto identityReqDto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 User 입니다", HttpStatus.BAD_REQUEST));
+
         if (identityRepository.existsByUserId(userId))
             throw new ExpectedException("이미 존재하는 Identity 입니다", HttpStatus.BAD_REQUEST);
+
         List<AuthenticationCode> codes = codeRepository.findByUserId(userId);
         AuthenticationCode recentCode = codes.stream()
                 .max(Comparator.comparing(AuthenticationCode::getCreatedAt))
                 .orElseThrow(() ->
-                        new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : "+userId, HttpStatus.BAD_REQUEST));
-        if (!recentCode.getCode().equals(identityReqDto.code()) || !recentCode.getAuthenticated())
-            throw new ExpectedException("유효하지 않은 code 입니다. 이전 혹은 잘못되었거나 인증받지 않은 code입니다.", HttpStatus.BAD_REQUEST);
+                        new ExpectedException("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + userId, HttpStatus.BAD_REQUEST));
 
-        User identifiedUser = new User(
-                user.getId(),
-                user.getProvider(),
-                user.getProviderId(),
-                Role.ROLE_USER
-        );
-        userRepository.save(identifiedUser);
+        if (!recentCode.getAuthenticated())
+            throw new ExpectedException("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", HttpStatus.BAD_REQUEST);
+
+        if (!recentCode.getCode().equals(identityReqDto.code()))
+            throw new ExpectedException("유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", HttpStatus.BAD_REQUEST);
+
+        if (!recentCode.getPhoneNumber().equals(identityReqDto.phoneNumber()))
+            throw new ExpectedException("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+
+        userRepository.save(
+                new User(
+                        user.getId(),
+                        user.getProvider(),
+                        user.getProviderId(),
+                        Role.ROLE_USER
+                ));
+
         Identity newIdentity = IdentityMapper.INSTANCE.identityReqDtoToIdentity(identityReqDto, userId, null);
         Identity savedidentity = identityRepository.save(newIdentity);
 
