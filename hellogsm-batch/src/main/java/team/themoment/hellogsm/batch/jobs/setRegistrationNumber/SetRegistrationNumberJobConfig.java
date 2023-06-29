@@ -2,6 +2,8 @@ package team.themoment.hellogsm.batch.jobs.setRegistrationNumber;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
@@ -54,8 +56,11 @@ public class SetRegistrationNumberJobConfig {
     @Bean(JOB_NAME)
     public Job setRegistrationNumberJobConfig() {
         return new JobBuilder(JOB_NAME, this.jobRepository)
-                .start(clearRegistrationNumberStep())
-                .next(setRegistrationNumberStep())
+                .preventRestart()  // 재시작 false
+                .start(setRegistrationNumberStep())  // 접수번호 할당 배치 시작
+                    .on(BatchStatus.FAILED.name())  // 만약 배치 작업을 실패하면
+                    .to(clearRegistrationNumberStep()) // 접수번호 초기화 배치 수행
+                .end()
                 .build();
     }
 
