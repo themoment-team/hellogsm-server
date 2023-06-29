@@ -18,6 +18,9 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.repeat.RepeatContext;
+import org.springframework.batch.repeat.exception.ExceptionHandler;
+import org.springframework.batch.repeat.exception.SimpleLimitExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,8 +61,11 @@ public class SetRegistrationNumberJobConfig {
         return new JobBuilder(JOB_NAME, this.jobRepository)
                 .preventRestart()  // 재시작 false
                 .start(setRegistrationNumberStep())  // 접수번호 할당 배치 시작
-                    .on(BatchStatus.FAILED.name())  // 만약 배치 작업을 실패하면
+                    .on("FAILED")  // 만약 배치 작업을 실패하면
                     .to(clearRegistrationNumberStep()) // 접수번호 초기화 배치 수행
+                .from(clearRegistrationNumberStep())  // 접수번호 초기화 배치
+                    .on("*") // 실행 성공 여부와 상관없이
+                    .end() // 배치 작업 종료
                 .end()
                 .build();
     }
@@ -92,6 +98,11 @@ public class SetRegistrationNumberJobConfig {
                         // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
                         registrationNumberSequence.clear();
                     }
+                })
+                .exceptionHandler((context, throwable) -> {
+                    //TODO 예외처리 + 로깅 추가
+                    //아마 throws 안하면 배치 작업 실패 안됨
+                    throw throwable;
                 })
                 .reader(finalSubmittedApplicationIR())
                 .processor(setRegistrationNumberIP())
