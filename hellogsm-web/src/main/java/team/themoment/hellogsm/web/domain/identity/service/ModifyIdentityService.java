@@ -9,6 +9,6 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
  *  * @author 양시준
  *  * @since 1.0.0
  */
-public interface CreateIdentityService {
+public interface ModifyIdentityService {
     IdentityDto execute(IdentityReqDto reqDto, Long userId);
 }

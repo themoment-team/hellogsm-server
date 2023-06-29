@@ -2,20 +2,27 @@ package team.themoment.hellogsm.web.domain.application.mapper;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import io.micrometer.common.lang.Nullable;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
+import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
+import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleSchoolGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
+import team.themoment.hellogsm.entity.domain.application.enums.Major;
+import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
-
-import java.util.List;
+import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
+import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 
 import java.util.List;
 
@@ -154,4 +161,75 @@ public interface ApplicationMapper {
     ApplicationsDto applicationToApplicationsDto(Application applicationList);
 
     List<ApplicationsDto> applicationListToApplicationsDtoList(List<Application> applicationList);
+
+    default Application applicationReqDtoAndIdentityDtoToApplication(ApplicationReqDto applicationReqDto, IdentityDto identityDto, Long userId, @Nullable Long appId) {
+
+        DesiredMajor desiredMajor = DesiredMajor.builder()
+                .firstDesiredMajor(Major.valueOf(applicationReqDto.firstDesiredMajor()))
+                .secondDesiredMajor(Major.valueOf(applicationReqDto.secondDesiredMajor()))
+                .thirdDesiredMajor(Major.valueOf(applicationReqDto.thirdDesiredMajor()))
+                .build();
+
+        AdmissionInfo admissionInfo = AdmissionInfo.builder()
+                .id(userId)
+                .applicantImageUri(applicationReqDto.applicantImageUri())
+                .applicantName(identityDto.name())
+                .applicantGender(identityDto.gender())
+                .applicantBirth(identityDto.birth())
+                .address(applicationReqDto.address())
+                .detailAddress(applicationReqDto.detailAddress())
+                .graduation(GraduationStatus.valueOf(applicationReqDto.graduation()))
+                .telephone(applicationReqDto.telephone())
+                .applicantPhoneNumber(identityDto.phoneNumber())
+                .guardianName(applicationReqDto.guardianName())
+                .relationWithApplicant(applicationReqDto.relationWithApplicant())
+                .guardianPhoneNumber(applicationReqDto.guardianPhoneNumber())
+                .teacherName(applicationReqDto.teacherName())
+                .teacherPhoneNumber(applicationReqDto.teacherPhoneNumber())
+                .screening(Screening.valueOf(applicationReqDto.screening()))
+                .desiredMajor(desiredMajor)
+                .build();
+
+        AdmissionStatus admissionStatus = AdmissionStatus.init(userId);
+        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(userId, applicationReqDto.middleSchoolGrade());
+
+        return new Application(
+                userId,
+                admissionInfo,
+                admissionStatus,
+                middleSchoolGrade,
+                userId
+        );
+    }
+
+    @BeanMapping(ignoreUnmappedSourceProperties = {
+            "applicantName",
+            "applicantGender",
+            "applicantBirth",
+            "applicantPhoneNumber",
+            "code"
+    })
+    @Mappings({
+            @Mapping(source = "admissionInfo.id", target = "id"),
+            @Mapping(source = "admissionInfo.applicantImageUri", target = "applicantImageUri"),
+            @Mapping(source = "identityReqDto.name", target = "applicantName"),
+            @Mapping(source = "identityReqDto.gender", target = "applicantGender"),
+            @Mapping(source = "identityReqDto.birth", target = "applicantBirth"),
+            @Mapping(source = "admissionInfo.address", target = "address"),
+            @Mapping(source = "admissionInfo.detailAddress", target = "detailAddress"),
+            @Mapping(source = "admissionInfo.telephone", target = "telephone"),
+            @Mapping(source = "identityReqDto.phoneNumber", target = "applicantPhoneNumber"),
+            @Mapping(source = "admissionInfo.guardianName", target = "guardianName"),
+            @Mapping(source = "admissionInfo.relationWithApplicant", target = "relationWithApplicant"),
+            @Mapping(source = "admissionInfo.guardianPhoneNumber", target = "guardianPhoneNumber"),
+            @Mapping(source = "admissionInfo.screening", target = "screening"),
+            @Mapping(source = "admissionInfo.schoolName", target = "schoolName"),
+            @Mapping(source = "admissionInfo.schoolLocation", target = "schoolLocation"),
+            @Mapping(source = "admissionInfo.teacherName", target = "teacherName"),
+            @Mapping(source = "admissionInfo.teacherPhoneNumber", target = "teacherPhoneNumber"),
+            @Mapping(source = "admissionInfo.desiredMajor.firstDesiredMajor", target = "desiredMajor.firstDesiredMajor"),
+            @Mapping(source = "admissionInfo.desiredMajor.secondDesiredMajor", target = "desiredMajor.secondDesiredMajor"),
+            @Mapping(source = "admissionInfo.desiredMajor.thirdDesiredMajor", target = "desiredMajor.thirdDesiredMajor"),
+    })
+    AdmissionInfo toConsistentAdmissionInfoWithIdentity(AdmissionInfo admissionInfo, IdentityReqDto identityReqDto);
 }
