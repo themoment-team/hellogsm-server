@@ -1,6 +1,7 @@
 package team.themoment.hellogsm.web.domain.application.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
@@ -41,6 +42,7 @@ public class ApplicationController {
     private final ModifyApplicationStatusService modifyApplicationStatusService;
     private final DeleteApplicationService deleteApplicationService;
     private final QueryTicketsService queryTicketsService;
+    private final ImageSaveService imageSaveService;
 
     @GetMapping("/application/{userId}")
     public SingleApplicationRes readOne(@PathVariable("userId") Long userId) {
@@ -101,5 +103,11 @@ public class ApplicationController {
         if (page < 0 || size < 0)
             throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return queryTicketsService.execute(page, size);
+    }
+
+    @PostMapping("/image")
+    public Map<String, String> uploadImage(@Valid @RequestPart(name = "file") MultipartFile multipartFile) {
+        String url = imageSaveService.execute(multipartFile);
+        return Map.of("url", url);
     }
 }
