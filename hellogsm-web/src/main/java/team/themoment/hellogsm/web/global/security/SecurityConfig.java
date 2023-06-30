@@ -3,7 +3,10 @@ package team.themoment.hellogsm.web.global.security;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.global.data.profile.ServerProfile;
 import team.themoment.hellogsm.web.global.security.auth.AuthEnvironment;
+import team.themoment.hellogsm.web.global.security.handler.CustomAccessDeniedHandler;
+import team.themoment.hellogsm.web.global.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -35,9 +38,8 @@ public class SecurityConfig {
     private static final String oauth2LoginEndpointBaseUri = "/auth/v1/oauth2/authorization";
     private static final String oauth2LoginProcessingUri = "/auth/v1/oauth2/code/*";
 
-
-    // TODO
-    //  1. 본인인증 필터 추가
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Configuration
     @EnableWebSecurity
@@ -57,8 +59,15 @@ public class SecurityConfig {
             http.authorizeHttpRequests(
                     httpRequests -> httpRequests
                             .requestMatchers(toH2Console()).permitAll()
+                            .requestMatchers(HttpMethod.GET, "/identity/v1/identity/me/send-code-test")
+                            .hasAnyRole(
+                                    Role.ROLE_UNAUTHENTICATED.getRole(),
+                                    Role.ROLE_USER.getRole())
             );
             authorizeHttpRequests(http);
+            http.exceptionHandling(handling -> handling
+                    .accessDeniedHandler(accessDeniedHandler)
+                    .authenticationEntryPoint(authenticationEntryPoint));
             return http.build();
         }
     }
@@ -122,6 +131,12 @@ public class SecurityConfig {
                         Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole(),
                         Role.ROLE_ADMIN.getRole()
+                )
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/identity/v1/identity/me/send-code").hasAnyRole(
+                        Role.ROLE_UNAUTHENTICATED.getRole(),
+                        Role.ROLE_USER.getRole()
                 )
                 .requestMatchers("/identity/v1/**").hasAnyRole(
                         Role.ROLE_USER.getRole(),

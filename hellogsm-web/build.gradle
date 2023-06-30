@@ -9,6 +9,10 @@ ext {
     set('snippetsDir', file("build/generated-snippets"))
 }
 
+configurations {
+    asciidoctorExt
+}
+
 dependencies {
     /** entity **/
     implementation project(':hellogsm-entity')
@@ -31,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     /** for test **/
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
 
@@ -38,16 +43,21 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    /** aws **/
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns:3.0.1'
 }
 
-
-tasks.named('test').configure {
-    actions.clear() // root에서 시행한 task를 clear
+task restDocsTest(type: Test) {
     outputs.dir snippetsDir
-    useJUnitPlatform()
+    useJUnitPlatform {
+            includeTags 'restDocsTest'
+    }
 }
 
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
     dependsOn test
 }

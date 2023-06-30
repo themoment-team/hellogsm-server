@@ -1,7 +1,7 @@
 package team.themoment.hellogsm.web.domain.identity.service;
 
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 
 /**
  * identityReqDto와 userId를 받아 Identity를 생성하는 인터페이스입니다.
@@ -10,5 +10,5 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.CreateIdentityReq
  *  * @since 1.0.0
  */
 public interface CreateIdentityService {
-    IdentityDto execute(CreateIdentityReqDto identityReqDto, Long userId);
+    IdentityDto execute(IdentityReqDto reqDto, Long userId);
 }

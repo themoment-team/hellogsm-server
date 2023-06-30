@@ -1,6 +1,9 @@
 package team.themoment.hellogsm.web.global.exception;
 
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 import team.themoment.hellogsm.web.global.exception.model.ExceptionResponseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,7 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * {@code @Valid} 검증에 실패한 경우 던져지는 {@code MethodArgumentNotValidException}를 핸들링합니다.
+     * {@code @Valid} 검증에 실패한 경우 던져지는 {@code MethodArgumentNotValidException}와 {@code HttpMessageNotReadableException}를 핸들링합니다.
      *
      * <p>
      * 반환 메시지 예시:
@@ -56,7 +59,7 @@ public class GlobalExceptionHandler {
      * @param ex {@code MethodArgumentNotValidException}
      * @return ResponseEntity
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<ExceptionResponseEntity> validationException(MethodArgumentNotValidException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                 .body(new ExceptionResponseEntity(methodArgumentNotValidExceptionToJson(ex)));
@@ -88,6 +91,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponseEntity> noHandlerFoundException(NoHandlerFoundException ex) {
         return ResponseEntity.status(ex.getStatusCode())
                 .body(new ExceptionResponseEntity(HttpStatus.NOT_FOUND.getReasonPhrase()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ExceptionResponseEntity> maxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                .body(new ExceptionResponseEntity("The file is so big and beautiful"));
     }
 
     private static String methodArgumentNotValidExceptionToJson(MethodArgumentNotValidException ex) {

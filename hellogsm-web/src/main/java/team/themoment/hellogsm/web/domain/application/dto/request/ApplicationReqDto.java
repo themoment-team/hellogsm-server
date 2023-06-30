@@ -34,14 +34,6 @@ public record ApplicationReqDto(
         String applicantImageUri,
 
         @NotBlank
-        String applicantName,
-
-        @Enumerated(EnumType.STRING)
-        Gender applicantGender,
-
-        LocalDate applicantBirth,
-
-        @NotBlank
         String address,
 
         @NotBlank
@@ -51,12 +43,9 @@ public record ApplicationReqDto(
         @Pattern(regexp = "^(CANDIDATE|GRADUATE|GED)$")
         String graduation,
 
-        @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
-        String telephone,
-
         @NotBlank
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
-        String applicantPhoneNumber,
+        String telephone,
 
         @NotBlank
         String guardianName,
@@ -87,7 +76,7 @@ public record ApplicationReqDto(
         String thirdDesiredMajor,
 
         @NotBlank
-        String MiddleSchoolGrade,
+        String middleSchoolGrade,
 
         @NotSpace
         String schoolName,
@@ -99,58 +88,6 @@ public record ApplicationReqDto(
         @NotBlank
         String screening
 ) {
-    public Application toEntity(Long id, Long userId) {
-        GraduationStatus graduationStatus = null;
-        Screening screening = null;
-
-        try {
-            graduationStatus = GraduationStatus.valueOf(this.graduation);
-        } catch (IllegalArgumentException e) {
-            throw new ExpectedException("graduation 값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
-        }
-        try {
-            screening = Screening.valueOf(this.screening);
-        } catch (IllegalArgumentException e) {
-            throw new ExpectedException("screening 값이 올바르지 않습니다", HttpStatus.BAD_REQUEST);
-        }
-
-        DesiredMajor desiredMajor = DesiredMajor.builder()
-                .firstDesiredMajor(Major.valueOf(this.firstDesiredMajor))
-                .secondDesiredMajor(Major.valueOf(this.secondDesiredMajor))
-                .thirdDesiredMajor(Major.valueOf(this.thirdDesiredMajor))
-                .build();
-
-        AdmissionInfo admissionInfo = AdmissionInfo.builder()
-                .id(id)
-                .applicantImageUri(this.applicantImageUri)
-                .applicantName(this.applicantName)
-                .applicantGender(this.applicantGender)
-                .applicantBirth(this.applicantBirth)
-                .address(this.address)
-                .detailAddress(this.detailAddress)
-                .graduation(graduationStatus)
-                .telephone(this.telephone)
-                .applicantPhoneNumber(this.applicantPhoneNumber)
-                .guardianName(this.guardianName)
-                .relationWithApplicant(this.relationWithApplicant)
-                .guardianPhoneNumber(this.guardianPhoneNumber)
-                .teacherName(this.teacherName)
-                .teacherPhoneNumber(this.teacherPhoneNumber)
-                .screening(screening)
-                .desiredMajor(desiredMajor)
-                .build();
-
-        AdmissionStatus admissionStatus = AdmissionStatus.init(id);
-        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(id, this.MiddleSchoolGrade);
-
-        return new Application(
-                id,
-                admissionInfo,
-                admissionStatus,
-                middleSchoolGrade,
-                userId
-        );
-    }
 
     @AssertTrue(message = "중복된 전공이 있습니다")
     private boolean isDuplicateMajor() {
