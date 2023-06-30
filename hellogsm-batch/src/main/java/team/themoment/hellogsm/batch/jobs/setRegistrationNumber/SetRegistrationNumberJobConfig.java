@@ -60,13 +60,15 @@ public class SetRegistrationNumberJobConfig {
     public Job setRegistrationNumberJobConfig() {
         return new JobBuilder(JOB_NAME, this.jobRepository)
                 .preventRestart()  // 재시작 false
-                .start(setRegistrationNumberStep())  // 접수번호 할당 배치 시작
-                    .on("FAILED")  // 만약 배치 작업을 실패하면
-                    .to(clearRegistrationNumberStep()) // 접수번호 초기화 배치 수행
-                .from(clearRegistrationNumberStep())  // 접수번호 할당 배치
-                    .on("*") // 실행 성공 여부와 상관없이
-                    .end() // 배치 작업 종료
-                .end()
+                .start(setRegistrationNumberStep())  // 접수번호 할당 Job 시작
+                    .on("FAILED")  // 만약 접수번호 할당 Job을 실패하면
+                    .to(clearRegistrationNumberStep()) // 접수번호 초기화 Job 수행
+                    .on("*") // 접수번호 초기화 Job의 모든 경우에
+                    .end() // Flow 종료
+                .from(setRegistrationNumberStep())  // 접수번호 할당 Job으로부터
+                    .on("*") // FAILED를 제외한 모든 경우에
+                    .end() // Flow 종료
+                .end() // Job 작업 종료
                 .build();
     }
 
