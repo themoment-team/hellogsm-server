@@ -38,6 +38,7 @@ dependencies {
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'io.awspring.cloud:spring-cloud-aws-test:3.0.1'
 
     /** code generator **/
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'

@@ -2,6 +2,8 @@ package team.themoment.hellogsm.web.global.exception;
 
 
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 import team.themoment.hellogsm.web.global.exception.model.ExceptionResponseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +91,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponseEntity> noHandlerFoundException(NoHandlerFoundException ex) {
         return ResponseEntity.status(ex.getStatusCode())
                 .body(new ExceptionResponseEntity(HttpStatus.NOT_FOUND.getReasonPhrase()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ExceptionResponseEntity> maxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                .body(new ExceptionResponseEntity("The file is so big and beautiful"));
     }
 
     private static String methodArgumentNotValidExceptionToJson(MethodArgumentNotValidException ex) {

@@ -43,7 +43,7 @@ public class IdentityController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/auth/v1/logout"));
         // 인증정보 갱신을 위한 로그아웃 uri로 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/identity/me")
@@ -60,7 +60,7 @@ public class IdentityController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/auth/v1/logout"));
         // 굳이 리다이렉트 할 필요는 없는데, create() 랑 리턴 타입을 맞추기 위해 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/identity/{userId}")
