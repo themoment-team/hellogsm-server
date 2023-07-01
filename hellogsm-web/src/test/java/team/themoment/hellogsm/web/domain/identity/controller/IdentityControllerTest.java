@@ -145,7 +145,7 @@ class IdentityControllerTest {
                         .cookie(new Cookie("SESSION", "SESSIONID12345"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isMovedPermanently())
+                .andExpect(status().isSeeOther())
                 .andDo(this.documentationHandler.document(
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
                 ));
@@ -167,7 +167,7 @@ class IdentityControllerTest {
                         .cookie(new Cookie("SESSION", "SESSIONID12345"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isMovedPermanently())
+                .andExpect(status().isSeeOther())
                 .andDo(this.documentationHandler.document(
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
                 ));
