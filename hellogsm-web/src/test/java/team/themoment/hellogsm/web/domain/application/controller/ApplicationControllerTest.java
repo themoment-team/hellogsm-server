@@ -248,6 +248,7 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionGrade.gedMaxScore").value(admissionGrade.gedMaxScore()))
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         responseFields(
                                 Stream.concat(
                                         Arrays.stream(applicationCommonResponseFields),
@@ -303,5 +304,81 @@ class ApplicationControllerTest {
                         )
                 )
         );
+    }
+
+    @Test
+    @DisplayName("자신의 USER ID로 원서 단일 조회 (검정고시)")
+    void GedReadMe() throws Exception {
+        SingleApplicationRes singleApplicationRes = createSingleApplicationRes(new GedAdmissionGradeDto(
+                BigDecimal.valueOf(261),
+                BigDecimal.valueOf(0),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(100)
+        ));
+
+        Mockito.when(querySingleApplicationService.execute(any(Long.class))).thenReturn(singleApplicationRes);
+
+        GedAdmissionGradeDto admissionGrade = (GedAdmissionGradeDto) singleApplicationRes.admissionGrade();
+
+        applicationDtoPerform(get("/application/v1/application/me"), singleApplicationRes)
+                .andExpect(jsonPath("$.admissionGrade.totalScore").value(admissionGrade.totalScore()))
+                .andExpect(jsonPath("$.admissionGrade.percentileRank").value(admissionGrade.percentileRank()))
+                .andExpect(jsonPath("$.admissionGrade.gedTotalScore").value(admissionGrade.gedTotalScore()))
+                .andExpect(jsonPath("$.admissionGrade.gedMaxScore").value(admissionGrade.gedMaxScore()))
+                .andDo(this.documentationHandler.document(
+                        responseFields(
+                                Stream.concat(
+                                        Arrays.stream(applicationCommonResponseFields),
+                                        Arrays.stream(gedResponseFields)
+                                ).toArray(FieldDescriptor[]::new)
+                        )
+                ));
+    }
+
+
+    @Test
+    @DisplayName("USER ID로 원서 단일 조회 (일반 전형)")
+    void GeneralReadMe() throws Exception {
+        SingleApplicationRes singleApplicationRes = createSingleApplicationRes(new GeneralAdmissionGradeDto(
+                BigDecimal.valueOf(298),
+                BigDecimal.valueOf(0.7),
+                BigDecimal.valueOf(18),
+                BigDecimal.valueOf(36),
+                BigDecimal.valueOf(36),
+                BigDecimal.valueOf(48),
+                BigDecimal.valueOf(64),
+                BigDecimal.valueOf(60),
+                BigDecimal.valueOf(262),
+                BigDecimal.valueOf(30),
+                BigDecimal.valueOf(6),
+                BigDecimal.valueOf(36)
+        ));
+
+        Mockito.when(querySingleApplicationService.execute(any(Long.class))).thenReturn(singleApplicationRes);
+
+        GeneralAdmissionGradeDto admissionGrade = (GeneralAdmissionGradeDto) singleApplicationRes.admissionGrade();
+
+        applicationDtoPerform(get("/application/v1/application/me"), singleApplicationRes)
+                .andExpect(jsonPath("$.admissionGrade.totalScore").value(admissionGrade.totalScore()))
+                .andExpect(jsonPath("$.admissionGrade.percentileRank").value(admissionGrade.percentileRank()))
+                .andExpect(jsonPath("$.admissionGrade.grade1Semester1Score").value(admissionGrade.grade1Semester1Score()))
+                .andExpect(jsonPath("$.admissionGrade.grade1Semester2Score").value(admissionGrade.grade1Semester2Score()))
+                .andExpect(jsonPath("$.admissionGrade.grade2Semester1Score").value(admissionGrade.grade2Semester1Score()))
+                .andExpect(jsonPath("$.admissionGrade.grade2Semester2Score").value(admissionGrade.grade2Semester2Score()))
+                .andExpect(jsonPath("$.admissionGrade.grade3Semester1Score").value(admissionGrade.grade3Semester1Score()))
+                .andExpect(jsonPath("$.admissionGrade.artisticScore").value(admissionGrade.artisticScore()))
+                .andExpect(jsonPath("$.admissionGrade.curricularSubtotalScore").value(admissionGrade.curricularSubtotalScore()))
+                .andExpect(jsonPath("$.admissionGrade.attendanceScore").value(admissionGrade.attendanceScore()))
+                .andExpect(jsonPath("$.admissionGrade.volunteerScore").value(admissionGrade.volunteerScore()))
+                .andExpect(jsonPath("$.admissionGrade.extracurricularSubtotalScore").value(admissionGrade.extracurricularSubtotalScore()))
+                .andDo(this.documentationHandler.document(
+                                responseFields(
+                                        Stream.concat(
+                                                Arrays.stream(applicationCommonResponseFields),
+                                                Arrays.stream(generalResponseFields)
+                                        ).toArray(FieldDescriptor[]::new)
+                                )
+                        )
+                );
     }
 }
