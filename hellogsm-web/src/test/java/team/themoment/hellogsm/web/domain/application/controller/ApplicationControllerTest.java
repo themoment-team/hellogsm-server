@@ -25,14 +25,16 @@ import team.themoment.hellogsm.entity.domain.application.entity.admission.Desire
 import team.themoment.hellogsm.entity.domain.application.enums.*;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -142,23 +144,23 @@ class ApplicationControllerTest {
     };
 
     protected final FieldDescriptor[] createRequestFields = new FieldDescriptor[]{
-            fieldWithPath("applicantImageUri").description("지원자 증명사진"),
-            fieldWithPath("address").description("지원자 집주소"),
-            fieldWithPath("detailAddress").description("지원자 상세주소"),
-            fieldWithPath("graduation").description("지원자 중학교 졸업 상태"),
-            fieldWithPath("telephone").description("지원자 집전화 번호"),
-            fieldWithPath("guardianName").description("지원자의 보호자 이름"),
-            fieldWithPath("relationWithApplicant").description("지원자와 보호자의 관계"),
-            fieldWithPath("guardianPhoneNumber").description("보호자 전화번호"),
-            fieldWithPath("teacherName").description("지원자 선생님 이름"),
-            fieldWithPath("teacherPhoneNumber").description("지원자 선생님 전화번호"),
-            fieldWithPath("firstDesiredMajor").description("1지망 학과"),
-            fieldWithPath("secondDesiredMajor").description("2지망 학과"),
-            fieldWithPath("thirdDesiredMajor").description("3지망 학과"),
-            fieldWithPath("middleSchoolGrade").description("중학교 성적 json 형태로"),
-            fieldWithPath("schoolName").description("지원자 학교 이름"),
-            fieldWithPath("schoolLocation").description("지원자 학교 위치"),
-            fieldWithPath("screening").description("지원 전형")
+            fieldWithPath("applicantImageUri").type(STRING).description("지원자 증명사진"),
+            fieldWithPath("address").type(STRING).description("지원자 집주소"),
+            fieldWithPath("detailAddress").type(STRING).description("지원자 상세주소"),
+            fieldWithPath("graduation").type(STRING).description("지원자 중학교 졸업 상태"),
+            fieldWithPath("telephone").type(STRING).description("지원자 집전화 번호"),
+            fieldWithPath("guardianName").type(STRING).description("지원자의 보호자 이름"),
+            fieldWithPath("relationWithApplicant").type(STRING).description("지원자와 보호자의 관계"),
+            fieldWithPath("guardianPhoneNumber").type(STRING).description("보호자 전화번호"),
+            fieldWithPath("teacherName").type(STRING).description("지원자 선생님 이름"),
+            fieldWithPath("teacherPhoneNumber").type(STRING).description("지원자 선생님 전화번호"),
+            fieldWithPath("firstDesiredMajor").type(STRING).description("1지망 학과"),
+            fieldWithPath("secondDesiredMajor").type(STRING).description("2지망 학과"),
+            fieldWithPath("thirdDesiredMajor").type(STRING).description("3지망 학과"),
+            fieldWithPath("middleSchoolGrade").type(STRING).description("중학교 성적 json 형태로"),
+            fieldWithPath("schoolName").type(STRING).description("지원자 학교 이름"),
+            fieldWithPath("schoolLocation").type(STRING).description("지원자 학교 위치"),
+            fieldWithPath("screening").type(STRING).description("지원 전형")
     };
 
 
@@ -458,5 +460,69 @@ class ApplicationControllerTest {
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         requestFields(createRequestFields)
                 ));
+    }
+
+    @Test
+    @DisplayName("원서 전체 조회")
+    void findAll() throws Exception {
+        ApplicationListDto applicationListDto = new ApplicationListDto(
+                new ApplicationListInfoDto(1),
+                List.of(new ApplicationsDto(
+                        1L,
+                        "human",
+                        GraduationStatus.GRADUATE,
+                        "01012341234",
+                        "01012341234",
+                        "휴먼선생",
+                        "01012341234",
+                        true,
+                        true,
+                        EvaluationStatus.NOT_YET,
+                        EvaluationStatus.NOT_YET,
+                        1L,
+                        "100"
+                ))
+        );
+
+        Mockito.when(applicationListQuery.execute(any(Integer.class), any(Integer.class))).thenReturn(applicationListDto);
+
+        this.mockMvc.perform(get("/application/v1/application/all?page=0&size=1")
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.info.count").value(applicationListDto.info().count()))
+                .andExpect(jsonPath("$.applications[0].applicationId").value(applicationListDto.applications().get(0).applicationId()))
+                .andExpect(jsonPath("$.applications[0].applicantName").value(applicationListDto.applications().get(0).applicantName()))
+                .andExpect(jsonPath("$.applications[0].graduation").value(applicationListDto.applications().get(0).graduation().toString()))
+                .andExpect(jsonPath("$.applications[0].applicantPhoneNumber").value(applicationListDto.applications().get(0).applicantPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].guardianPhoneNumber").value(applicationListDto.applications().get(0).guardianPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].teacherName").value(applicationListDto.applications().get(0).teacherName()))
+                .andExpect(jsonPath("$.applications[0].teacherPhoneNumber").value(applicationListDto.applications().get(0).teacherPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].isFinalSubmitted").value(applicationListDto.applications().get(0).isFinalSubmitted()))
+                .andExpect(jsonPath("$.applications[0].isPrintsArrived").value(applicationListDto.applications().get(0).isPrintsArrived()))
+                .andExpect(jsonPath("$.applications[0].firstEvaluation").value(applicationListDto.applications().get(0).firstEvaluation().toString()))
+                .andExpect(jsonPath("$.applications[0].secondEvaluation").value(applicationListDto.applications().get(0).secondEvaluation().toString()))
+                .andExpect(jsonPath("$.applications[0].registrationNumber").value(applicationListDto.applications().get(0).registrationNumber()))
+                .andExpect(jsonPath("$.applications[0].secondScore").value(applicationListDto.applications().get(0).secondScore()))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        responseFields(
+                                fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
+                                fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
+                                fieldWithPath("applications[].applicantName").type(STRING).description("지원자 이름"),
+                                fieldWithPath("applications[].graduation").type(STRING).description("중학교 졸업 상태"),
+                                fieldWithPath("applications[].applicantPhoneNumber").type(STRING).description("지원자 전화번호"),
+                                fieldWithPath("applications[].guardianPhoneNumber").type(STRING).description("보호자 전화번호"),
+                                fieldWithPath("applications[].teacherName").type(STRING).description("선생님 이름"),
+                                fieldWithPath("applications[].teacherPhoneNumber").type(STRING).description("선생님 전화번호"),
+                                fieldWithPath("applications[].isFinalSubmitted").type(BOOLEAN).description("최종 제출 여부"),
+                                fieldWithPath("applications[].isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
+                                fieldWithPath("applications[].firstEvaluation").type(STRING).description("1차 평가 결과"),
+                                fieldWithPath("applications[].secondEvaluation").type(STRING).description("2차 평가 결과"),
+                                fieldWithPath("applications[].registrationNumber").type(NUMBER).description("접수 번호"),
+                                fieldWithPath("applications[].secondScore").type(STRING).description("2차 시험 점수")
+                        )
+        ));
     }
 }
