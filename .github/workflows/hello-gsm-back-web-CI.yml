@@ -5,10 +5,16 @@ on:
     branches: [ "*" ] # ci 테스트 용으로 전체 브랜치 허용 - 원래는 develop 만
     paths:
       - '!hellogsm-batch/**' # 배치 모듈만 변경된 경우 실행하지 않음
+      - 'hellogsm-web/**'
+      - 'hellogsm-entity/**'
+      - '**.gradle'
   pull_request:
     branches: [ "*" ]
     paths:
-      - '!hellogsm-batch/**'
+      - '!hellogsm-batch/**' # 배치 모듈만 변경된 경우 실행하지 않음
+      - 'hellogsm-web/**'
+      - 'hellogsm-entity/**'
+      - '**.gradle'
 
 env:
   REDIS_HOST: ${{secrets.REDIS_HOST}}
