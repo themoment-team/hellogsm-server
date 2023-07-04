@@ -48,8 +48,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("restDocsTest")
@@ -487,7 +486,9 @@ class ApplicationControllerTest {
 
         Mockito.when(applicationListQuery.execute(any(Integer.class), any(Integer.class))).thenReturn(applicationListDto);
 
-        this.mockMvc.perform(get("/application/v1/application/all?page=0&size=1")
+        this.mockMvc.perform(get("/application/v1/application/all")
+                        .param("page", "0")
+                        .param("size", "1")
                         .cookie(new Cookie("SESSION", "SESSIONID12345"))
                 )
                 .andExpect(status().isOk())
@@ -507,6 +508,10 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.applications[0].registrationNumber").value(applicationListDto.applications().get(0).registrationNumber()))
                 .andExpect(jsonPath("$.applications[0].secondScore").value(applicationListDto.applications().get(0).secondScore()))
                 .andDo(this.documentationHandler.document(
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("원서 크기")
+                        ),
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         responseFields(
                                 fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
