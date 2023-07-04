@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,14 +26,13 @@ import team.themoment.hellogsm.entity.domain.application.entity.admission.Desire
 import team.themoment.hellogsm.entity.domain.application.enums.*;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -457,6 +457,44 @@ class ApplicationControllerTest {
                 .andDo(this.documentationHandler.document(
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         requestFields(createRequestFields)
+                ));
+    }
+
+    @Test
+    @DisplayName("원서 상태 수정")
+    void modifyStatus() throws Exception {
+        ApplicationStatusReqDto applicationStatusReqDto = new ApplicationStatusReqDto(
+                true,
+                true,
+                "NOT_YET",
+                "NOT_YET",
+                1L,
+                BigDecimal.valueOf(100),
+                "SW"
+        );
+
+        doNothing().when(modifyApplicationStatusService).execute(any(Long.class), any(ApplicationStatusReqDto.class));
+
+        this.mockMvc.perform(put("/application/v1/status/{userId}", 1)
+                        .content(objectMapper.writeValueAsString(applicationStatusReqDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        pathParameters(
+                                parameterWithName("userId").description("유저 식별자")
+                        ),
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        requestFields(
+                                fieldWithPath("isFinalSubmitted").type(BOOLEAN).description("최종제출 여부"),
+                                fieldWithPath("isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
+                                fieldWithPath("firstEvaluation").type(STRING).description("1차 평과 결과"),
+                                fieldWithPath("secondEvaluation").type(STRING).description("2차 평과 결과"),
+                                fieldWithPath("registrationNumber").type(NUMBER).description("접수 번호"),
+                                fieldWithPath("secondScore").type(NUMBER).description("2차 평가 점수"),
+                                fieldWithPath("finalMajor").type(STRING).description("최종 합격 전공")
+                        )
                 ));
     }
 }
