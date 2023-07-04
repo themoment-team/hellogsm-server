@@ -482,9 +482,6 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        pathParameters(
-                                parameterWithName("userId").description("유저 식별자")
-                        ),
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         requestFields(
                                 fieldWithPath("isFinalSubmitted").type(BOOLEAN).description("최종제출 여부"),
@@ -495,6 +492,21 @@ class ApplicationControllerTest {
                                 fieldWithPath("secondScore").type(NUMBER).description("2차 평가 점수"),
                                 fieldWithPath("finalMajor").type(STRING).description("최종 합격 전공")
                         )
+                ));
+    }
+
+    @Test
+    @DisplayName("원서 삭제")
+    void deleteApplication() throws Exception {
+        doNothing().when(deleteApplicationService).execute(any(Long.class));
+
+        this.mockMvc.perform(delete("/application/v1/application/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
                 ));
     }
 }
