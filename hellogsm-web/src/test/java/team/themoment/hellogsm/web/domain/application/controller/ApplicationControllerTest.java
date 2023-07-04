@@ -1,6 +1,5 @@
 package team.themoment.hellogsm.web.domain.application.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,11 +27,13 @@ import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,8 +46,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("restDocsTest")
@@ -494,6 +494,57 @@ class ApplicationControllerTest {
                                 fieldWithPath("registrationNumber").type(NUMBER).description("접수 번호"),
                                 fieldWithPath("secondScore").type(NUMBER).description("2차 평가 점수"),
                                 fieldWithPath("finalMajor").type(STRING).description("최종 합격 전공")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("수험표 출력")
+    void tickets() throws Exception {
+        List<TicketResDto> ticketResDto = List.of(
+                new TicketResDto(
+                        1L,
+                        "누군가",
+                        Gender.MALE,
+                        "20030423",
+                        "https://naver.com",
+                        "이세상 어딘가",
+                        GraduationStatus.GRADUATE,
+                        1L
+                )
+        );
+
+        Mockito.when(queryTicketsService.execute(any(Integer.class), any(Integer.class))).thenReturn(ticketResDto);
+
+        this.mockMvc.perform(get("/application/v1/tickets")
+                        .param("page", "0")
+                        .param("size", "1")
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].applicationId").value(ticketResDto.get(0).applicationId()))
+                .andExpect(jsonPath("$[0].applicantName").value(ticketResDto.get(0).applicantName()))
+                .andExpect(jsonPath("$[0].applicantGender").value(ticketResDto.get(0).applicantGender().toString()))
+                .andExpect(jsonPath("$[0].applicantBirth").value(ticketResDto.get(0).applicantBirth()))
+                .andExpect(jsonPath("$[0].applicantImageUri").value(ticketResDto.get(0).applicantImageUri()))
+                .andExpect(jsonPath("$[0].address").value(ticketResDto.get(0).address()))
+                .andExpect(jsonPath("$[0].graduation").value(ticketResDto.get(0).graduation().toString()))
+                .andExpect(jsonPath("$[0].registrationNumber").value(ticketResDto.get(0).registrationNumber()))
+                .andDo(this.documentationHandler.document(
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("원서 크기")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].applicationId").type(NUMBER).description("원서 식별자"),
+                                fieldWithPath("[].applicantName").type(STRING).description("지원자 이름"),
+                                fieldWithPath("[].applicantGender").type(STRING).description("지원자 성별"),
+                                fieldWithPath("[].applicantBirth").type(STRING).description("지원자 생년월일"),
+                                fieldWithPath("[].applicantImageUri").type(STRING).description("지원자 증명사진"),
+                                fieldWithPath("[].address").type(STRING).description("지원자 주소"),
+                                fieldWithPath("[].graduation").type(STRING).description("지원자 졸업 상태"),
+                                fieldWithPath("[].registrationNumber").type(NUMBER).description("접수 번호")
                         )
                 ));
     }
