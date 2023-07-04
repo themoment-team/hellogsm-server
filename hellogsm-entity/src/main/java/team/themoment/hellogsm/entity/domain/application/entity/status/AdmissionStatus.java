@@ -41,6 +41,18 @@ public class AdmissionStatus {
     @Column(name = "second_evaluation", nullable = false)
     private EvaluationStatus secondEvaluation;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "major_submitted_at", nullable = true)
+    private Major majorSubmittedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "major_first_evaluation_at", nullable = true)
+    private Major majorFirstEvaluationAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "major_second_evaluation_at", nullable = true)
+    private Major majorSecondEvaluationAt;
+
     @Column(name = "registration_number", nullable = true)
     private Long registrationNumber;  // 접수 번호, 원서 제출 기간 후 배정됨
 
@@ -63,6 +75,9 @@ public class AdmissionStatus {
                 .isPrintsArrived(false)
                 .firstEvaluation(EvaluationStatus.NOT_YET)
                 .secondEvaluation(EvaluationStatus.NOT_YET)
+                .majorSubmittedAt(null)
+                .majorFirstEvaluationAt(null)
+                .majorSecondEvaluationAt(null)
                 .finalMajor(null)
                 .build();
     }
@@ -75,6 +90,7 @@ public class AdmissionStatus {
         return isPrintsArrived;
     }
 
+    // null이 아닌 기본 값이 있는 경우 기본값 정해주기
     @PrePersist
     public void prePersist() {
         isFinalSubmitted = isFinalSubmitted == null ? false : isFinalSubmitted;

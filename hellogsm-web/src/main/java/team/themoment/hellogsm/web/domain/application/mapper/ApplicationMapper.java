@@ -11,11 +11,13 @@ import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissi
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleSchoolGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
+import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
@@ -114,6 +116,9 @@ public interface ApplicationMapper {
             @Mapping(source = "printsArrived", target = "isPrintsArrived"),
             @Mapping(source = "firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "secondEvaluation", target = "secondEvaluation"),
+            @Mapping(source = "majorSubmittedAt", target = "majorSubmittedAt"),
+            @Mapping(source = "majorFirstEvaluationAt", target = "majorFirstEvaluationAt"),
+            @Mapping(source = "majorSecondEvaluationAt", target = "majorSecondEvaluationAt"),
             @Mapping(source = "registrationNumber", target = "registrationNumber"),
             @Mapping(source = "secondScore", target = "secondScore"),
             @Mapping(source = "finalMajor", target = "finalMajor"),
@@ -155,10 +160,47 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionStatus.isPrintsArrived", target = "isPrintsArrived"),
             @Mapping(source = "admissionStatus.firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "admissionStatus.secondEvaluation", target = "secondEvaluation"),
+            @Mapping(source = "admissionStatus.majorSubmittedAt", target = "majorSubmittedAt"),
+            @Mapping(source = "admissionStatus.majorFirstEvaluationAt", target = "majorFirstEvaluationAt"),
+            @Mapping(source = "admissionStatus.majorSecondEvaluationAt", target = "majorSecondEvaluationAt"),
             @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
             @Mapping(source = "admissionStatus.secondScore", target = "secondScore"),
     })
     ApplicationsDto applicationToApplicationsDto(Application applicationList);
+
+    default AdmissionStatus createNewAdmissionStatus(Long admissionStatusId, ApplicationStatusReqDto applicationStatusReqDto) {
+        Major finalMajor = null;
+        Major majorSubmittedAt = null;
+        Major majorFirstEvaluationAt = null;
+        Major majorSecondEvaluationAt = null;
+
+        try {
+            if(applicationStatusReqDto.finalMajor() != null)
+                finalMajor = Major.valueOf(applicationStatusReqDto.finalMajor());
+            if(applicationStatusReqDto.majorSubmittedAt() != null)
+                majorSubmittedAt = Major.valueOf(applicationStatusReqDto.majorSubmittedAt());
+            if(applicationStatusReqDto.majorFirstEvaluationAt() != null)
+                majorFirstEvaluationAt = Major.valueOf(applicationStatusReqDto.majorFirstEvaluationAt());
+            if(applicationStatusReqDto.majorSecondEvaluationAt() != null)
+                majorSecondEvaluationAt = Major.valueOf(applicationStatusReqDto.majorSecondEvaluationAt());
+        } catch (Exception ex) {
+            throw new RuntimeException("예상하지 못한 에러 발생",ex);
+        }
+
+        return AdmissionStatus.builder()
+                .id(admissionStatusId)
+                .isPrintsArrived(applicationStatusReqDto.isPrintsArrived())
+                .firstEvaluation(EvaluationStatus.valueOf(applicationStatusReqDto.firstEvaluation()))
+                .secondEvaluation(EvaluationStatus.valueOf(applicationStatusReqDto.secondEvaluation()))
+                .isFinalSubmitted(applicationStatusReqDto.isFinalSubmitted())
+                .registrationNumber(applicationStatusReqDto.registrationNumber())
+                .majorSubmittedAt(majorSubmittedAt)
+                .majorFirstEvaluationAt(majorFirstEvaluationAt)
+                .majorSecondEvaluationAt(majorSecondEvaluationAt)
+                .finalMajor(finalMajor)
+                .secondScore(applicationStatusReqDto.secondScore())
+                .build();
+    }
 
     List<ApplicationsDto> applicationListToApplicationsDtoList(List<Application> applicationList);
 

@@ -10,6 +10,9 @@ public record AdmissionStatusDto(
         Boolean isPrintsArrived,
         EvaluationStatus firstEvaluation,
         EvaluationStatus secondEvaluation,
+        Major majorSubmittedAt,
+        Major majorFirstEvaluationAt,
+        Major majorSecondEvaluationAt,
         Long registrationNumber,
         BigDecimal secondScore,
         Major finalMajor
