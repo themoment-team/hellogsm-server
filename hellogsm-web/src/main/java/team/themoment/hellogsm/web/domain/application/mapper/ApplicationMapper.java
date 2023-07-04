@@ -116,9 +116,9 @@ public interface ApplicationMapper {
             @Mapping(source = "printsArrived", target = "isPrintsArrived"),
             @Mapping(source = "firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "secondEvaluation", target = "secondEvaluation"),
-            @Mapping(source = "majorSubmittedAt", target = "majorSubmittedAt"),
-            @Mapping(source = "majorFirstEvaluationAt", target = "majorFirstEvaluationAt"),
-            @Mapping(source = "majorSecondEvaluationAt", target = "majorSecondEvaluationAt"),
+            @Mapping(source = "screeningSubmittedAt", target = "screeningSubmittedAt"),
+            @Mapping(source = "screeningFirstEvaluationAt", target = "screeningFirstEvaluationAt"),
+            @Mapping(source = "screeningSecondEvaluationAt", target = "screeningSecondEvaluationAt"),
             @Mapping(source = "registrationNumber", target = "registrationNumber"),
             @Mapping(source = "secondScore", target = "secondScore"),
             @Mapping(source = "finalMajor", target = "finalMajor"),
@@ -160,9 +160,9 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionStatus.isPrintsArrived", target = "isPrintsArrived"),
             @Mapping(source = "admissionStatus.firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "admissionStatus.secondEvaluation", target = "secondEvaluation"),
-            @Mapping(source = "admissionStatus.majorSubmittedAt", target = "majorSubmittedAt"),
-            @Mapping(source = "admissionStatus.majorFirstEvaluationAt", target = "majorFirstEvaluationAt"),
-            @Mapping(source = "admissionStatus.majorSecondEvaluationAt", target = "majorSecondEvaluationAt"),
+            @Mapping(source = "admissionStatus.screeningSubmittedAt", target = "screeningSubmittedAt"),
+            @Mapping(source = "admissionStatus.screeningFirstEvaluationAt", target = "screeningFirstEvaluationAt"),
+            @Mapping(source = "admissionStatus.screeningSecondEvaluationAt", target = "screeningSecondEvaluationAt"),
             @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
             @Mapping(source = "admissionStatus.secondScore", target = "secondScore"),
     })
@@ -170,19 +170,19 @@ public interface ApplicationMapper {
 
     default AdmissionStatus createNewAdmissionStatus(Long admissionStatusId, ApplicationStatusReqDto applicationStatusReqDto) {
         Major finalMajor = null;
-        Major majorSubmittedAt = null;
-        Major majorFirstEvaluationAt = null;
-        Major majorSecondEvaluationAt = null;
+        Screening screeningSubmittedAt = null;
+        Screening screeningFirstEvaluationAt = null;
+        Screening screeningSecondEvaluationAt = null;
 
         try {
             if(applicationStatusReqDto.finalMajor() != null)
                 finalMajor = Major.valueOf(applicationStatusReqDto.finalMajor());
-            if(applicationStatusReqDto.majorSubmittedAt() != null)
-                majorSubmittedAt = Major.valueOf(applicationStatusReqDto.majorSubmittedAt());
-            if(applicationStatusReqDto.majorFirstEvaluationAt() != null)
-                majorFirstEvaluationAt = Major.valueOf(applicationStatusReqDto.majorFirstEvaluationAt());
-            if(applicationStatusReqDto.majorSecondEvaluationAt() != null)
-                majorSecondEvaluationAt = Major.valueOf(applicationStatusReqDto.majorSecondEvaluationAt());
+            if(applicationStatusReqDto.screeningSubmittedAt() != null)
+                screeningSubmittedAt = Screening.valueOf(applicationStatusReqDto.screeningSubmittedAt());
+            if(applicationStatusReqDto.screeningFirstEvaluationAt() != null)
+                screeningFirstEvaluationAt = Screening.valueOf(applicationStatusReqDto.screeningFirstEvaluationAt());
+            if(applicationStatusReqDto.screeningSecondEvaluationAt() != null)
+                screeningSecondEvaluationAt = Screening.valueOf(applicationStatusReqDto.screeningSecondEvaluationAt());
         } catch (Exception ex) {
             throw new RuntimeException("예상하지 못한 에러 발생",ex);
         }
@@ -194,9 +194,9 @@ public interface ApplicationMapper {
                 .secondEvaluation(EvaluationStatus.valueOf(applicationStatusReqDto.secondEvaluation()))
                 .isFinalSubmitted(applicationStatusReqDto.isFinalSubmitted())
                 .registrationNumber(applicationStatusReqDto.registrationNumber())
-                .majorSubmittedAt(majorSubmittedAt)
-                .majorFirstEvaluationAt(majorFirstEvaluationAt)
-                .majorSecondEvaluationAt(majorSecondEvaluationAt)
+                .screeningSubmittedAt(screeningSubmittedAt)
+                .screeningFirstEvaluationAt(screeningFirstEvaluationAt)
+                .screeningSecondEvaluationAt(screeningSecondEvaluationAt)
                 .finalMajor(finalMajor)
                 .secondScore(applicationStatusReqDto.secondScore())
                 .build();

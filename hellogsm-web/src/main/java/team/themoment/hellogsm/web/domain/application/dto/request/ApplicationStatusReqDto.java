@@ -3,7 +3,6 @@ package team.themoment.hellogsm.web.domain.application.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import team.themoment.hellogsm.entity.domain.application.enums.Major;
 
 import java.math.BigDecimal;
 
@@ -22,14 +21,14 @@ public record ApplicationStatusReqDto(
         @NotBlank
         String secondEvaluation,
 
-        @Pattern(regexp = "^(AI|IOT|SW|)$") // null 포함
-        String majorSubmittedAt,
+        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL|)$") // null 포함
+        String screeningSubmittedAt,
 
-        @Pattern(regexp = "^(AI|IOT|SW|)$") // null 포함
-        String majorFirstEvaluationAt,
+        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL|)$") // null 포함
+        String screeningFirstEvaluationAt,
 
-        @Pattern(regexp = "^(AI|IOT|SW|)$") // null 포함
-        String majorSecondEvaluationAt,
+        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL|)$") // null 포함
+        String screeningSecondEvaluationAt,
 
         Long registrationNumber,
 
