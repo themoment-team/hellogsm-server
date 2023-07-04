@@ -41,4 +41,4 @@ jobs:
         run : chmod +x gradlew 
         
       - name: Run build with Gradle wrapper
-        run: ./gradlew clean build
+        run: ./gradlew clean hellogsm-web:build hellogsm-batch:build
