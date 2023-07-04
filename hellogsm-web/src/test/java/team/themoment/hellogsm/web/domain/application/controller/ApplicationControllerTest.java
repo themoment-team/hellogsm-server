@@ -24,24 +24,27 @@ import org.springframework.web.context.WebApplicationContext;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
 import team.themoment.hellogsm.entity.domain.application.enums.*;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
+import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -60,6 +63,25 @@ class ApplicationControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private AuthenticatedUserManager manager;
+    @MockBean
+    private CreateApplicationService createApplicationService;
+    @MockBean
+    private ModifyApplicationService modifyApplicationService;
+    @MockBean
+    private QuerySingleApplicationService querySingleApplicationService;
+    @MockBean
+    private ApplicationListQuery applicationListQuery;
+    @MockBean
+    private ModifyApplicationStatusService modifyApplicationStatusService;
+    @MockBean
+    private DeleteApplicationService deleteApplicationService;
+    @MockBean
+    private QueryTicketsService queryTicketsService;
+    @MockBean
+    private ImageSaveService imageSaveService;
 
 
     protected final FieldDescriptor[] gedResponseFields = new FieldDescriptor[]{
@@ -119,6 +141,47 @@ class ApplicationControllerTest {
             fieldWithPath("admissionStatus.finalMajor").type(STRING).description("최종 학과").optional()
     };
 
+    protected final FieldDescriptor[] createRequestFields = new FieldDescriptor[]{
+            fieldWithPath("applicantImageUri").description("지원자 증명사진"),
+            fieldWithPath("address").description("지원자 집주소"),
+            fieldWithPath("detailAddress").description("지원자 상세주소"),
+            fieldWithPath("graduation").description("지원자 중학교 졸업 상태"),
+            fieldWithPath("telephone").description("지원자 집전화 번호"),
+            fieldWithPath("guardianName").description("지원자의 보호자 이름"),
+            fieldWithPath("relationWithApplicant").description("지원자와 보호자의 관계"),
+            fieldWithPath("guardianPhoneNumber").description("보호자 전화번호"),
+            fieldWithPath("teacherName").description("지원자 선생님 이름"),
+            fieldWithPath("teacherPhoneNumber").description("지원자 선생님 전화번호"),
+            fieldWithPath("firstDesiredMajor").description("1지망 학과"),
+            fieldWithPath("secondDesiredMajor").description("2지망 학과"),
+            fieldWithPath("thirdDesiredMajor").description("3지망 학과"),
+            fieldWithPath("middleSchoolGrade").description("중학교 성적 json 형태로"),
+            fieldWithPath("schoolName").description("지원자 학교 이름"),
+            fieldWithPath("schoolLocation").description("지원자 학교 위치"),
+            fieldWithPath("screening").description("지원 전형")
+    };
+
+
+            ApplicationReqDto applicationReqDto = new ApplicationReqDto(
+            "https://naver.com",
+            "광주소프트웨어마이스터중학교",
+            "이세상 어딘가",
+            "GED",
+            "01012341234",
+            "길동이",
+            "부",
+            "01012341234",
+            "쌤쌤",
+            "01012341234",
+            "SW",
+            "AI",
+            "IOT",
+            "{\"curriculumScoreSubtotal\":100,\"nonCurriculumScoreSubtotal\":100,\"rankPercentage\":0,\"scoreTotal\":261}",
+            "최형우학교",
+            "이세상어딘가",
+            "GENERAL"
+    );
+
 
     ApplicationControllerTest() {
     }
@@ -134,25 +197,6 @@ class ApplicationControllerTest {
                 .alwaysDo(this.documentationHandler)
                 .build();
     }
-
-    @MockBean
-    private AuthenticatedUserManager manager;
-    @MockBean
-    private CreateApplicationService createApplicationService;
-    @MockBean
-    private ModifyApplicationService modifyApplicationService;
-    @MockBean
-    private QuerySingleApplicationService querySingleApplicationService;
-    @MockBean
-    private ApplicationListQuery applicationListQuery;
-    @MockBean
-    private ModifyApplicationStatusService modifyApplicationStatusService;
-    @MockBean
-    private DeleteApplicationService deleteApplicationService;
-    @MockBean
-    private QueryTicketsService queryTicketsService;
-    @MockBean
-    private ImageSaveService imageSaveService;
 
     SingleApplicationRes createSingleApplicationRes(SuperGrade admissionGrade) {
         String graduation;
@@ -380,5 +424,39 @@ class ApplicationControllerTest {
                                 )
                         )
                 );
+    }
+
+    @Test
+    @DisplayName("원서 생성")
+    void create() throws Exception {
+        doNothing().when(createApplicationService).execute(any(ApplicationReqDto.class), any(Long.class));
+
+        this.mockMvc.perform(post("/application/v1/application/me")
+                        .content(objectMapper.writeValueAsString(applicationReqDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        requestFields(createRequestFields)
+                ));
+    }
+
+    @Test
+    @DisplayName("원서 수정")
+    void modify() throws Exception {
+        doNothing().when(modifyApplicationService).execute(any(ApplicationReqDto.class), any(Long.class));
+
+        this.mockMvc.perform(put("/application/v1/application/me")
+                        .content(objectMapper.writeValueAsString(applicationReqDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        requestFields(createRequestFields)
+                ));
     }
 }
