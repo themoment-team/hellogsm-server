@@ -112,7 +112,7 @@ public class ApplicationController {
         return Map.of("url", url);
     }
 
-    @PutMapping("/final-subㅈmit")
+    @PutMapping("/final-submit")
     public ResponseEntity<Map<String, String>> finalSubmission() {
         finalSubmissionService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
