@@ -8,6 +8,7 @@ import team.themoment.hellogsm.entity.domain.application.entity.status.Admission
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
+import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationStatusService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
@@ -22,7 +23,8 @@ public class ModifyApplicationStatusServiceImpl implements ModifyApplicationStat
         Application application = applicationRepository.findByUserId(userId)
                 .orElseThrow(() -> new ExpectedException("존재하지 않는 유저입니다", HttpStatus.NOT_FOUND));
 
-        AdmissionStatus admissionStatus = createNewAdmissionStatus(application.getAdmissionStatus().getId(), applicationStatusReqDto);
+        AdmissionStatus admissionStatus = ApplicationMapper.INSTANCE
+                .createNewAdmissionStatus(application.getAdmissionStatus().getId(), applicationStatusReqDto);
 
         Application newApplication = new Application(
                 application.getId(),
@@ -33,24 +35,5 @@ public class ModifyApplicationStatusServiceImpl implements ModifyApplicationStat
         );
 
         applicationRepository.save(newApplication);
-    }
-
-    private AdmissionStatus createNewAdmissionStatus(Long admissionStatusId, ApplicationStatusReqDto applicationStatusReqDto) {
-        Major major = null;
-
-        try {
-            major = Major.valueOf(applicationStatusReqDto.finalMajor());
-        } catch (Exception ignored) {}
-
-        return AdmissionStatus.builder()
-                .id(admissionStatusId)
-                .isPrintsArrived(applicationStatusReqDto.isPrintsArrived())
-                .firstEvaluation(EvaluationStatus.valueOf(applicationStatusReqDto.firstEvaluation()))
-                .secondEvaluation(EvaluationStatus.valueOf(applicationStatusReqDto.secondEvaluation()))
-                .isFinalSubmitted(applicationStatusReqDto.isFinalSubmitted())
-                .registrationNumber(applicationStatusReqDto.registrationNumber())
-                .finalMajor(major)
-                .secondScore(applicationStatusReqDto.secondScore())
-                .build();
     }
 }
