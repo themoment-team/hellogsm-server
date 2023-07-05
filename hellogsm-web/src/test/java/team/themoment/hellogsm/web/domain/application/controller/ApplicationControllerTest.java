@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
 import team.themoment.hellogsm.entity.domain.application.enums.*;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
@@ -633,6 +635,30 @@ class ApplicationControllerTest {
                                 fieldWithPath("[].address").type(STRING).description("지원자 주소"),
                                 fieldWithPath("[].graduation").type(STRING).description("지원자 졸업 상태"),
                                 fieldWithPath("[].registrationNumber").type(NUMBER).description("접수 번호")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("증명사진 업로드")
+    void uploadImage() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "image.png", "image/png",
+                "<<image data>>".getBytes());
+
+        Mockito.when(imageSaveService.execute(any(MultipartFile.class))).thenReturn("https://hellogsm.kr");
+
+        this.mockMvc.perform(multipart("/application/v1/image")
+                        .file(file)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+
+                )
+                .andDo(this.documentationHandler.document(
+                        requestParts(
+                                partWithName("file").description("이미지 파일")
+                        ),
+                        responseFields(
+                                fieldWithPath("url").type(STRING).description("이미지 url")
                         )
                 ));
     }
