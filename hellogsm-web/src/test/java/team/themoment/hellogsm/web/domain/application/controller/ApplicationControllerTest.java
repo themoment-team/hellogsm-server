@@ -572,6 +572,21 @@ class ApplicationControllerTest {
     }
 
     @Test
+    @DisplayName("원서 삭제")
+    void deleteApplication() throws Exception {
+        doNothing().when(deleteApplicationService).execute(any(Long.class));
+
+        this.mockMvc.perform(delete("/application/v1/application/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
+                ));
+    }
+
+    @Test
     @DisplayName("수험표 출력")
     void tickets() throws Exception {
         List<TicketResDto> ticketResDto = List.of(
