@@ -555,6 +555,9 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
+                        pathParameters(
+                                parameterWithName("userId").description("유저 식별자")
+                        ),
                         requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
                         requestFields(
                                 fieldWithPath("isFinalSubmitted").type(BOOLEAN).description("최종제출 여부"),
