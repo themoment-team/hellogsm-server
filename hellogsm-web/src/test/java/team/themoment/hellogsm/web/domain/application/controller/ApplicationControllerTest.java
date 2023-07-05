@@ -136,6 +136,9 @@ class ApplicationControllerTest {
             fieldWithPath("admissionStatus.isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
             fieldWithPath("admissionStatus.firstEvaluation").type(STRING).description("첫 번째 시험 평가 결과"),
             fieldWithPath("admissionStatus.secondEvaluation").type(STRING).description("두 번째 시험 평가 결과"),
+            fieldWithPath("admissionStatus.screeningSubmittedAt").type(STRING).description("최종제출 시 전형 상태").optional(),
+            fieldWithPath("admissionStatus.screeningFirstEvaluationAt").type(STRING).description("1차 평가 이후 전형 상태").optional(),
+            fieldWithPath("admissionStatus.screeningSecondEvaluationAt").type(STRING).description("2차 평가 이후 전형 상태").optional(),
             fieldWithPath("admissionStatus.registrationNumber").type(NUMBER).description("접수 번호").optional(),
             fieldWithPath("admissionStatus.secondScore").type(NUMBER).description("2차 점수").optional(),
             fieldWithPath("admissionStatus.finalMajor").type(STRING).description("최종 학과").optional()
@@ -234,6 +237,9 @@ class ApplicationControllerTest {
                         EvaluationStatus.NOT_YET,
                         null,
                         null,
+                        null,
+                        null,
+                        null,
                         null
                 ));
     }
@@ -264,6 +270,9 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionStatus.isPrintsArrived").value(singleApplicationRes.admissionStatus().isPrintsArrived()))
                 .andExpect(jsonPath("$.admissionStatus.firstEvaluation").value(singleApplicationRes.admissionStatus().firstEvaluation().toString()))
                 .andExpect(jsonPath("$.admissionStatus.secondEvaluation").value(singleApplicationRes.admissionStatus().secondEvaluation().toString()))
+                .andExpect(jsonPath("$.admissionStatus.screeningSubmittedAt").value(singleApplicationRes.admissionStatus().screeningSubmittedAt()))
+                .andExpect(jsonPath("$.admissionStatus.screeningFirstEvaluationAt").value(singleApplicationRes.admissionStatus().screeningFirstEvaluationAt()))
+                .andExpect(jsonPath("$.admissionStatus.screeningSecondEvaluationAt").value(singleApplicationRes.admissionStatus().screeningSecondEvaluationAt()))
                 .andExpect(jsonPath("$.admissionStatus.registrationNumber").value(singleApplicationRes.admissionStatus().registrationNumber()))
                 .andExpect(jsonPath("$.admissionStatus.secondScore").value(singleApplicationRes.admissionStatus().secondScore()))
                 .andExpect(jsonPath("$.admissionStatus.finalMajor").value(singleApplicationRes.admissionStatus().finalMajor()))
@@ -468,6 +477,9 @@ class ApplicationControllerTest {
                 true,
                 "NOT_YET",
                 "NOT_YET",
+                "SPECIAL",
+                "SOCIAL",
+                "GENERAL",
                 1L,
                 BigDecimal.valueOf(100),
                 "SW"
@@ -491,6 +503,9 @@ class ApplicationControllerTest {
                                 fieldWithPath("isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
                                 fieldWithPath("firstEvaluation").type(STRING).description("1차 평과 결과"),
                                 fieldWithPath("secondEvaluation").type(STRING).description("2차 평과 결과"),
+                                fieldWithPath("screeningSubmittedAt").type(STRING).description("최종제출 시 전형 상태"),
+                                fieldWithPath("screeningFirstEvaluationAt").type(STRING).description("1차 평가 이후 전형 상태"),
+                                fieldWithPath("screeningSecondEvaluationAt").type(STRING).description("2차 평가 이후 전형 상태"),
                                 fieldWithPath("registrationNumber").type(NUMBER).description("접수 번호"),
                                 fieldWithPath("secondScore").type(NUMBER).description("2차 평가 점수"),
                                 fieldWithPath("finalMajor").type(STRING).description("최종 합격 전공")
