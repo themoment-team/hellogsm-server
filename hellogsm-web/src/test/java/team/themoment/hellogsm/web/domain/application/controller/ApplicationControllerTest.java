@@ -87,6 +87,8 @@ class ApplicationControllerTest {
     private QueryTicketsService queryTicketsService;
     @MockBean
     private ImageSaveService imageSaveService;
+    @MockBean
+    private FinalSubmissionService finalSubmissionService;
 
 
     protected final FieldDescriptor[] gedResponseFields = new FieldDescriptor[]{
@@ -681,6 +683,21 @@ class ApplicationControllerTest {
                         responseFields(
                                 fieldWithPath("url").type(STRING).description("이미지 url")
                         )
+                ));
+    }
+
+    @Test
+    @DisplayName("최종 제출")
+    void finalSubmission() throws Exception {
+        doNothing().when(finalSubmissionService).execute(any(Long.class));
+
+        this.mockMvc.perform(put("/application/v1/final-submit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
                 ));
     }
 }

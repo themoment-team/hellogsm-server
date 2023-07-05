@@ -204,6 +204,24 @@ public interface ApplicationMapper {
 
     List<ApplicationsDto> applicationListToApplicationsDtoList(List<Application> applicationList);
 
+
+    default AdmissionStatus updateFinalSubmission(AdmissionStatus admissionStatus) {
+        return AdmissionStatus.builder()
+                .id(admissionStatus.getId())
+                .isFinalSubmitted(true)
+                .isPrintsArrived(admissionStatus.isPrintsArrived())
+                .firstEvaluation(admissionStatus.getFirstEvaluation())
+                .secondEvaluation(admissionStatus.getSecondEvaluation())
+                .registrationNumber(admissionStatus.getRegistrationNumber())
+                .screeningSubmittedAt(admissionStatus.getScreeningSubmittedAt())
+                .screeningFirstEvaluationAt(admissionStatus.getScreeningFirstEvaluationAt())
+                .screeningSecondEvaluationAt(admissionStatus.getScreeningSecondEvaluationAt())
+                .secondScore(admissionStatus.getSecondScore())
+                .finalMajor(admissionStatus.getFinalMajor())
+                .build();
+    }
+
+
     default Application applicationReqDtoAndIdentityDtoToApplication(ApplicationReqDto applicationReqDto, IdentityDto identityDto, Long userId, @Nullable Long appId) {
 
         DesiredMajor desiredMajor = DesiredMajor.builder()
