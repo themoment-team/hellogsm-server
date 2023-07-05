@@ -1,6 +1,5 @@
 package team.themoment.hellogsm.web.domain.application.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -22,17 +22,23 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
 import team.themoment.hellogsm.entity.domain.application.enums.*;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,8 +51,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("restDocsTest")
@@ -145,27 +150,27 @@ class ApplicationControllerTest {
     };
 
     protected final FieldDescriptor[] createRequestFields = new FieldDescriptor[]{
-            fieldWithPath("applicantImageUri").description("지원자 증명사진"),
-            fieldWithPath("address").description("지원자 집주소"),
-            fieldWithPath("detailAddress").description("지원자 상세주소"),
-            fieldWithPath("graduation").description("지원자 중학교 졸업 상태"),
-            fieldWithPath("telephone").description("지원자 집전화 번호"),
-            fieldWithPath("guardianName").description("지원자의 보호자 이름"),
-            fieldWithPath("relationWithApplicant").description("지원자와 보호자의 관계"),
-            fieldWithPath("guardianPhoneNumber").description("보호자 전화번호"),
-            fieldWithPath("teacherName").description("지원자 선생님 이름"),
-            fieldWithPath("teacherPhoneNumber").description("지원자 선생님 전화번호"),
-            fieldWithPath("firstDesiredMajor").description("1지망 학과"),
-            fieldWithPath("secondDesiredMajor").description("2지망 학과"),
-            fieldWithPath("thirdDesiredMajor").description("3지망 학과"),
-            fieldWithPath("middleSchoolGrade").description("중학교 성적 json 형태로"),
-            fieldWithPath("schoolName").description("지원자 학교 이름"),
-            fieldWithPath("schoolLocation").description("지원자 학교 위치"),
-            fieldWithPath("screening").description("지원 전형")
+            fieldWithPath("applicantImageUri").type(STRING).description("지원자 증명사진"),
+            fieldWithPath("address").type(STRING).description("지원자 집주소"),
+            fieldWithPath("detailAddress").type(STRING).description("지원자 상세주소"),
+            fieldWithPath("graduation").type(STRING).description("지원자 중학교 졸업 상태"),
+            fieldWithPath("telephone").type(STRING).description("지원자 집전화 번호"),
+            fieldWithPath("guardianName").type(STRING).description("지원자의 보호자 이름"),
+            fieldWithPath("relationWithApplicant").type(STRING).description("지원자와 보호자의 관계"),
+            fieldWithPath("guardianPhoneNumber").type(STRING).description("보호자 전화번호"),
+            fieldWithPath("teacherName").type(STRING).description("지원자 선생님 이름"),
+            fieldWithPath("teacherPhoneNumber").type(STRING).description("지원자 선생님 전화번호"),
+            fieldWithPath("firstDesiredMajor").type(STRING).description("1지망 학과"),
+            fieldWithPath("secondDesiredMajor").type(STRING).description("2지망 학과"),
+            fieldWithPath("thirdDesiredMajor").type(STRING).description("3지망 학과"),
+            fieldWithPath("middleSchoolGrade").type(STRING).description("중학교 성적 json 형태로"),
+            fieldWithPath("schoolName").type(STRING).description("지원자 학교 이름"),
+            fieldWithPath("schoolLocation").type(STRING).description("지원자 학교 위치"),
+            fieldWithPath("screening").type(STRING).description("지원 전형")
     };
 
 
-            ApplicationReqDto applicationReqDto = new ApplicationReqDto(
+    ApplicationReqDto applicationReqDto = new ApplicationReqDto(
             "https://naver.com",
             "광주소프트웨어마이스터중학교",
             "이세상 어딘가",
@@ -347,16 +352,16 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionGrade.volunteerScore").value(admissionGrade.volunteerScore()))
                 .andExpect(jsonPath("$.admissionGrade.extracurricularSubtotalScore").value(admissionGrade.extracurricularSubtotalScore()))
                 .andDo(this.documentationHandler.document(
-                        pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
-                        responseFields(
-                                Stream.concat(
-                                        Arrays.stream(applicationCommonResponseFields),
-                                        Arrays.stream(generalResponseFields)
-                                ).toArray(FieldDescriptor[]::new)
+                                pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
+                                requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                                responseFields(
+                                        Stream.concat(
+                                                Arrays.stream(applicationCommonResponseFields),
+                                                Arrays.stream(generalResponseFields)
+                                        ).toArray(FieldDescriptor[]::new)
+                                )
                         )
-                )
-        );
+                );
     }
 
     @Test
@@ -470,6 +475,79 @@ class ApplicationControllerTest {
     }
 
     @Test
+    @DisplayName("원서 전체 조회")
+    void findAll() throws Exception {
+        ApplicationListDto applicationListDto = new ApplicationListDto(
+                new ApplicationListInfoDto(1),
+                List.of(new ApplicationsDto(
+                        1L,
+                        "human",
+                        GraduationStatus.GRADUATE,
+                        "01012341234",
+                        "01012341234",
+                        "휴먼선생",
+                        "01012341234",
+                        true,
+                        true,
+                        EvaluationStatus.NOT_YET,
+                        EvaluationStatus.NOT_YET,
+                        Screening.SPECIAL,
+                        Screening.SOCIAL,
+                        Screening.GENERAL,
+                        1L,
+                        "100"
+                ))
+        );
+
+        Mockito.when(applicationListQuery.execute(any(Integer.class), any(Integer.class))).thenReturn(applicationListDto);
+
+        this.mockMvc.perform(get("/application/v1/application/all")
+                        .param("page", "0")
+                        .param("size", "1")
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.info.count").value(applicationListDto.info().count()))
+                .andExpect(jsonPath("$.applications[0].applicationId").value(applicationListDto.applications().get(0).applicationId()))
+                .andExpect(jsonPath("$.applications[0].applicantName").value(applicationListDto.applications().get(0).applicantName()))
+                .andExpect(jsonPath("$.applications[0].graduation").value(applicationListDto.applications().get(0).graduation().toString()))
+                .andExpect(jsonPath("$.applications[0].applicantPhoneNumber").value(applicationListDto.applications().get(0).applicantPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].guardianPhoneNumber").value(applicationListDto.applications().get(0).guardianPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].teacherName").value(applicationListDto.applications().get(0).teacherName()))
+                .andExpect(jsonPath("$.applications[0].teacherPhoneNumber").value(applicationListDto.applications().get(0).teacherPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].isFinalSubmitted").value(applicationListDto.applications().get(0).isFinalSubmitted()))
+                .andExpect(jsonPath("$.applications[0].isPrintsArrived").value(applicationListDto.applications().get(0).isPrintsArrived()))
+                .andExpect(jsonPath("$.applications[0].firstEvaluation").value(applicationListDto.applications().get(0).firstEvaluation().toString()))
+                .andExpect(jsonPath("$.applications[0].secondEvaluation").value(applicationListDto.applications().get(0).secondEvaluation().toString()))
+                .andExpect(jsonPath("$.applications[0].registrationNumber").value(applicationListDto.applications().get(0).registrationNumber()))
+                .andExpect(jsonPath("$.applications[0].secondScore").value(applicationListDto.applications().get(0).secondScore()))
+                .andDo(this.documentationHandler.document(
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("원서 크기")
+                        ),
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        responseFields(
+                                fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
+                                fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
+                                fieldWithPath("applications[].applicantName").type(STRING).description("지원자 이름"),
+                                fieldWithPath("applications[].graduation").type(STRING).description("중학교 졸업 상태"),
+                                fieldWithPath("applications[].applicantPhoneNumber").type(STRING).description("지원자 전화번호"),
+                                fieldWithPath("applications[].guardianPhoneNumber").type(STRING).description("보호자 전화번호"),
+                                fieldWithPath("applications[].teacherName").type(STRING).description("선생님 이름"),
+                                fieldWithPath("applications[].teacherPhoneNumber").type(STRING).description("선생님 전화번호"),
+                                fieldWithPath("applications[].isFinalSubmitted").type(BOOLEAN).description("최종 제출 여부"),
+                                fieldWithPath("applications[].isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
+                                fieldWithPath("applications[].firstEvaluation").type(STRING).description("1차 평가 결과"),
+                                fieldWithPath("applications[].secondEvaluation").type(STRING).description("2차 평가 결과"),
+                                fieldWithPath("applications[].registrationNumber").type(NUMBER).description("접수 번호"),
+                                fieldWithPath("applications[].secondScore").type(STRING).description("2차 시험 점수")
+                        )
+                ));
+    }
+
+    @Test
     @DisplayName("원서 상태 수정")
     void modifyStatus() throws Exception {
         ApplicationStatusReqDto applicationStatusReqDto = new ApplicationStatusReqDto(
@@ -509,6 +587,96 @@ class ApplicationControllerTest {
                                 fieldWithPath("registrationNumber").type(NUMBER).description("접수 번호"),
                                 fieldWithPath("secondScore").type(NUMBER).description("2차 평가 점수"),
                                 fieldWithPath("finalMajor").type(STRING).description("최종 합격 전공")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("원서 삭제")
+    void deleteApplication() throws Exception {
+        doNothing().when(deleteApplicationService).execute(any(Long.class));
+
+        this.mockMvc.perform(delete("/application/v1/application/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
+                ));
+    }
+
+    @Test
+    @DisplayName("수험표 출력")
+    void tickets() throws Exception {
+        List<TicketResDto> ticketResDto = List.of(
+                new TicketResDto(
+                        1L,
+                        "누군가",
+                        Gender.MALE,
+                        "20030423",
+                        "https://naver.com",
+                        "이세상 어딘가",
+                        GraduationStatus.GRADUATE,
+                        1L
+                )
+        );
+
+        Mockito.when(queryTicketsService.execute(any(Integer.class), any(Integer.class))).thenReturn(ticketResDto);
+
+        this.mockMvc.perform(get("/application/v1/tickets")
+                        .param("page", "0")
+                        .param("size", "1")
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].applicationId").value(ticketResDto.get(0).applicationId()))
+                .andExpect(jsonPath("$[0].applicantName").value(ticketResDto.get(0).applicantName()))
+                .andExpect(jsonPath("$[0].applicantGender").value(ticketResDto.get(0).applicantGender().toString()))
+                .andExpect(jsonPath("$[0].applicantBirth").value(ticketResDto.get(0).applicantBirth()))
+                .andExpect(jsonPath("$[0].applicantImageUri").value(ticketResDto.get(0).applicantImageUri()))
+                .andExpect(jsonPath("$[0].address").value(ticketResDto.get(0).address()))
+                .andExpect(jsonPath("$[0].graduation").value(ticketResDto.get(0).graduation().toString()))
+                .andExpect(jsonPath("$[0].registrationNumber").value(ticketResDto.get(0).registrationNumber()))
+                .andDo(this.documentationHandler.document(
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("원서 크기")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].applicationId").type(NUMBER).description("원서 식별자"),
+                                fieldWithPath("[].applicantName").type(STRING).description("지원자 이름"),
+                                fieldWithPath("[].applicantGender").type(STRING).description("지원자 성별"),
+                                fieldWithPath("[].applicantBirth").type(STRING).description("지원자 생년월일"),
+                                fieldWithPath("[].applicantImageUri").type(STRING).description("지원자 증명사진"),
+                                fieldWithPath("[].address").type(STRING).description("지원자 주소"),
+                                fieldWithPath("[].graduation").type(STRING).description("지원자 졸업 상태"),
+                                fieldWithPath("[].registrationNumber").type(NUMBER).description("접수 번호")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("증명사진 업로드")
+    void uploadImage() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "image.png", "image/png",
+                "<<image data>>".getBytes());
+
+        Mockito.when(imageSaveService.execute(any(MultipartFile.class))).thenReturn("https://hellogsm.kr");
+
+        this.mockMvc.perform(multipart("/application/v1/image")
+                        .file(file)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+
+                )
+                .andDo(this.documentationHandler.document(
+                        requestParts(
+                                partWithName("file").description("이미지 파일")
+                        ),
+                        responseFields(
+                                fieldWithPath("url").type(STRING).description("이미지 url")
                         )
                 ));
     }
