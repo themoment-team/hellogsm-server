@@ -666,7 +666,7 @@ class ApplicationControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "image.png", "image/png",
                 "<<image data>>".getBytes());
 
-        Mockito.when(imageSaveService.execute(any(MultipartFile.class))).thenReturn("https://hellogsm.kr");
+        Mockito.when(imageSaveService.execute(any(MultipartFile.class))).thenReturn("https://hellogsm.kr/image.png");
 
         this.mockMvc.perform(multipart("/application/v1/image")
                         .file(file)
