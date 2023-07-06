@@ -194,10 +194,6 @@ class ApplicationControllerTest {
             "GENERAL"
     );
 
-
-    ApplicationControllerTest() {
-    }
-
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
         this.documentationHandler = document("application/{method-name}",
