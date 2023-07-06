@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import team.themoment.hellogsm.entity.domain.application.enums.Gender;
+import team.themoment.hellogsm.web.domain.common.ControllerTestUtil;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
@@ -112,7 +113,7 @@ class IdentityControllerTest {
         identityDtoPerform(get("/identity/v1/identity/me")
                 .cookie(new Cookie("SESSION", "SESSIONID12345")))
                 .andDo(this.documentationHandler.document(
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        ControllerTestUtil.requestSessionCookie(),
                         responseFields(identityResponseFields)
                 ));
     }

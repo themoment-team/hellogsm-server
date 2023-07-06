@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +35,7 @@ import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationSta
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.application.service.*;
+import team.themoment.hellogsm.web.domain.common.ControllerTestUtil;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
@@ -308,7 +310,7 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionGrade.gedMaxScore").value(admissionGrade.gedMaxScore()))
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        ControllerTestUtil.requestSessionCookie(),
                         responseFields(
                                 Stream.concat(
                                         Arrays.stream(applicationCommonResponseFields),
@@ -355,7 +357,7 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionGrade.extracurricularSubtotalScore").value(admissionGrade.extracurricularSubtotalScore()))
                 .andDo(this.documentationHandler.document(
                                 pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
-                                requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                                ControllerTestUtil.requestSessionCookie(),
                                 responseFields(
                                         Stream.concat(
                                                 Arrays.stream(applicationCommonResponseFields),
@@ -454,7 +456,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        ControllerTestUtil.requestSessionCookie(),
                         requestFields(createRequestFields)
                 ));
     }
@@ -471,7 +473,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        ControllerTestUtil.requestSessionCookie(),
                         requestFields(createRequestFields)
                 ));
     }
@@ -529,7 +531,7 @@ class ApplicationControllerTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("원서 크기")
                         ),
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        ControllerTestUtil.requestSessionCookie(),
                         responseFields(
                                 fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
                                 fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
@@ -580,7 +582,7 @@ class ApplicationControllerTest {
                         pathParameters(
                                 parameterWithName("userId").description("유저 식별자")
                         ),
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다.")),
+                        ControllerTestUtil.requestSessionCookie(),
                         requestFields(
                                 fieldWithPath("isFinalSubmitted").type(BOOLEAN).description("최종제출 여부"),
                                 fieldWithPath("isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
