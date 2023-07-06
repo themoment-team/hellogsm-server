@@ -76,7 +76,7 @@ class UserControllerTest {
             fieldWithPath("id").type(NUMBER).description("USER 식별자"),
             fieldWithPath("provider").type(STRING).description("OAuth2 제공자"),
             fieldWithPath("providerId").type(STRING).description("OAuth2 제공자의 회원 식별자"),
-            fieldWithPath("role").type(STRING).description("USER 권한")
+            fieldWithPath("role").type(Role.class).description("USER 권한")
     };
 
     @Test
