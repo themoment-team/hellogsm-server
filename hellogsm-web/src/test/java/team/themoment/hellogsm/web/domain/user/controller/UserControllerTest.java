@@ -40,6 +40,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.enumAsString;
 
 @Tag("restDocsTest")
 @WebMvcTest(controllers = UserController.class)
@@ -76,7 +77,7 @@ class UserControllerTest {
             fieldWithPath("id").type(NUMBER).description("USER 식별자"),
             fieldWithPath("provider").type(STRING).description("OAuth2 제공자"),
             fieldWithPath("providerId").type(STRING).description("OAuth2 제공자의 회원 식별자"),
-            fieldWithPath("role").type(Role.class).description("USER 권한")
+            fieldWithPath("role").type(enumAsString(Role.class)).description("USER 권한")
     };
 
     @Test

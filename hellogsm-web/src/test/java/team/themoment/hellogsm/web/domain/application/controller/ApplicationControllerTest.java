@@ -55,6 +55,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.enumAsString;
 import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.requestSessionCookie;
 
 @Tag("restDocsTest")
@@ -124,7 +125,7 @@ class ApplicationControllerTest {
             fieldWithPath("admissionInfo.applicantBirth").type(STRING).description("지원자 생년월일"),
             fieldWithPath("admissionInfo.address").type(STRING).description("지원자 주소"),
             fieldWithPath("admissionInfo.detailAddress").type(STRING).description("지원자 상세 주소"),
-            fieldWithPath("admissionInfo.graduation").type(GraduationStatus.class).description("지원자 졸업 여부"),
+            fieldWithPath("admissionInfo.graduation").type(enumAsString(GraduationStatus.class)).description("지원자 졸업 여부"),
             fieldWithPath("admissionInfo.telephone").type(STRING).description("지원자 집전화"),
             fieldWithPath("admissionInfo.applicantPhoneNumber").type(STRING).description("지원자 전화 번호"),
             fieldWithPath("admissionInfo.guardianName").type(STRING).description("보호자 이름"),
@@ -135,23 +136,23 @@ class ApplicationControllerTest {
             fieldWithPath("admissionInfo.schoolName").type(STRING).description("지원자 중학교 이름"),
             fieldWithPath("admissionInfo.schoolLocation").type(STRING).description("지원자 학교 주소"),
             fieldWithPath("admissionInfo.applicantImageUri").type(STRING).description("지원자 증명사진"),
-            fieldWithPath("admissionInfo.desiredMajor.firstDesiredMajor").type(STRING).description("지원자 1지망 학과"),
-            fieldWithPath("admissionInfo.desiredMajor.secondDesiredMajor").type(STRING).description("지원자 2지망 학과"),
-            fieldWithPath("admissionInfo.desiredMajor.thirdDesiredMajor").type(STRING).description("지원자 3지망 학과"),
-            fieldWithPath("admissionInfo.screening").type(Screening.class).description("지원 전형"),
+            fieldWithPath("admissionInfo.desiredMajor.firstDesiredMajor").type(enumAsString(Major.class)).description("지원자 1지망 학과"),
+            fieldWithPath("admissionInfo.desiredMajor.secondDesiredMajor").type(enumAsString(Major.class)).description("지원자 2지망 학과"),
+            fieldWithPath("admissionInfo.desiredMajor.thirdDesiredMajor").type(enumAsString(Major.class)).description("지원자 3지망 학과"),
+            fieldWithPath("admissionInfo.screening").type(enumAsString(Screening.class)).description("지원 전형"),
 
             fieldWithPath("middleSchoolGrade").type(STRING).description("중학교 점수가 json 문자열 형태로 되어있음"),
 
             fieldWithPath("admissionStatus.isFinalSubmitted").type(BOOLEAN).description("최종 제출 여부"),
             fieldWithPath("admissionStatus.isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
-            fieldWithPath("admissionStatus.firstEvaluation").type(STRING).description("첫 번째 시험 평가 결과"),
-            fieldWithPath("admissionStatus.secondEvaluation").type(STRING).description("두 번째 시험 평가 결과"),
-            fieldWithPath("admissionStatus.screeningSubmittedAt").type(STRING).description("최종제출 시 전형 상태").optional(),
-            fieldWithPath("admissionStatus.screeningFirstEvaluationAt").type(STRING).description("1차 평가 이후 전형 상태").optional(),
-            fieldWithPath("admissionStatus.screeningSecondEvaluationAt").type(STRING).description("2차 평가 이후 전형 상태").optional(),
+            fieldWithPath("admissionStatus.firstEvaluation").type(enumAsString(EvaluationStatus.class)).description("첫 번째 시험 평가 결과"),
+            fieldWithPath("admissionStatus.secondEvaluation").type(enumAsString(EvaluationStatus.class)).description("두 번째 시험 평가 결과"),
+            fieldWithPath("admissionStatus.screeningSubmittedAt").type(enumAsString(Screening.class)).description("최종제출 시 전형 상태").optional(),
+            fieldWithPath("admissionStatus.screeningFirstEvaluationAt").type(enumAsString(Screening.class)).description("1차 평가 이후 전형 상태").optional(),
+            fieldWithPath("admissionStatus.screeningSecondEvaluationAt").type(enumAsString(Screening.class)).description("2차 평가 이후 전형 상태").optional(),
             fieldWithPath("admissionStatus.registrationNumber").type(NUMBER).description("접수 번호").optional(),
             fieldWithPath("admissionStatus.secondScore").type(NUMBER).description("2차 점수").optional(),
-            fieldWithPath("admissionStatus.finalMajor").type(STRING).description("최종 학과").optional()
+            fieldWithPath("admissionStatus.finalMajor").type(enumAsString(Major.class)).description("최종 학과").optional()
     };
 
     protected final FieldDescriptor[] createRequestFields = new FieldDescriptor[]{
@@ -165,13 +166,13 @@ class ApplicationControllerTest {
             fieldWithPath("guardianPhoneNumber").type(STRING).description("보호자 전화번호"),
             fieldWithPath("teacherName").type(STRING).description("지원자 선생님 이름"),
             fieldWithPath("teacherPhoneNumber").type(STRING).description("지원자 선생님 전화번호"),
-            fieldWithPath("firstDesiredMajor").type(STRING).description("1지망 학과"),
-            fieldWithPath("secondDesiredMajor").type(STRING).description("2지망 학과"),
-            fieldWithPath("thirdDesiredMajor").type(STRING).description("3지망 학과"),
+            fieldWithPath("firstDesiredMajor").type(enumAsString(Major.class)).description("1지망 학과"),
+            fieldWithPath("secondDesiredMajor").type(enumAsString(Major.class)).description("2지망 학과"),
+            fieldWithPath("thirdDesiredMajor").type(enumAsString(Major.class)).description("3지망 학과"),
             fieldWithPath("middleSchoolGrade").type(STRING).description("중학교 성적 json 형태로"),
             fieldWithPath("schoolName").type(STRING).description("지원자 학교 이름"),
             fieldWithPath("schoolLocation").type(STRING).description("지원자 학교 위치"),
-            fieldWithPath("screening").type(STRING).description("지원 전형")
+            fieldWithPath("screening").type(enumAsString(Screening.class)).description("지원 전형")
     };
 
 
@@ -540,11 +541,11 @@ class ApplicationControllerTest {
                                 fieldWithPath("applications[].teacherPhoneNumber").type(STRING).description("선생님 전화번호"),
                                 fieldWithPath("applications[].isFinalSubmitted").type(BOOLEAN).description("최종 제출 여부"),
                                 fieldWithPath("applications[].isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
-                                fieldWithPath("applications[].firstEvaluation").type(STRING).description("1차 평가 결과"),
-                                fieldWithPath("applications[].secondEvaluation").type(STRING).description("2차 평가 결과"),
-                                fieldWithPath("applications[].screeningSubmittedAt").type(STRING).description("최종제출 시 전형 상태"),
-                                fieldWithPath("applications[].screeningFirstEvaluationAt").type(STRING).description("1차 평가 이후 전형 상태"),
-                                fieldWithPath("applications[]screeningSecondEvaluationAt").type(STRING).description("2차 평가 이후 전형 상태"),
+                                fieldWithPath("applications[].firstEvaluation").type(enumAsString(EvaluationStatus.class)).description("1차 평가 결과"),
+                                fieldWithPath("applications[].secondEvaluation").type(enumAsString(EvaluationStatus.class)).description("2차 평가 결과"),
+                                fieldWithPath("applications[].screeningSubmittedAt").type(enumAsString(Screening.class)).description("최종제출 시 전형 상태"),
+                                fieldWithPath("applications[].screeningFirstEvaluationAt").type(enumAsString(Screening.class)).description("1차 평가 이후 전형 상태"),
+                                fieldWithPath("applications[]screeningSecondEvaluationAt").type(enumAsString(Screening.class)).description("2차 평가 이후 전형 상태"),
                                 fieldWithPath("applications[].registrationNumber").type(NUMBER).description("접수 번호"),
                                 fieldWithPath("applications[].secondScore").type(STRING).description("2차 시험 점수")
                         )
@@ -583,14 +584,14 @@ class ApplicationControllerTest {
                         requestFields(
                                 fieldWithPath("isFinalSubmitted").type(BOOLEAN).description("최종제출 여부"),
                                 fieldWithPath("isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
-                                fieldWithPath("firstEvaluation").type(STRING).description("1차 평과 결과"),
-                                fieldWithPath("secondEvaluation").type(STRING).description("2차 평과 결과"),
-                                fieldWithPath("screeningSubmittedAt").type(STRING).description("최종제출 시 전형 상태"),
-                                fieldWithPath("screeningFirstEvaluationAt").type(STRING).description("1차 평가 이후 전형 상태"),
-                                fieldWithPath("screeningSecondEvaluationAt").type(STRING).description("2차 평가 이후 전형 상태"),
+                                fieldWithPath("firstEvaluation").type(enumAsString(EvaluationStatus.class)).description("1차 평과 결과"),
+                                fieldWithPath("secondEvaluation").type(enumAsString(EvaluationStatus.class)).description("2차 평과 결과"),
+                                fieldWithPath("screeningSubmittedAt").type(enumAsString(Screening.class)).description("최종제출 시 전형 상태"),
+                                fieldWithPath("screeningFirstEvaluationAt").type(enumAsString(Screening.class)).description("1차 평가 이후 전형 상태"),
+                                fieldWithPath("screeningSecondEvaluationAt").type(enumAsString(Screening.class)).description("2차 평가 이후 전형 상태"),
                                 fieldWithPath("registrationNumber").type(NUMBER).description("접수 번호"),
                                 fieldWithPath("secondScore").type(NUMBER).description("2차 평가 점수"),
-                                fieldWithPath("finalMajor").type(STRING).description("최종 합격 전공")
+                                fieldWithPath("finalMajor").type(enumAsString(Major.class)).description("최종 합격 전공")
                         )
                 ));
     }

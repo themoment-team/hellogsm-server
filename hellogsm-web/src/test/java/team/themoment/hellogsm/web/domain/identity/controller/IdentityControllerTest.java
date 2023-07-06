@@ -80,7 +80,7 @@ class IdentityControllerTest {
             fieldWithPath("name").type(STRING).description("USER의 이름"),
             fieldWithPath("phoneNumber").type(STRING).description("USER의 휴대전화 번호"),
             fieldWithPath("birth").type(STRING).description("USER의 생년월일"),
-            fieldWithPath("gender").type(Gender.class).description("USER의 성별"),
+            fieldWithPath("gender").type(enumAsString(Gender.class)).description("USER의 성별"),
             fieldWithPath("userId").type(NUMBER).description("USER 식별자")
     };
 
