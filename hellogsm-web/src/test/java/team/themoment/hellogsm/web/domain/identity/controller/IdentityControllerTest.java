@@ -148,7 +148,7 @@ class IdentityControllerTest {
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isSeeOther())
                 .andDo(this.documentationHandler.document(
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
+                        ControllerTestUtil.requestSessionCookie()
                 ));
     }
 
@@ -170,7 +170,7 @@ class IdentityControllerTest {
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isSeeOther())
                 .andDo(this.documentationHandler.document(
-                        requestCookies(cookieWithName("SESSION").description("사용자의 SESSION ID, 브라우저로 접근 시 자동 생성됩니다."))
+                        ControllerTestUtil.requestSessionCookie()
                 ));
     }
 }
