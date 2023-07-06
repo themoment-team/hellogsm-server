@@ -180,9 +180,12 @@ public class SetRegistrationNumberJobConfig {
 
     private Long getRegistrationNumber(Screening screening) {
         Long prefix = switch (screening) {
-            case GENERAL: yield 1000L;
-            case SOCIAL: yield 2000L;
-            case SPECIAL: yield 3000L;
+            case GENERAL:
+                yield 1000L;
+            case SOCIAL:
+                yield 2000L;
+            case SPECIAL_VETERANS, SPECIAL_ADMISSION:
+                yield 3000L;
             default:
                 throw new IllegalArgumentException("Invalid screening: " + screening);
         };
