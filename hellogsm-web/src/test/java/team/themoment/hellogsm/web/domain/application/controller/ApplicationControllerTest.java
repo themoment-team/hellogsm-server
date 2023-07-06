@@ -55,6 +55,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.requestSessionCookie;
 
 @Tag("restDocsTest")
 @WebMvcTest(controllers = ApplicationController.class)
@@ -306,7 +307,7 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionGrade.gedMaxScore").value(admissionGrade.gedMaxScore()))
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
-                        ControllerTestUtil.requestSessionCookie(),
+                        requestSessionCookie(),
                         responseFields(
                                 Stream.concat(
                                         Arrays.stream(applicationCommonResponseFields),
@@ -353,7 +354,7 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.admissionGrade.extracurricularSubtotalScore").value(admissionGrade.extracurricularSubtotalScore()))
                 .andDo(this.documentationHandler.document(
                                 pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
-                                ControllerTestUtil.requestSessionCookie(),
+                                requestSessionCookie(),
                                 responseFields(
                                         Stream.concat(
                                                 Arrays.stream(applicationCommonResponseFields),
@@ -452,7 +453,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie(),
+                        requestSessionCookie(),
                         requestFields(createRequestFields)
                 ));
     }
@@ -469,7 +470,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie(),
+                        requestSessionCookie(),
                         requestFields(createRequestFields)
                 ));
     }
@@ -527,7 +528,7 @@ class ApplicationControllerTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("원서 크기")
                         ),
-                        ControllerTestUtil.requestSessionCookie(),
+                        requestSessionCookie(),
                         responseFields(
                                 fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
                                 fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
@@ -578,7 +579,7 @@ class ApplicationControllerTest {
                         pathParameters(
                                 parameterWithName("userId").description("유저 식별자")
                         ),
-                        ControllerTestUtil.requestSessionCookie(),
+                        requestSessionCookie(),
                         requestFields(
                                 fieldWithPath("isFinalSubmitted").type(BOOLEAN).description("최종제출 여부"),
                                 fieldWithPath("isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
@@ -605,7 +606,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie()
+                        requestSessionCookie()
                 ));
     }
 
@@ -695,7 +696,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie()
+                        requestSessionCookie()
                 ));
     }
 }

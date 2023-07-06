@@ -34,8 +34,6 @@ import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager
 import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
-import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -46,6 +44,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.enumAsString;
+import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.requestSessionCookie;
 
 @Tag("restDocsTest")
 @WebMvcTest(controllers = IdentityController.class)
@@ -113,7 +113,7 @@ class IdentityControllerTest {
         identityDtoPerform(get("/identity/v1/identity/me")
                 .cookie(new Cookie("SESSION", "SESSIONID12345")))
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie(),
+                        requestSessionCookie(),
                         responseFields(identityResponseFields)
                 ));
     }
@@ -148,7 +148,7 @@ class IdentityControllerTest {
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isSeeOther())
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie()
+                        requestSessionCookie()
                 ));
     }
 
@@ -170,7 +170,7 @@ class IdentityControllerTest {
                         .content(this.objectMapper.writeValueAsString(request)))
                 .andExpect(status().isSeeOther())
                 .andDo(this.documentationHandler.document(
-                        ControllerTestUtil.requestSessionCookie()
+                        requestSessionCookie()
                 ));
     }
 }
