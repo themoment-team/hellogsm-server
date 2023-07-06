@@ -129,6 +129,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/v1/**").permitAll()
                 // user
                 .requestMatchers(HttpMethod.GET, "/user/v1/user/me").hasAnyRole(
+                        Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole()
                 )
                 .requestMatchers(HttpMethod.GET, "/user/v1/user/*").hasAnyRole(
@@ -159,6 +160,9 @@ public class SecurityConfig {
                 )
                 // application
                 .requestMatchers("/application/v1/application/me").hasAnyRole(
+                        Role.ROLE_USER.getRole()
+                )
+                .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyRole(
                         Role.ROLE_USER.getRole()
                 )
                 .requestMatchers(HttpMethod.POST, "/application/v1/image").hasAnyRole(
