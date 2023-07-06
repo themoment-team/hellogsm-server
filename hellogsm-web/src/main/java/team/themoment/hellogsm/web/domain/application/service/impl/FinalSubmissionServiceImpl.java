@@ -20,6 +20,8 @@ public class FinalSubmissionServiceImpl implements FinalSubmissionService {
     public void execute(Long userId) {
         Application application = applicationRepository.findByUserId(userId)
                 .orElseThrow(() -> new ExpectedException("원서가 존재하지 않습니다", HttpStatus.BAD_REQUEST));
+        if (application.getAdmissionStatus().isFinalSubmitted())
+            throw new ExpectedException("이미 최종제출이 완료 되었습니다", HttpStatus.BAD_REQUEST);
 
         AdmissionStatus newAdmissionStatus = ApplicationMapper.INSTANCE.updateFinalSubmission(application.getAdmissionStatus());
 
