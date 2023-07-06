@@ -26,14 +26,15 @@ public class IdentityController {
     private final ModifyIdentityService modifyIdentityService;
     private final IdentityQuery identityQuery;
 
-    @PostMapping("/identity/{userId}")
-    public ResponseEntity<IdentityDto> createByUserId(
-            @RequestBody @Valid IdentityReqDto reqDto,
-            @PathVariable Long userId
-    ) {
-        IdentityDto identityResDto = createIdentityService.execute(reqDto, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
-    }
+    // 사용은 안 하지만 혹시 몰라서 남김
+//    @PostMapping("/identity/{userId}")
+//    public ResponseEntity<IdentityDto> createByUserId(
+//            @RequestBody @Valid IdentityReqDto reqDto,
+//            @PathVariable Long userId
+//    ) {
+//        IdentityDto identityResDto = createIdentityService.execute(reqDto, userId);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(identityResDto);
+//    }
 
     @PostMapping("/identity/me")
     public ResponseEntity<Object> create(
@@ -43,7 +44,7 @@ public class IdentityController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/auth/v1/logout"));
         // 인증정보 갱신을 위한 로그아웃 uri로 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/identity/me")
@@ -60,7 +61,7 @@ public class IdentityController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/auth/v1/logout"));
         // 굳이 리다이렉트 할 필요는 없는데, create() 랑 리턴 타입을 맞추기 위해 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/identity/{userId}")
