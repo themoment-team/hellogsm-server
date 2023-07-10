@@ -20,7 +20,6 @@ spring:
     import:
       - classpath:oauth.yml
       - classpath:auth.yml
-      - classpath:schedule.yml
   h2:
     console:
       enabled: true
