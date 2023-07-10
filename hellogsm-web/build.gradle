@@ -2,7 +2,13 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
-bootJar { enabled = true }
+bootJar {
+    enabled = true
+    dependsOn asciidoctorw
+    from ("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
+}
 jar { enabled = true }
 
 ext {
