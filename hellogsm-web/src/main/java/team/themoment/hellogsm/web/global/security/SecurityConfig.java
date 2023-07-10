@@ -43,7 +43,7 @@ public class SecurityConfig {
 
     @Configuration
     @EnableWebSecurity
-    @Profile(ServerProfile.LOCAL)
+    @Profile({ServerProfile.LOCAL,ServerProfile.DEV})
     public class LocalSecurityConfig {
 
         @Bean
