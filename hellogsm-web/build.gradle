@@ -4,7 +4,7 @@ plugins {
 
 bootJar {
     enabled = true
-    dependsOn asciidoctorw
+    dependsOn asciidoctor
     from ("${asciidoctor.outputDir}") {
         into 'static/docs'
     }
