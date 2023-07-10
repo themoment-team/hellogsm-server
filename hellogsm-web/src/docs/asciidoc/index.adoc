@@ -29,13 +29,12 @@ v0.1, 2023-06-16
 
 AsciiDoc 문법에 관한 내용은 link:https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference[AsciiDoc Syntax Quick Reference]를 참고하시길 바랍니다.
 
-``API 명세``까지 아래 내용은 포멧을 보여주기 위한 임시 내용입니다. Hello,GSM의 명세가 아닙니다.
-
 == API 서버 경로
 [cols="2,5,3"]
 |====
 |환경     |DNS  |비고
-|작성중    | 입니다 |
+|Dev    | 아직 정해지지 않음 |
+|Prod    | 아직 정해지지 않음 |
 // |개발(dev)    | link:[https://dev-api.hellogsm.kr] |API 문서 제공
 // |운영(prod)   | link:[https://api.hellogsm.kr] | API 문서 미제공
 |====
@@ -96,9 +95,9 @@ CAUTION: 운영환경에 노출될 경우 보안 관련 문제가 발생할 수 
 |HttpStatus |설명
 |`OK(200)`|정상 응답
 |`CREATED(201)`|데이터가 새로(수정X) 추가된 경우
-|`SEE_OTHER(303)`|요청이 성공하였으며, 권한이 변경되어 로그아웃이 필요한 경우
+|`SEE_OTHER(303)`|FE 페이지로 이동하기 위해 리다이렉트 하는 경우
 |`BAD_REQUEST(400)`|요청값 누락, 잘못된 기입, 존재하지 않는 자료 요청
-|`FORBIDDEN(401)`|사용자를 식별이 불가능
+|`FORBIDDEN(401)`|사용자를 식별이 불가능힌 경우
 |`FORBIDDEN(403)`|사용자를 식별하였으나, 해당 사용자가 접근할 수 없는 요청(권한 없음)
 |`NOT_FOUND(404)`|존재하지 않는 엔드포인트
 |====
