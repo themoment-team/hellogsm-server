@@ -9,3 +9,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.batch:spring-batch-test'
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
