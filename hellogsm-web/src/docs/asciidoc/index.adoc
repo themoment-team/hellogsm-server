@@ -34,7 +34,7 @@ AsciiDoc 문법에 관한 내용은 link:https://docs.asciidoctor.org/asciidoc/l
 == API 서버 경로
 [cols="2,5,3"]
 |====
-|환경         |DNS |비고
+|환경     |DNS  |비고
 |작성중    | 입니다 |
 // |개발(dev)    | link:[https://dev-api.hellogsm.kr] |API 문서 제공
 // |운영(prod)   | link:[https://api.hellogsm.kr] | API 문서 미제공
@@ -116,6 +116,34 @@ CAUTION: 운영환경에 노출될 경우 보안 관련 문제가 발생할 수 
 
 = API 명세
 
+== auth/v1/
+*인증(Auth)*
+
+=== [GET] oauth2/authorization/{provider-name}
+
+해당 url로 접근 시 OAuth 페이지로 리다이렉트 됩니다.
+
+WARNING: API 요청을 보내지 않고, 직접 이동해야 합니다.
+
+==== Response
+
+OAuth2 인증 후, FE 메인페이지로 리다이렉트됩니다.
+
+==== `registrationId` 종류
+- google
+- github
+- kakao
+
+=== [GET] logout
+
+해당 url로 접근 시 로그아웃 됩니다.
+
+WARNING: API 요청을 보내지 않고, 직접 이동해야 합니다.
+
+==== Response
+
+로그아웃 이후, FE 메인페이지로 디라이렉트됩니다.
+
 == user/v1/
 *회원(User)*
 
@@ -165,6 +193,9 @@ operation::user/find-by-authenticated[snippets='http-response,response-fields']
 
 회원의 본인인증과 관련된 기능을 담당합니다.
 
+=== Enum 정리
+관련된 Enum 없음
+
 === [POST] identity/me/send-code
 현재 사용자의 본인인증 코드를 SMS로 발신하는 엔드포인트입니다.
 
@@ -177,7 +208,6 @@ Request Body에 담긴 휴대폰 전화번호로 본인인증 코드를 발신�
 operation::identity/code/send-code[snippets='curl-request,http-request,request-body']
 
 ==== Response
-
 operation::identity/code/send-code[snippets='http-response']
 
 === [POST - TEST ONLY] identity/me/send-code-test
@@ -194,8 +224,19 @@ WARNING: 테스트 환경에서만 사용 가능합니다.
 operation::identity/code/send-code-test[snippets='curl-request,http-request,request-body']
 
 ==== Response
-
 operation::identity/code/send-code-test[snippets='http-response']
+
+=== [POST] identity/me/auth-code
+휴대폰으로 발송된 인증코드를 인증하는 엔드포인트입니다.
+
+==== 사용 가능한 권환
+    ROLE_UNAUTHENTICATED, ROLE_USER
+
+==== Request
+operation::identity/code/auth-code[snippets='curl-request,http-request,request-body']
+
+==== Response
+operation::identity/code/auth-code[snippets='http-response']
 
 === [GET] identity/me
 현재 사용자의 본인인증 정보를 가져오는 엔드포인트입니다.
@@ -301,8 +342,8 @@ operation::identity/identity/modify-by-authenticated[snippets='http-response']
 |Name |설명
 |`GENERAL`|일반
 |`SOCIAL`|사회통합(특별)전형
-|`SPECIAL_VETERANS`| [전형 외 특별전형] 국가보훈대상자
-|`SPECIAL_ADMISSION`| [전형 외 특별전형] 특례입학대상자
+|`SPECIAL_VETERANS`| [정원 외 특별전형] 국가보훈대상자
+|`SPECIAL_ADMISSION`| [정원 외 특별전형] 특례입학대상자
 |====
 
 === [GET] application/me
@@ -315,7 +356,6 @@ operation::identity/identity/modify-by-authenticated[snippets='http-response']
 operation::application/ged-read-me[snippets='curl-request,http-request']
 
 ==== Response
-
 ===== 검정고시(GED) 학생의 경우
 operation::application/ged-read-me[snippets='http-response,response-fields']
 
@@ -332,7 +372,6 @@ USER ID를 사용하여 특정 사용자의 원서 정보를 가져오는 엔드
 operation::application/ged-read-one[snippets='curl-request,http-request']
 
 ==== Response
-
 ===== 검정고시(GED) 학생의 경우
 operation::application/ged-read-one[snippets='http-response,response-fields']
 
