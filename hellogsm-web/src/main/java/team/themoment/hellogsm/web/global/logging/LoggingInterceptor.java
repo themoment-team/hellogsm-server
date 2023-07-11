@@ -22,12 +22,13 @@ public class LoggingInterceptor implements HandlerInterceptor {
         if (request instanceof ContentCachingRequestWrapper cachingRequest) {
 
             String ip = cachingRequest.getRemoteAddr();
+            String method = cachingRequest.getMethod();
             String uri = cachingRequest.getRequestURI();
             String params = cachingRequest.getQueryString();
             String contentType = cachingRequest.getContentType();
 
-            log.info("[Request] IP: {} | URI: {} | Params: {} | Type: {}", ip, uri, params, contentType);
-//            log.debug("[Request] Body: {}", getRequestBody(cachingRequest)); 이유는 모르겠는데,
+            log.info("[Request:{}] IP: {} | URI: {} | Params: {} | Req-Type: {}", method, ip, uri, params, contentType);
+//            log.debug("[Request] Body: {}", getRequestBody(cachingRequest));  // 정확한 이유는 모르겠지만, preHandle 에서 body가 빈 문자열로 인식됨
         }
 
         return true;
@@ -38,14 +39,15 @@ public class LoggingInterceptor implements HandlerInterceptor {
         if (request instanceof ContentCachingRequestWrapper cachingRequest && response instanceof ContentCachingResponseWrapper cachingResponse) {
 
             String ip = cachingRequest.getRemoteAddr();
+            String method = cachingRequest.getMethod();
             String uri = cachingRequest.getRequestURI();
             String params = cachingRequest.getQueryString();
             String contentType = cachingResponse.getContentType();
             int statusCode = cachingResponse.getStatus();
 
-            log.info("[Response] IP: {} | URI: {} | Params: {} | Type: {} | Status Code: {}", ip, uri, params, contentType, statusCode);
-            log.debug("[Request] Body: {}", getRequestBody(cachingRequest));
-            log.debug("[Response] Body: {}", getResponseBody(cachingResponse));
+            log.debug("[Request:{}] Json Body: {}", method, getRequestBody(cachingRequest)); // TODO preHandle에서 body 읽을 수 있도록 고치기
+            log.info("[Response] IP: {} | URI: {} | Params: {} | Res-Type: {} | Status Code: {}", ip, uri, params, contentType, statusCode);
+            log.debug("[Response] Json Body: {}", getResponseBody(cachingResponse));
         }
     }
 
