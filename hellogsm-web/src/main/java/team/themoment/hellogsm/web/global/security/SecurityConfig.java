@@ -63,7 +63,6 @@ public class SecurityConfig {
             oauth2Login(http);
             http.authorizeHttpRequests(
                     httpRequests -> httpRequests
-                            .requestMatchers(toH2Console()).permitAll()
                             .requestMatchers(HttpMethod.GET, "/identity/v1/identity/me/send-code-test")
                             .hasAnyRole(
                                     Role.ROLE_UNAUTHENTICATED.getRole(),
