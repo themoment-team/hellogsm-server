@@ -11,7 +11,7 @@ public class WebResourceConfig {
 
     @Configuration
     @Profile(ServerProfile.PROD)
-    public class LocalWebConfig implements WebMvcConfigurer {
+    public class ProdWebConfig implements WebMvcConfigurer {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
             // 리소스 허용 X
@@ -21,7 +21,7 @@ public class WebResourceConfig {
 
     @Configuration
     @Profile({ServerProfile.DEV, ServerProfile.LOCAL})
-    public class ProdWebConfig implements WebMvcConfigurer {
+    public class LocalWebConfig implements WebMvcConfigurer {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
             restdocs(registry);
