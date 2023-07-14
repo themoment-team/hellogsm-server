@@ -1,4 +1,4 @@
-package team.themoment.hellogsm.web.global.thirdParty.aws.service.exception;
+package team.themoment.hellogsm.web.global.thirdParty.aws.service.template;
 
 import io.awspring.cloud.s3.S3Exception;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
