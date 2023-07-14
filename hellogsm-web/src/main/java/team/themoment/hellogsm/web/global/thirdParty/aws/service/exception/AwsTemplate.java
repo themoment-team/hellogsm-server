@@ -8,8 +8,8 @@ import software.amazon.awssdk.core.exception.SdkClientException;
 import java.io.IOException;
 
 @Component
-public class AwsExecuteWithExHandle<T> {
-    public T handleExceptions(AwsCallBack<T> action) {
+public class AwsTemplate<T> {
+    public T execute(AwsCallBack<T> action) {
         try {
             return action.execute();
         } catch (SdkClientException e) {

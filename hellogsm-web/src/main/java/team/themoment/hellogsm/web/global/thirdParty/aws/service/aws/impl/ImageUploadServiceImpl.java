@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.ImageUploadService;
-import team.themoment.hellogsm.web.global.thirdParty.aws.service.exception.AwsExecuteWithExHandle;
+import team.themoment.hellogsm.web.global.thirdParty.aws.service.exception.AwsTemplate;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageUploadServiceImpl implements ImageUploadService {
     private final S3Template s3Template;
-    private final AwsExecuteWithExHandle<String> executeWithExHandle;
+    private final AwsTemplate<String> executeWithExHandle;
 
     @Value("${spring.cloud.aws.s3.bucket-name}")
     String bucketName;
@@ -25,7 +25,7 @@ public class ImageUploadServiceImpl implements ImageUploadService {
     @Override
     public String execute(MultipartFile multipartFile) {
         String fileExtension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
-        return executeWithExHandle.handleExceptions(() -> {
+        return executeWithExHandle.execute(() -> {
             S3Resource resource = s3Template.upload(bucketName, createFileName(fileExtension), multipartFile.getInputStream());
             return resource.getURL().toString();
         });
