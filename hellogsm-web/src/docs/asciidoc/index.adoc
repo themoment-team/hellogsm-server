@@ -33,10 +33,8 @@ AsciiDoc 문법에 관한 내용은 link:https://docs.asciidoctor.org/asciidoc/l
 [cols="2,5,3"]
 |====
 |환경     |DNS  |비고
-|Dev    | 아직 정해지지 않음 |
-|Prod    | 아직 정해지지 않음 |
-// |개발(dev)    | link:[https://dev-api.hellogsm.kr] |API 문서 제공
-// |운영(prod)   | link:[https://api.hellogsm.kr] | API 문서 미제공
+|개발(Dev)   | link:[https://api.dev.hellogsm.kr] |
+|운영(Prod)    | link:[https://api.hellogsm.kr] | 해당 Link에선 Api 명세서 접근이 불가능합니다.
 |====
 
 NOTE: 해당 프로젝트 API문서는 개발환경까지 노출되는 것을 권장합니다.
