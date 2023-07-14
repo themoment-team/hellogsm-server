@@ -144,7 +144,7 @@ WARNING: API 요청을 보내지 않고, 직접 이동해야 합니다.
 == user/v1/
 *회원(User)*
 
-회원의 권환과 OAuth2 정보를 관리합니다.
+회원의 권한과 OAuth2 정보를 관리합니다.
 
 === Enum 정리
 
@@ -163,7 +163,7 @@ USER ID를 사용하여 특정 사용자 정보를 가져오는 엔드포인트�
 
 WARNING: `userId` 를 입력해야만 합니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_ADMIN
 
 
@@ -176,7 +176,7 @@ operation::user/find-by-user-id[snippets='http-response,response-fields']
 === [GET] user/me
 현재 사용자 정보를 가져오는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
 ==== Request
@@ -198,7 +198,7 @@ operation::user/find-by-authenticated[snippets='http-response,response-fields']
 
 Request Body에 담긴 휴대폰 전화번호로 본인인증 코드를 발신합니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
 ==== Request
@@ -214,7 +214,7 @@ SMS로 인증코드를 확인받지 않고, Response 값에 본인인증 코드�
 
 WARNING: 테스트 환경에서만 사용 가능합니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
 ==== Request
@@ -226,7 +226,7 @@ operation::identity/code/send-code-test[snippets='http-response']
 === [POST] identity/me/auth-code
 휴대폰으로 발송된 인증코드를 인증하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
 ==== Request
@@ -238,7 +238,7 @@ operation::identity/code/auth-code[snippets='http-response']
 === [GET] identity/me
 현재 사용자의 본인인증 정보를 가져오는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -252,7 +252,7 @@ operation::identity/identity/find-by-authenticated[snippets='http-response,respo
 
 사용자의 개인정보(본인인증 정보)를 등록하고 권한을 `인증된 유저(ROLE_USER)` 로 변경합니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
 ==== Request
@@ -268,7 +268,7 @@ USER ID를 사용하여 특정 사용자의 본인인증 정보를 가져오는 
 
 WARNING: `userId` 를 입력해야만 합니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_ADMIN
 
 ==== Request
@@ -280,7 +280,7 @@ operation::identity/identity/find-by-user-id[snippets='http-response,response-fi
 === [PUT] identity/me
 현재 사용자의 본인인증 정보를 수정하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -346,7 +346,7 @@ operation::identity/identity/modify-by-authenticated[snippets='http-response']
 === [GET] application/me
 현재 사용자의 원서 정보를 가져오는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -362,7 +362,7 @@ operation::application/general-read-me[snippets='http-response,response-fields']
 === [GET] application/{userId}
 USER ID를 사용하여 특정 사용자의 원서 정보를 가져오는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_ADMIN
 
 ==== Request
@@ -378,7 +378,7 @@ operation::application/general-read-one[snippets='http-response,response-fields'
 === [POST] image
 현재 사용자의 증명사진을 등록하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -390,7 +390,7 @@ operation::application/upload-image[snippets='http-response,response-fields']
 === [POST] application/me
 현재 사용자의 원서를 생성하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -402,7 +402,7 @@ operation::application/create[snippets='http-response']
 === [PUT] application/me
 현재 사용자의 원서를 수정하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -414,7 +414,7 @@ operation::application/modify[snippets='http-response']
 === [DELETE] application/me
 현재 사용자의 원서를 삭제하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 ==== Request
@@ -426,7 +426,7 @@ operation::application/delete-application[snippets='http-response']
 === [GET] application/all
 모든 사용자의 원서를 조회하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_ADMIN
 
 ==== Request
@@ -438,7 +438,7 @@ operation::application/delete-application[snippets='http-response']
 === [PUT] status/{userId}
 USER ID를 사용하여 특정 사용자의 원서의 상태를 변경하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_ADMIN
 
 
@@ -453,7 +453,7 @@ operation::application/modify-status[snippets='http-response']
 
 최종제출 이후 사용자의 원서의 수정/삭제는 불가능합니다. (``ADMIN``은 수정 가능)
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_USER
 
 
@@ -466,7 +466,7 @@ operation::application/final-submission[snippets='http-response']
 === [GET] tickets
 모든 사용자의 수험표 정보를 조회하는 엔드포인트입니다.
 
-==== 사용 가능한 권환
+==== 사용 가능한 권한
     ROLE_ADMIN
 
 ==== Request
