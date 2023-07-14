@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.SendSmsService;
-import team.themoment.hellogsm.web.global.thirdParty.aws.service.common.AwsExecuteWithExHandle;
+import team.themoment.hellogsm.web.global.thirdParty.aws.service.exception.AwsExecuteWithExHandle;
 
 @Service
 @RequiredArgsConstructor
