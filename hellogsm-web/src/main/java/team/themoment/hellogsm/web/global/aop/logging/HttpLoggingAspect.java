@@ -35,6 +35,7 @@ public class HttpLoggingAspect {
         String sessionId = request.getRequestedSessionId();
         String params = request.getQueryString();
         String contentType = request.getContentType();
+        String userAgent = request.getHeader("User-Agent");
 
 
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
@@ -51,8 +52,8 @@ public class HttpLoggingAspect {
 
         UUID code = UUID.randomUUID(); // 나중에 찾기 쉽게 Req/Res가 한 세트인 id 느낌
 
-        log.info("At {}#{} [Request:{}] IP: {}, Session-ID: {}, URI: {}, Params: {}, Content-Type: {}, Headers: {}, Parameters: {}, Code: {}",
-                className, methodName, method, ip, sessionId, uri, params, contentType, headerSet, params(proceedingJoinPoint), code);
+        log.info("At {}#{} [Request:{}] IP: {}, Session-ID: {}, URI: {}, Params: {}, Content-Type: {}, User-Agent: {}, Headers: {}, Parameters: {}, Code: {}",
+                className, methodName, method, ip, sessionId, uri, params, contentType, userAgent, headerSet, params(proceedingJoinPoint), code);
 
         ResponseEntity result = (ResponseEntity) proceedingJoinPoint.proceed();
 
