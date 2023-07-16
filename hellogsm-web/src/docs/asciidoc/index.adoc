@@ -433,7 +433,7 @@ operation::application/delete-application[snippets='http-response']
 operation::application/find-all[snippets='curl-request,http-request,query-parameters']
 
 ==== Response
-operation::application/delete-application[snippets='http-response']
+operation::application/find-all[snippets='http-response']
 
 === [PUT] status/{userId}
 USER ID를 사용하여 특정 사용자의 원서의 상태를 변경하는 엔드포인트입니다.
