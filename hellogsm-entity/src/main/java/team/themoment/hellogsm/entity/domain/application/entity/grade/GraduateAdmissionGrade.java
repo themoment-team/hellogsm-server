@@ -30,43 +30,43 @@ import java.util.stream.Stream;
 public class GraduateAdmissionGrade extends AdmissionGrade {
 
 
-    @Column(name = "grade_1_semester_1_score", nullable = true)
+    @Column(name = "grade_1_semester_1_score", nullable = false)
     private BigDecimal grade1Semester1Score;  // 1 grade 1 semester 점수
 
 
-    @Column(name = "grade_1_semester_2_score", nullable = true)
+    @Column(name = "grade_1_semester_2_score", nullable = false)
     private BigDecimal grade1Semester2Score;
 
 
-    @Column(name = "grade_2_semester_1_score", nullable = true)
+    @Column(name = "grade_2_semester_1_score", nullable = false)
     private BigDecimal grade2Semester1Score;
 
 
-    @Column(name = "grade_2_semester_2_score", nullable = true)
+    @Column(name = "grade_2_semester_2_score", nullable = false)
     private BigDecimal grade2Semester2Score;
 
 
-    @Column(name = "grade_3_semester_1_score", nullable = true)
+    @Column(name = "grade_3_semester_1_score", nullable = false)
     private BigDecimal grade3Semester1Score;
 
 
-    @Column(name = "artistic_score", nullable = true)
+    @Column(name = "artistic_score", nullable = false)
     private BigDecimal artisticScore;
 
 
-    @Column(name = "curricular_subtotal_score", nullable = true)
+    @Column(name = "curricular_subtotal_score", nullable = false)
     private BigDecimal curricularSubtotalScore;
 
 
-    @Column(name = "attendance_score", nullable = true)
+    @Column(name = "attendance_score", nullable = false)
     private BigDecimal attendanceScore;
 
 
-    @Column(name = "volunteer_score")
+    @Column(name = "volunteer_score", nullable = false)
     private BigDecimal volunteerScore;
 
 
-    @Column(name = "extracurricular_subtotal_score")
+    @Column(name = "extracurricular_subtotal_score", nullable = false)
     private BigDecimal extracurricularSubtotalScore;
 
     public GraduateAdmissionGrade(MiddleSchoolGrade middleSchoolGrade) {
