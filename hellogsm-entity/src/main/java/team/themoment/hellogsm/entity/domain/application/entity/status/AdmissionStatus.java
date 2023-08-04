@@ -8,6 +8,7 @@ import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * 입학 원서의 상태를 저장하는 Entity입니다.
@@ -59,6 +60,30 @@ public class AdmissionStatus {
 
     @Column(name = "second_score", nullable = true) // TODO 이름 바꾸기 - 2차 시험 점수
     private BigDecimal secondScore;
+
+    public Optional<Screening> getScreeningSubmittedAt() {
+        return Optional.ofNullable(screeningSubmittedAt);
+    }
+
+    public Optional<Screening> getScreeningFirstEvaluationAt() {
+        return Optional.ofNullable(screeningFirstEvaluationAt);
+    }
+
+    public Optional<Screening> getScreeningSecondEvaluationAt() {
+        return Optional.ofNullable(screeningSecondEvaluationAt);
+    }
+
+    public Optional<Long> getRegistrationNumber() {
+        return Optional.ofNullable(registrationNumber);
+    }
+
+    public Optional<BigDecimal> getSecondScore() {
+        return Optional.ofNullable(secondScore);
+    }
+
+    public Optional<Major> getFinalMajor() {
+        return Optional.ofNullable(finalMajor);
+    }
 
     @Enumerated(EnumType.STRING)
     @Column(name = "final_major", nullable = true)

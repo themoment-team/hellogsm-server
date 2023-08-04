@@ -9,6 +9,7 @@ import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * 입학 원서의 인적사항을 저장하는 Entity입니다.
@@ -100,6 +101,26 @@ public class AdmissionInfo {
     @AssertFalse(message = "DesiredMajor 가 null 임")
     private boolean isDesiredMajorNull() {
         return desiredMajor == null;
+    }
+
+    public Optional<String> getTelephone() {
+        return Optional.ofNullable(telephone);
+    }
+
+    public Optional<String> getSchoolName() {
+        return Optional.ofNullable(schoolName);
+    }
+
+    public Optional<String> getSchoolLocation() {
+        return Optional.ofNullable(schoolLocation);
+    }
+
+    public Optional<String> getTeacherName() {
+        return Optional.ofNullable(teacherName);
+    }
+
+    public Optional<String> getTeacherPhoneNumber() {
+        return Optional.ofNullable(teacherPhoneNumber);
     }
 
 }
