@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @since 1.0.0
  */
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

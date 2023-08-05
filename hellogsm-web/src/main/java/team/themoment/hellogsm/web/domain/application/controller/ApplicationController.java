@@ -46,13 +46,13 @@ public class ApplicationController {
     private final FinalSubmissionService finalSubmissionService;
 
     @GetMapping("/application/{userId}")
-    public SingleApplicationRes readOne(@PathVariable("userId") Long userId) {
-        return querySingleApplicationService.execute(userId);
+    public ResponseEntity<SingleApplicationRes> readOne(@PathVariable("userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(querySingleApplicationService.execute(userId));
     }
 
     @GetMapping("/application/me")
-    public SingleApplicationRes readMe() {
-        return querySingleApplicationService.execute(manager.getId());
+    public ResponseEntity<SingleApplicationRes> readMe() {
+        return ResponseEntity.status(HttpStatus.OK).body(querySingleApplicationService.execute(manager.getId()));
     }
 
     @PostMapping("/application/me")
@@ -107,9 +107,9 @@ public class ApplicationController {
     }
 
     @PostMapping("/image")
-    public Map<String, String> uploadImage(@Valid @RequestPart(name = "file") MultipartFile multipartFile) {
+    public ResponseEntity<Map<String, String>> uploadImage(@Valid @RequestPart(name = "file") MultipartFile multipartFile) {
         String url = imageSaveService.execute(multipartFile);
-        return Map.of("url", url);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("url", url));
     }
 
     @PutMapping("/final-submit")

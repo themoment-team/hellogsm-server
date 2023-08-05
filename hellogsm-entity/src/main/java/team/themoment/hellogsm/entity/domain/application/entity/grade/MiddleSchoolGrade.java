@@ -19,11 +19,11 @@ public class MiddleSchoolGrade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "middle_school_grade_id")
+    @Column(name = "middle_school_grade_id", nullable = false)
     private Long id;
 
     @Lob
-    @Column(name = "middle_school_grade_text")
+    @Column(name = "middle_school_grade_text", nullable = false)
     private String middleSchoolGradeText;
 
 }
