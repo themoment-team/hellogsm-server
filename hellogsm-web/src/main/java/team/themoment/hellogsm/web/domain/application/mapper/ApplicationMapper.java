@@ -25,6 +25,7 @@ import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplica
 import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
+import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 
 import java.util.List;
 
@@ -32,7 +33,8 @@ import java.util.List;
         componentModel = "spring",
         unmappedSourcePolicy = ReportingPolicy.ERROR,
         unmappedTargetPolicy = ReportingPolicy.ERROR,
-        typeConversionPolicy = ReportingPolicy.WARN
+        typeConversionPolicy = ReportingPolicy.WARN,
+        uses = OptionalUtils.class
 )
 public interface ApplicationMapper {
     ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
@@ -212,12 +214,12 @@ public interface ApplicationMapper {
                 .isPrintsArrived(admissionStatus.isPrintsArrived())
                 .firstEvaluation(admissionStatus.getFirstEvaluation())
                 .secondEvaluation(admissionStatus.getSecondEvaluation())
-                .registrationNumber(admissionStatus.getRegistrationNumber())
-                .screeningSubmittedAt(admissionStatus.getScreeningSubmittedAt())
-                .screeningFirstEvaluationAt(admissionStatus.getScreeningFirstEvaluationAt())
-                .screeningSecondEvaluationAt(admissionStatus.getScreeningSecondEvaluationAt())
-                .secondScore(admissionStatus.getSecondScore())
-                .finalMajor(admissionStatus.getFinalMajor())
+                .registrationNumber(OptionalUtils.fromOptional(admissionStatus.getRegistrationNumber()))
+                .screeningSubmittedAt(OptionalUtils.fromOptional(admissionStatus.getScreeningSubmittedAt()))
+                .screeningFirstEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningFirstEvaluationAt()))
+                .screeningSecondEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningSecondEvaluationAt()))
+                .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))
+                .finalMajor(OptionalUtils.fromOptional(admissionStatus.getFinalMajor()))
                 .build();
     }
 

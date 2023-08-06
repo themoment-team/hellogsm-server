@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
@@ -140,8 +141,8 @@ public class SetRegistrationNumberJobConfig {
                     .firstEvaluation(admissionStatus.getFirstEvaluation())
                     .secondEvaluation(admissionStatus.getSecondEvaluation())
                     .registrationNumber(null)
-                    .secondScore(admissionStatus.getSecondScore())
-                    .finalMajor(admissionStatus.getFinalMajor())
+                    .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))
+                    .finalMajor(OptionalUtils.fromOptional(admissionStatus.getFinalMajor()))
                     .build();
             return clearAdmissionStatus;
         };
@@ -162,8 +163,8 @@ public class SetRegistrationNumberJobConfig {
                     .firstEvaluation(admissionStatus.getFirstEvaluation())
                     .secondEvaluation(admissionStatus.getSecondEvaluation())
                     .registrationNumber(registrationNumber)
-                    .secondScore(admissionStatus.getSecondScore())
-                    .finalMajor(admissionStatus.getFinalMajor())
+                    .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))
+                    .finalMajor(OptionalUtils.fromOptional(admissionStatus.getFinalMajor()))
                     .build();
             return newAdmissionStatus;
         };
