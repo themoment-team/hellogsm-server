@@ -8,14 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.response.CreateIdentityResDto;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.domain.identity.service.ModifyIdentityService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/identity/v1")
@@ -40,11 +43,9 @@ public class IdentityController {
     public ResponseEntity<Object> create(
             @RequestBody @Valid IdentityReqDto reqDto
     ) {
-        createIdentityService.execute(reqDto, manager.getId());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/auth/v1/logout"));
-        // 인증정보 갱신을 위한 로그아웃 uri로 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        CreateIdentityResDto resDto = createIdentityService.execute(reqDto, manager.getId());
+        manager.setRole(resDto.userRole());
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "본인인증이 완료되었습니다"));
     }
 
     @GetMapping("/identity/me")
