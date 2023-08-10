@@ -119,7 +119,7 @@ public class SecurityConfig {
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout -> logout
                 .logoutUrl(logoutUri)
-                .logoutSuccessUrl(authEnv.redirectBaseUri())
+                .logoutSuccessUrl(authEnv.redirectBaseUri()+"?logout=success")
         );
     }
 
