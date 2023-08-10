@@ -8,4 +8,5 @@ public interface AuthenticatedUserManager {
     Long getId();
     Role getRole();
     LocalDateTime getLastLoginTime();
+    Role setRole(Role role);
 }
