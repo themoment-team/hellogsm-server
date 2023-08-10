@@ -22,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import team.themoment.hellogsm.web.global.security.handler.CustomUrlAuthenticationSuccessHandler;
 
 import java.util.Arrays;
 
@@ -109,7 +110,7 @@ public class SecurityConfig {
                 oauth2Login
                         .authorizationEndpoint().baseUri(oauth2LoginEndpointBaseUri).and()
                         .loginProcessingUrl(oauth2LoginProcessingUri)
-                        .successHandler(new SimpleUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri()))
+                        .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri()))
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.redirectLoginFailureUri()))
 
         );
