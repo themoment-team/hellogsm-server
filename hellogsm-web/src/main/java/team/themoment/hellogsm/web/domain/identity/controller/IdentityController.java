@@ -1,11 +1,14 @@
 package team.themoment.hellogsm.web.domain.identity.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
@@ -16,7 +19,6 @@ import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.domain.identity.service.ModifyIdentityService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
-import java.net.URI;
 import java.util.Map;
 
 @RestController
@@ -40,10 +42,11 @@ public class IdentityController {
 
     @PostMapping("/identity/me")
     public ResponseEntity<Object> create(
+            HttpServletRequest httpServletRequest,
             @RequestBody @Valid IdentityReqDto reqDto
     ) {
         CreateIdentityResDto resDto = createIdentityService.execute(reqDto, manager.getId());
-        manager.setRole(resDto.userRole());
+        manager.setRole(httpServletRequest, resDto.userRole());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "본인인증이 완료되었습니다"));
     }
 
