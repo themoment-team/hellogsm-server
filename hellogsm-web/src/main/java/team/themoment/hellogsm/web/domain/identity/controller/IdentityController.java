@@ -45,7 +45,7 @@ public class IdentityController {
     ) {
         CreateIdentityResDto resDto = createIdentityService.execute(reqDto, manager.getId());
         manager.setRole(resDto.userRole());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "본인인증이 완료되었습니다"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "본인인증이 완료되었습니다"));
     }
 
     @GetMapping("/identity/me")
