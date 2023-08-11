@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.dto.response.CreateIdentityResDto;
@@ -55,14 +54,11 @@ public class IdentityController {
     }
 
     @PutMapping("/identity/me")
-    public ResponseEntity<IdentityDto> modify(
+    public ResponseEntity<Map<String, String>> modify(
             @RequestBody @Valid IdentityReqDto reqDto
     ) {
         modifyIdentityService.execute(reqDto, manager.getId());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/auth/v1/logout"));
-        // 굳이 리다이렉트 할 필요는 없는데, create() 랑 리턴 타입을 맞추기 위해 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
     @GetMapping("/identity/{userId}")
