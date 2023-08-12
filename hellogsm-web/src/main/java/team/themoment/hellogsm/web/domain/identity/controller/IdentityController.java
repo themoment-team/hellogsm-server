@@ -1,21 +1,25 @@
 package team.themoment.hellogsm.web.domain.identity.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.response.CreateIdentityResDto;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.domain.identity.service.ModifyIdentityService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
-import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/identity/v1")
@@ -38,13 +42,12 @@ public class IdentityController {
 
     @PostMapping("/identity/me")
     public ResponseEntity<Object> create(
+            HttpServletRequest httpServletRequest,
             @RequestBody @Valid IdentityReqDto reqDto
     ) {
-        createIdentityService.execute(reqDto, manager.getId());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/auth/v1/logout"));
-        // 인증정보 갱신을 위한 로그아웃 uri로 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        CreateIdentityResDto resDto = createIdentityService.execute(reqDto, manager.getId());
+        manager.setRole(httpServletRequest, resDto.userRole());
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "본인인증이 완료되었습니다"));
     }
 
     @GetMapping("/identity/me")
@@ -54,14 +57,11 @@ public class IdentityController {
     }
 
     @PutMapping("/identity/me")
-    public ResponseEntity<IdentityDto> modify(
+    public ResponseEntity<Map<String, String>> modify(
             @RequestBody @Valid IdentityReqDto reqDto
     ) {
         modifyIdentityService.execute(reqDto, manager.getId());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/auth/v1/logout"));
-        // 굳이 리다이렉트 할 필요는 없는데, create() 랑 리턴 타입을 맞추기 위해 리다이렉트
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
     @GetMapping("/identity/{userId}")

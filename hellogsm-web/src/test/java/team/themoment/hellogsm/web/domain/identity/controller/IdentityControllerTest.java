@@ -23,9 +23,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import team.themoment.hellogsm.entity.domain.application.enums.Gender;
+import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.common.ControllerTestUtil;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
+import team.themoment.hellogsm.web.domain.identity.dto.response.CreateIdentityResDto;
 import team.themoment.hellogsm.web.domain.identity.service.CreateIdentityService;
 import team.themoment.hellogsm.web.domain.identity.service.IdentityQuery;
 import team.themoment.hellogsm.web.domain.identity.service.ModifyIdentityService;
@@ -140,15 +142,25 @@ class IdentityControllerTest {
                 Gender.MALE.name(),
                 LocalDate.of(2007,01,01)
         );
-        Mockito.when(createIdentityService.execute(any(IdentityReqDto.class), any(Long.class))).thenReturn(identity);
+        CreateIdentityResDto response = new CreateIdentityResDto(
+                1L,
+                "홍길동",
+                "01012345678",
+                LocalDate.of(2007,01,01),
+                Gender.MALE,
+                Role.ROLE_USER,
+                userId
+        );
+        Mockito.when(createIdentityService.execute(any(IdentityReqDto.class), any(Long.class))).thenReturn(response);
         Mockito.when(manager.getId()).thenReturn(userId);
-        this.mockMvc.perform(post("/identity/v1/identity/me", userId, MediaType.APPLICATION_JSON)
+        this.mockMvc.perform(post("/identity/v1/identity/me", MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("SESSION", "SESSIONID12345"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isSeeOther())
+                .andExpect(status().isCreated())
                 .andDo(this.documentationHandler.document(
-                        requestSessionCookie()
+                        requestSessionCookie(),
+                        responseFields(fieldWithPath("message").type(STRING).description("작업 상태 설명"))
                 ));
     }
 
@@ -164,13 +176,14 @@ class IdentityControllerTest {
         );
         Mockito.when(modifyIdentityService.execute(any(IdentityReqDto.class), any(Long.class))).thenReturn(identity);
         Mockito.when(manager.getId()).thenReturn(userId);
-        this.mockMvc.perform(post("/identity/v1/identity/me", userId, MediaType.APPLICATION_JSON)
+        this.mockMvc.perform(put("/identity/v1/identity/me", MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("SESSION", "SESSIONID12345"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(request)))
-                .andExpect(status().isSeeOther())
+                .andExpect(status().isOk())
                 .andDo(this.documentationHandler.document(
-                        requestSessionCookie()
+                        requestSessionCookie(),
+                        responseFields(fieldWithPath("message").type(STRING).description("작업 상태 설명"))
                 ));
     }
 }
