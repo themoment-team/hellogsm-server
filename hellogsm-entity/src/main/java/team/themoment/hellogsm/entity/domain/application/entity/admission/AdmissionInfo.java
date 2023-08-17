@@ -38,40 +38,31 @@ public class AdmissionInfo {
     @Column(name = "applicant_name", nullable = false)
     private String applicantName;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "applicant_gender", nullable = false)
     private Gender applicantGender;
 
-
     @Column(name = "applicant_birth", nullable = false)
     private LocalDate applicantBirth;
-
 
     @Column(name = "address", nullable = false)
     private String address;
 
-
     @Column(name = "detail_address", nullable = false)
     private String detailAddress;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "graduation", nullable = false)
     private GraduationStatus graduation;
 
-
     @Column(name = "telephone", nullable = true)
     private String telephone;
-
 
     @Column(name = "applicant_phone_number", nullable = false)
     private String applicantPhoneNumber;
 
-
     @Column(name = "guardian_name", nullable = false)
     private String guardianName;
-
 
     @Column(name = "relation_with_applicant", nullable = false)
     private String relationWithApplicant;
@@ -123,4 +114,3 @@ public class AdmissionInfo {
         return Optional.ofNullable(teacherPhoneNumber);
     }
 }
-

@@ -25,6 +25,5 @@ public class MiddleSchoolGrade {
     @Lob
     @Column(name = "middle_school_grade_text", nullable = false)
     private String middleSchoolGradeText;
-
 }
 

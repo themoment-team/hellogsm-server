@@ -23,16 +23,14 @@ import java.math.BigDecimal;
 @ToString
 public abstract class AdmissionGrade {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admission_grade_id", nullable = false)
     protected Long id;
 
-    
     @Column(name = "total_score", nullable = false)
     protected BigDecimal totalScore;
 
-    
     @Column(name = "percentile_rank", nullable = false)
     protected BigDecimal percentileRank;
-
 }

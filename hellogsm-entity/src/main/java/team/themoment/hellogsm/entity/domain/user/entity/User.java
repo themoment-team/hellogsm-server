@@ -11,6 +11,7 @@ import team.themoment.hellogsm.entity.domain.user.enums.Role;
 @Getter
 @ToString
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -30,5 +31,4 @@ public class User {
     private void prePersist() {
         this.role = this.role == null ? Role.ROLE_UNAUTHENTICATED : this.role;
     }
-
 }
