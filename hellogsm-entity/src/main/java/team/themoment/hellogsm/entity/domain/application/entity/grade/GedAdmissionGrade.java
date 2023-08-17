@@ -32,6 +32,7 @@ import static lombok.AccessLevel.PROTECTED;
 @SuperBuilder
 @ToString
 public class GedAdmissionGrade extends AdmissionGrade {
+
     @Column(name = "ged_total_score", nullable = false)
     private BigDecimal gedTotalScore;
 
