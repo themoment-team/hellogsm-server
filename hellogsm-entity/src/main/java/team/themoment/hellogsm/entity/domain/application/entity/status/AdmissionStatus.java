@@ -19,9 +19,9 @@ import java.util.Optional;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 @Builder
 @ToString
-@Getter
 public class AdmissionStatus {
 
     @Id

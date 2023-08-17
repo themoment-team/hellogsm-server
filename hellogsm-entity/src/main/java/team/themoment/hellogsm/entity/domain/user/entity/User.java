@@ -1,10 +1,7 @@
 package team.themoment.hellogsm.entity.domain.user.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 
 @Entity
@@ -12,6 +9,7 @@ import team.themoment.hellogsm.entity.domain.user.enums.Role;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

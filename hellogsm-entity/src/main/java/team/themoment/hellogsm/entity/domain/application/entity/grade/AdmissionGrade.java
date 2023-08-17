@@ -13,12 +13,12 @@ import java.math.BigDecimal;
  * @since 1.0.0
  */
 @Entity
+@Table(name = "admission_grade")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "admission_grade")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @SuperBuilder
 @ToString
 public abstract class AdmissionGrade {
@@ -36,4 +36,3 @@ public abstract class AdmissionGrade {
     protected BigDecimal percentileRank;
 
 }
-

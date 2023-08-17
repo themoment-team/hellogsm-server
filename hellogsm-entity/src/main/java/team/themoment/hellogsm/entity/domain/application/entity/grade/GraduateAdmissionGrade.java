@@ -21,10 +21,10 @@ import java.util.stream.Stream;
  * @since 1.0.0
  */
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @DiscriminatorValue("GRADUATE")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor//(access = AccessLevel.PRIVATE) 테스트용으로 주석
 @SuperBuilder
 @ToString
 public class GraduateAdmissionGrade extends AdmissionGrade {

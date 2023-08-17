@@ -24,10 +24,9 @@ import java.util.Set;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 @Builder
 @ToString
-@Slf4j
-@Getter
 public class DesiredMajor {
 
 

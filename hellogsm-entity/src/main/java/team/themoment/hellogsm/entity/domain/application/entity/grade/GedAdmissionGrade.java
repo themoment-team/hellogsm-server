@@ -25,10 +25,10 @@ import static lombok.AccessLevel.PROTECTED;
  * @since 1.0.0
  */
 @Entity
-@DiscriminatorValue("GED")
-@Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
+@DiscriminatorValue("GED")
+@Getter
 @SuperBuilder
 @ToString
 public class GedAdmissionGrade extends AdmissionGrade {
