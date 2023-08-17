@@ -60,7 +60,7 @@ public class Application {
      *
      * @return 일관성 여부 (true: 일관성 만족, false: 일관성 불만족)
      */
-    @AssertTrue(message = "admissionInfo의 graduationStatus와 AdmissionGrade의 형식이 일치하지 않습니다.")
+    @AssertTrue(message = "AdmissionInfo의 졸업 상태와 AdmissionGrade 구현체가 일치하지 않습니다.")
     private boolean hasConsistency() {
         GraduationStatus graduationStatus = admissionInfo.getGraduation();
         boolean isGedGraduationStatus = graduationStatus.equals(GraduationStatus.GED);
