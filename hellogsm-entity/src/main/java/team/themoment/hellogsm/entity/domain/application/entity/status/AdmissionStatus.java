@@ -19,9 +19,9 @@ import java.util.Optional;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 @Builder
 @ToString
-@Getter
 public class AdmissionStatus {
 
     @Id
@@ -61,6 +61,10 @@ public class AdmissionStatus {
     @Column(name = "second_score", nullable = true) // TODO 이름 바꾸기 - 2차 시험 점수
     private BigDecimal secondScore;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "final_major", nullable = true)
+    private Major finalMajor;
+
     public Optional<Screening> getScreeningSubmittedAt() {
         return Optional.ofNullable(screeningSubmittedAt);
     }
@@ -85,9 +89,13 @@ public class AdmissionStatus {
         return Optional.ofNullable(finalMajor);
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "final_major", nullable = true)
-    private Major finalMajor; // "배정되지 않음" 상태를 표현하기 애패해서 일단은 null로 둠
+    public Boolean isFinalSubmitted() {
+        return isFinalSubmitted;
+    }
+
+    public Boolean isPrintsArrived() {
+        return isPrintsArrived;
+    }
 
     /**
      * 초기 상태의 {@code AdmissionStatus}를 생성합니다.
@@ -108,15 +116,6 @@ public class AdmissionStatus {
                 .build();
     }
 
-    public Boolean isFinalSubmitted() {
-        return isFinalSubmitted;
-    }
-
-    public Boolean isPrintsArrived() {
-        return isPrintsArrived;
-    }
-
-    // null이 아닌 기본 값이 있는 경우 기본값 정해주기
     @PrePersist
     public void prePersist() {
         isFinalSubmitted = isFinalSubmitted == null ? false : isFinalSubmitted;

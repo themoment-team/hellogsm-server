@@ -21,50 +21,40 @@ import java.util.stream.Stream;
  * @since 1.0.0
  */
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @DiscriminatorValue("GRADUATE")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor//(access = AccessLevel.PRIVATE) 테스트용으로 주석
 @SuperBuilder
 @ToString
 public class GraduateAdmissionGrade extends AdmissionGrade {
 
-
     @Column(name = "grade_1_semester_1_score", nullable = false)
-    private BigDecimal grade1Semester1Score;  // 1 grade 1 semester 점수
-
+    private BigDecimal grade1Semester1Score;  // 1 grade(학년) 1 semester(학기) 점수
 
     @Column(name = "grade_1_semester_2_score", nullable = false)
     private BigDecimal grade1Semester2Score;
 
-
     @Column(name = "grade_2_semester_1_score", nullable = false)
     private BigDecimal grade2Semester1Score;
-
 
     @Column(name = "grade_2_semester_2_score", nullable = false)
     private BigDecimal grade2Semester2Score;
 
-
     @Column(name = "grade_3_semester_1_score", nullable = false)
     private BigDecimal grade3Semester1Score;
-
 
     @Column(name = "artistic_score", nullable = false)
     private BigDecimal artisticScore;
 
-
     @Column(name = "curricular_subtotal_score", nullable = false)
     private BigDecimal curricularSubtotalScore;
-
 
     @Column(name = "attendance_score", nullable = false)
     private BigDecimal attendanceScore;
 
-
     @Column(name = "volunteer_score", nullable = false)
     private BigDecimal volunteerScore;
-
 
     @Column(name = "extracurricular_subtotal_score", nullable = false)
     private BigDecimal extracurricularSubtotalScore;

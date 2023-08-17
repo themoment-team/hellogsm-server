@@ -13,27 +13,24 @@ import java.math.BigDecimal;
  * @since 1.0.0
  */
 @Entity
+@Table(name = "admission_grade")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "admission_grade")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @SuperBuilder
 @ToString
 public abstract class AdmissionGrade {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admission_grade_id", nullable = false)
     protected Long id;
 
-    
     @Column(name = "total_score", nullable = false)
     protected BigDecimal totalScore;
 
-    
     @Column(name = "percentile_rank", nullable = false)
     protected BigDecimal percentileRank;
-
 }
-

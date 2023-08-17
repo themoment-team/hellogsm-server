@@ -10,9 +10,9 @@ import lombok.*;
  * @since 1.0.0
  */
 @Entity
+@Table(name = "middle_school_grade")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "middle_school_grade")
 @Getter
 @ToString
 public class MiddleSchoolGrade {
@@ -25,6 +25,5 @@ public class MiddleSchoolGrade {
     @Lob
     @Column(name = "middle_school_grade_text", nullable = false)
     private String middleSchoolGradeText;
-
 }
 

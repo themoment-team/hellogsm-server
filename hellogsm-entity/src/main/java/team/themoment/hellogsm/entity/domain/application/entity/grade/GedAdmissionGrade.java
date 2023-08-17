@@ -25,16 +25,16 @@ import static lombok.AccessLevel.PROTECTED;
  * @since 1.0.0
  */
 @Entity
-@DiscriminatorValue("GED")
-@Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
+@DiscriminatorValue("GED")
+@Getter
 @SuperBuilder
 @ToString
 public class GedAdmissionGrade extends AdmissionGrade {
+
     @Column(name = "ged_total_score", nullable = false)
     private BigDecimal gedTotalScore;
-
 
     @Column(name = "ged_max_score", nullable = false)
     private BigDecimal gedMaxScore;
