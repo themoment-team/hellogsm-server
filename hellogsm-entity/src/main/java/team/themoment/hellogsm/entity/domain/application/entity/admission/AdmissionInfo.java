@@ -89,11 +89,6 @@ public class AdmissionInfo {
     @Embedded
     private DesiredMajor desiredMajor;
 
-    @AssertFalse(message = "DesiredMajor 가 null 임")
-    private boolean isDesiredMajorNull() {
-        return desiredMajor == null;
-    }
-
     public Optional<String> getTelephone() {
         return Optional.ofNullable(telephone);
     }
@@ -112,5 +107,10 @@ public class AdmissionInfo {
 
     public Optional<String> getTeacherPhoneNumber() {
         return Optional.ofNullable(teacherPhoneNumber);
+    }
+
+    @AssertFalse(message = "DesiredMajor 가 null 임")
+    private boolean isDesiredMajorNull() {
+        return desiredMajor == null;
     }
 }
