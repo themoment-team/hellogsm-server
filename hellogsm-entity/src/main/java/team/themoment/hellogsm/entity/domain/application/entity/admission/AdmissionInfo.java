@@ -109,7 +109,7 @@ public class AdmissionInfo {
         return Optional.ofNullable(teacherPhoneNumber);
     }
 
-    @AssertFalse(message = "DesiredMajor 가 null 임")
+    @AssertFalse(message = "모든 Major 필드는 정의되어야 합니다.")
     private boolean isDesiredMajorNull() {
         return desiredMajor == null;
     }

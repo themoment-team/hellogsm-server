@@ -40,7 +40,7 @@ public class DesiredMajor {
     @Column(name = "third_desired_major", nullable = false)
     private Major thirdDesiredMajor;
 
-    @AssertFalse(message = "Null인 전공이 있습니다")
+    @AssertFalse(message = "모든 필드는 정의되어야 합니다. null일 수 없습니다.")
     private boolean hasNullMajor() {
         if (firstDesiredMajor == null || secondDesiredMajor == null || thirdDesiredMajor == null) {
             return true;
@@ -48,7 +48,7 @@ public class DesiredMajor {
         return false;
     }
 
-    @AssertFalse(message = "중복된 전공이 있습니다")
+    @AssertFalse(message = "Major의 타입은 한 번만 사용되어야 합니다. 같은 타입을 중복하여 사용할 수 없습니다.")
     private boolean hasSameMajor() {
         if (hasNullMajor()) return false; // NPE 방지를 위해서 사용, 어차피 false로 통과시켜도 다른 유효성 검사에서 catch 됨
         List<Major> majors = List.of(firstDesiredMajor, secondDesiredMajor, thirdDesiredMajor);
