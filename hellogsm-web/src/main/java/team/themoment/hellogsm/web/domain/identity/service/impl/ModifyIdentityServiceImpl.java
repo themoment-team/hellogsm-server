@@ -32,7 +32,6 @@ public class ModifyIdentityServiceImpl implements ModifyIdentityService {
     private final IdentityRepository identityRepository;
     private final UserRepository userRepository;
     private final CodeRepository codeRepository;
-    private final ApplicationRepository applicationRepository; // TODO 양방향 의존성 제거하기 Application <-> Identity - 이벤트로 의존성 해소
 
     @Override
     public IdentityDto execute(IdentityReqDto reqDto, Long userId) {
@@ -56,25 +55,6 @@ public class ModifyIdentityServiceImpl implements ModifyIdentityService {
 
         if (!recentCode.getPhoneNumber().equals(reqDto.phoneNumber()))
             throw new ExpectedException("유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-
-        // Identity의 인증 정보를 Application의 지원자 정보와 일관되도록 하는 로직
-        // 여기서부터
-        Optional<Application> savedApplicationOpt = applicationRepository.findByUserId(userId);
-        if (savedApplicationOpt.isPresent()) {
-            Application savedApplication = savedApplicationOpt.get();
-            AdmissionInfo newAdmissionInfo =
-                    ApplicationMapper.INSTANCE.toConsistentAdmissionInfoWithIdentity(savedApplication.getAdmissionInfo(), reqDto);
-
-            applicationRepository.save(
-                    new Application(
-                            savedApplication.getId(),
-                            newAdmissionInfo,
-                            savedApplication.getAdmissionStatus(),
-                            savedApplication.getMiddleSchoolGrade(),
-                            savedApplication.getUserId()
-                    ));
-        }
-        // 여기까지, Identity 모듈에서 이벤트 발행해서 Application 모듈에서 처리하도록 수정해야 함
 
         Identity newIdentity = IdentityMapper.INSTANCE.identityReqDtoToIdentity(reqDto, userId, savedidentity.getId());
         Identity newSavedIdentity = identityRepository.save(newIdentity);
