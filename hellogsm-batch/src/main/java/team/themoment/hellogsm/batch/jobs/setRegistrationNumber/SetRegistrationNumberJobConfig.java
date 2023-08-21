@@ -155,7 +155,7 @@ public class SetRegistrationNumberJobConfig {
             AdmissionStatus admissionStatus = application.getAdmissionStatus();
             Screening screening = application.getAdmissionInfo().getScreening();
             registrationNumberSequence.add(screening);
-            Long registrationNumber = getRegistrationNumber(screening);
+            Long registrationNumber = Long.valueOf(registrationNumberSequence.get(screening));
             AdmissionStatus newAdmissionStatus = AdmissionStatus.builder()
                     .id(admissionStatus.getId())
                     .isFinalSubmitted(admissionStatus.isFinalSubmitted())
@@ -177,19 +177,5 @@ public class SetRegistrationNumberJobConfig {
                 .usePersist(false)
                 .entityManagerFactory(this.entityManagerFactory)
                 .build();
-    }
-
-    private Long getRegistrationNumber(Screening screening) {
-        Long prefix = switch (screening) {
-            case GENERAL:
-                yield 1000L;
-            case SOCIAL:
-                yield 2000L;
-            case SPECIAL_VETERANS, SPECIAL_ADMISSION:
-                yield 3000L;
-            default:
-                throw new IllegalArgumentException("Invalid screening: " + screening);
-        };
-        return registrationNumberSequence.get(screening) + prefix;
     }
 }
