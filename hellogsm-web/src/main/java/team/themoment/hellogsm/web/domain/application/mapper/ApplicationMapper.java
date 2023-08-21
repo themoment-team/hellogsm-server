@@ -1,9 +1,9 @@
 package team.themoment.hellogsm.web.domain.application.mapper;
 
+import io.micrometer.common.lang.Nullable;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
-
-import io.micrometer.common.lang.Nullable;
+import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
@@ -15,17 +15,13 @@ import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
+import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
-import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.*;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
-import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 
 import java.util.List;
 
@@ -177,16 +173,16 @@ public interface ApplicationMapper {
         Screening screeningSecondEvaluationAt = null;
 
         try {
-            if(applicationStatusReqDto.finalMajor() != null)
+            if (applicationStatusReqDto.finalMajor() != null)
                 finalMajor = Major.valueOf(applicationStatusReqDto.finalMajor());
-            if(applicationStatusReqDto.screeningSubmittedAt() != null)
+            if (applicationStatusReqDto.screeningSubmittedAt() != null)
                 screeningSubmittedAt = Screening.valueOf(applicationStatusReqDto.screeningSubmittedAt());
-            if(applicationStatusReqDto.screeningFirstEvaluationAt() != null)
+            if (applicationStatusReqDto.screeningFirstEvaluationAt() != null)
                 screeningFirstEvaluationAt = Screening.valueOf(applicationStatusReqDto.screeningFirstEvaluationAt());
-            if(applicationStatusReqDto.screeningSecondEvaluationAt() != null)
+            if (applicationStatusReqDto.screeningSecondEvaluationAt() != null)
                 screeningSecondEvaluationAt = Screening.valueOf(applicationStatusReqDto.screeningSecondEvaluationAt());
         } catch (Exception ex) {
-            throw new RuntimeException("예상하지 못한 에러 발생",ex);
+            throw new RuntimeException("예상하지 못한 에러 발생", ex);
         }
 
         return AdmissionStatus.builder()
@@ -265,22 +261,22 @@ public interface ApplicationMapper {
     }
 
     @BeanMapping(ignoreUnmappedSourceProperties = {
+            "userId",
             "applicantName",
             "applicantGender",
             "applicantBirth",
-            "applicantPhoneNumber",
-            "code"
+            "applicantPhoneNumber"
     })
     @Mappings({
             @Mapping(source = "admissionInfo.id", target = "id"),
             @Mapping(source = "admissionInfo.applicantImageUri", target = "applicantImageUri"),
-            @Mapping(source = "identityReqDto.name", target = "applicantName"),
-            @Mapping(source = "identityReqDto.gender", target = "applicantGender"),
-            @Mapping(source = "identityReqDto.birth", target = "applicantBirth"),
+            @Mapping(source = "identity.name", target = "applicantName"),
+            @Mapping(source = "identity.gender", target = "applicantGender"),
+            @Mapping(source = "identity.birth", target = "applicantBirth"),
             @Mapping(source = "admissionInfo.address", target = "address"),
             @Mapping(source = "admissionInfo.detailAddress", target = "detailAddress"),
             @Mapping(source = "admissionInfo.telephone", target = "telephone"),
-            @Mapping(source = "identityReqDto.phoneNumber", target = "applicantPhoneNumber"),
+            @Mapping(source = "identity.phoneNumber", target = "applicantPhoneNumber"),
             @Mapping(source = "admissionInfo.guardianName", target = "guardianName"),
             @Mapping(source = "admissionInfo.relationWithApplicant", target = "relationWithApplicant"),
             @Mapping(source = "admissionInfo.guardianPhoneNumber", target = "guardianPhoneNumber"),
@@ -293,5 +289,5 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionInfo.desiredMajor.secondDesiredMajor", target = "desiredMajor.secondDesiredMajor"),
             @Mapping(source = "admissionInfo.desiredMajor.thirdDesiredMajor", target = "desiredMajor.thirdDesiredMajor"),
     })
-    AdmissionInfo toConsistentAdmissionInfoWithIdentity(AdmissionInfo admissionInfo, IdentityReqDto identityReqDto);
+    AdmissionInfo toConsistentAdmissionInfoWithIdentity(AdmissionInfo admissionInfo, Identity identity);
 }
