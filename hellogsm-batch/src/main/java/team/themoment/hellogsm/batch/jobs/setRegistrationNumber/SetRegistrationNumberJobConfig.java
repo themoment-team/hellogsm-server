@@ -3,11 +3,7 @@ package team.themoment.hellogsm.batch.jobs.setRegistrationNumber;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -90,16 +86,16 @@ public class SetRegistrationNumberJobConfig {
     public Step setRegistrationNumberStep() {
         return new StepBuilder(BEAN_PREFIX + "setRegistrationNumberStep", this.jobRepository)
                 .<Application, AdmissionStatus>chunk(CHUNK_SIZE, this.platformTransactionManager)
-                .listener(new JobExecutionListener() {
+                .listener(new StepExecutionListener() {
                     @Override
-                    public void beforeJob(JobExecution jobExecution) {
-                        // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
+                    public void beforeStep(StepExecution stepExecution) {
                         registrationNumberSequence.init();
                     }
+
                     @Override
-                    public void afterJob(JobExecution jobExecution) {
-                        // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
+                    public ExitStatus afterStep(StepExecution stepExecution) {
                         registrationNumberSequence.clear();
+                        return null;
                     }
                 })
                 .exceptionHandler((context, throwable) -> {
