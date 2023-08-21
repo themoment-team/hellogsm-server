@@ -2,12 +2,8 @@ package team.themoment.hellogsm.batch.jobs.setRegistrationNumber;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
-import org.springframework.batch.core.Step;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -18,19 +14,17 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.repeat.RepeatContext;
-import org.springframework.batch.repeat.exception.ExceptionHandler;
-import org.springframework.batch.repeat.exception.SimpleLimitExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
-
+import team.themoment.hellogsm.batch.common.LoggingExceptionHandler;
 import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class SetRegistrationNumberJobConfig {
@@ -52,24 +46,26 @@ public class SetRegistrationNumberJobConfig {
     @Bean(BEAN_PREFIX + "parameter")
     @JobScope
     public RegistrationNumberParameter parameter(
-            @Value("#{jobParameters[DATE_TIME]}") String strDateTime
+            @Value("#{jobParameters[VERSION]}") Long version
     ) {
-        return new RegistrationNumberParameter(strDateTime);
+        return new RegistrationNumberParameter(version);
     }
 
     @Bean(JOB_NAME)
     public Job setRegistrationNumberJobConfig() {
         return new JobBuilder(JOB_NAME, this.jobRepository)
-                .preventRestart()  // 재시작 false
-                .start(setRegistrationNumberStep())  // 접수번호 할당 Job 시작
-                    .on("FAILED")  // 만약 접수번호 할당 Job을 실패하면
-                    .to(clearRegistrationNumberStep()) // 접수번호 초기화 Job 수행
-                    .on("*") // 접수번호 초기화 Job의 모든 경우에
-                    .end() // Flow 종료
-                .from(setRegistrationNumberStep())  // 접수번호 할당 Job으로부터
-                    .on("*") // FAILED를 제외한 모든 경우에
-                    .end() // Flow 종료
-                .end() // Job 작업 종료
+                .preventRestart() // 재시작 false
+                .start(setRegistrationNumberStep()) // 접수번호 할당 Job 시작
+                .on("FAILED") // 만약 접수번호 할당 Job을 실패하면
+                .to(clearRegistrationNumberStep()) // 접수번호 초기화 Step
+                .on("FAILED") // 접수번호 초기화 실패 시
+                .fail() // Job fail
+                .on("FAILED") // 접수번호 초기화 결과가 FAILED를 제외한 모든 경우에
+                .end() // Flow 종료
+                .from(setRegistrationNumberStep()) // 접수번호 할당 Job으로부터
+                .on("*") // FAILED를 제외한 모든 경우에
+                .end() // Flow 종료
+                .end() // Job 종료
                 .build();
     }
 
@@ -78,6 +74,25 @@ public class SetRegistrationNumberJobConfig {
     public Step clearRegistrationNumberStep() {
         return new StepBuilder(BEAN_PREFIX + "initStep", this.jobRepository)
                 .<Application, AdmissionStatus>chunk(CHUNK_SIZE, this.platformTransactionManager)
+                .listener(new StepExecutionListener() {
+                    @Override
+                    public void beforeStep(StepExecution stepExecution) {
+                        log.info("beforeStep clearRegistrationNumberStep"); //TODO 문구 수정
+                    }
+
+                    @Override
+                    public ExitStatus afterStep(StepExecution stepExecution) {
+                        final String exitCode = stepExecution.getExitStatus().getExitCode();
+                        log.info("afterStep clearRegistrationNumberStep - Status : {}", exitCode); //TODO 문구 수정
+                        if (exitCode.equals(ExitStatus.FAILED.getExitCode()))
+                            log.error("clearRegistrationNumberStep FAIL!!"); //TODO 문구 수정
+                        return null;
+                    }
+                })
+                .exceptionHandler(new LoggingExceptionHandler())
+                .faultTolerant()
+                .skipLimit(0)
+                .noSkip(Exception.class)
                 .reader(finalSubmittedApplicationIR())
                 .processor(clearRegistrationNumberIP())
                 .writer(admissionStatusIW())
@@ -90,23 +105,27 @@ public class SetRegistrationNumberJobConfig {
     public Step setRegistrationNumberStep() {
         return new StepBuilder(BEAN_PREFIX + "setRegistrationNumberStep", this.jobRepository)
                 .<Application, AdmissionStatus>chunk(CHUNK_SIZE, this.platformTransactionManager)
-                .listener(new JobExecutionListener() {
+                .listener(new StepExecutionListener() {
                     @Override
-                    public void beforeJob(JobExecution jobExecution) {
-                        // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
+                    public void beforeStep(StepExecution stepExecution) {
+                        log.info("beforeStep setRegistrationNumberStep"); //TODO 문구 수정
                         registrationNumberSequence.init();
                     }
+
                     @Override
-                    public void afterJob(JobExecution jobExecution) {
-                        // TODO 로깅 + 웹훅 같은 서비스 사용해서 결과 notice 가능하도록 구현
+                    public ExitStatus afterStep(StepExecution stepExecution) {
+                        final String exitCode = stepExecution.getExitStatus().getExitCode();
+                        log.info("afterStep setRegistrationNumberStep - Status : {}", exitCode); //TODO 문구 수정
+                        if (stepExecution.getExitStatus().getExitCode().equals(exitCode))
+                            log.error("setRegistrationNumberStep FAIL!!"); //TODO 문구 수정
                         registrationNumberSequence.clear();
+                        return null; // ExitStatus을 수정하지 않고 그대로 리턴
                     }
                 })
-                .exceptionHandler((context, throwable) -> {
-                    //TODO 예외처리 + 로깅 추가
-                    //아마 throws 안하면 배치 작업 실패 안됨
-                    throw throwable;
-                })
+                .exceptionHandler(new LoggingExceptionHandler())
+                .faultTolerant()
+                .skipLimit(0)
+                .noSkip(Exception.class)
                 .reader(finalSubmittedApplicationIR())
                 .processor(setRegistrationNumberIP())
                 .writer(admissionStatusIW())
@@ -120,7 +139,7 @@ public class SetRegistrationNumberJobConfig {
                 .name(BEAN_PREFIX + "setRegistrationNumberItemReader")
                 .entityManagerFactory(this.entityManagerFactory)
                 .pageSize(CHUNK_SIZE)
-                .queryString( // TODO QueryDSL 도입 + 리팩토링하기
+                .queryString(
                         "SELECT a " +
                                 "FROM Application a " +
                                 "WHERE a.admissionStatus.isPrintsArrived = true " +
@@ -155,7 +174,7 @@ public class SetRegistrationNumberJobConfig {
             AdmissionStatus admissionStatus = application.getAdmissionStatus();
             Screening screening = application.getAdmissionInfo().getScreening();
             registrationNumberSequence.add(screening);
-            Long registrationNumber = getRegistrationNumber(screening);
+            Long registrationNumber = Long.valueOf(registrationNumberSequence.get(screening));
             AdmissionStatus newAdmissionStatus = AdmissionStatus.builder()
                     .id(admissionStatus.getId())
                     .isFinalSubmitted(admissionStatus.isFinalSubmitted())
@@ -174,22 +193,8 @@ public class SetRegistrationNumberJobConfig {
     @StepScope
     public JpaItemWriter<AdmissionStatus> admissionStatusIW() {
         return new JpaItemWriterBuilder<AdmissionStatus>()
-                .usePersist(false)
+                .usePersist(false) // update
                 .entityManagerFactory(this.entityManagerFactory)
                 .build();
-    }
-
-    private Long getRegistrationNumber(Screening screening) {
-        Long prefix = switch (screening) {
-            case GENERAL:
-                yield 1000L;
-            case SOCIAL:
-                yield 2000L;
-            case SPECIAL_VETERANS, SPECIAL_ADMISSION:
-                yield 3000L;
-            default:
-                throw new IllegalArgumentException("Invalid screening: " + screening);
-        };
-        return registrationNumberSequence.get(screening) + prefix;
     }
 }

@@ -26,7 +26,7 @@ public class RegistrationNumberSequence {
     }
 
     public Integer get(Screening screening) {
-        return sequenceMap.get(screening);
+        return getPrefix(screening) + sequenceMap.get(screening);
     }
 
     public void init() {
@@ -40,5 +40,19 @@ public class RegistrationNumberSequence {
 
     public void clear() {
         sequenceMap = Collections.emptyMap();
+    }
+
+    private Integer getPrefix(Screening screening) {
+        Integer prefix = switch (screening) {
+            case GENERAL:
+                yield 1000;
+            case SOCIAL:
+                yield 2000;
+            case SPECIAL_VETERANS, SPECIAL_ADMISSION:
+                yield 3000;
+            default:
+                throw new IllegalArgumentException("Invalid screening: " + screening);
+        };
+        return prefix;
     }
 }

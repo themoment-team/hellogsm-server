@@ -1,9 +1,11 @@
 package team.themoment.hellogsm.batch.jobs.setRegistrationNumber;
 
-import team.themoment.hellogsm.batch.common.DateTimeParameter;
+import lombok.Getter;
+import team.themoment.hellogsm.batch.common.BaseVersionParameter;
 
-public class RegistrationNumberParameter extends DateTimeParameter {
-    public RegistrationNumberParameter(String strDateTime) {
-        super(strDateTime);
+@Getter
+public class RegistrationNumberParameter extends BaseVersionParameter {
+    public RegistrationNumberParameter(Long version) {
+        super(version);
     }
 }
