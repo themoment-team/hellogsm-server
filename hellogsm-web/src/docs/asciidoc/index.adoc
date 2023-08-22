@@ -484,7 +484,7 @@ operation::application/final-submission[snippets='http-response']
     ROLE_ADMIN
 
 ==== Request
-operation::application/tickets[snippets='curl-request,http-request,query-parameters']
+operation::application/tickets[snippets='curl-request,http-request']
 
 ==== Response
 operation::application/tickets[snippets='http-response,response-fields']
