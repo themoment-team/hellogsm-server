@@ -131,9 +131,9 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionInfo.screening", target = "screening"),
             @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
     })
-    TicketResDto ApplicationToTicketResDto(Application application);
+    TicketResDto applicationToTicketResDto(Application application);
 
-    List<TicketResDto> ApplicationListToTicketResDtos(List<Application> applicationList);
+    List<TicketResDto> applicationListToTicketResDtos(List<Application> applicationList);
 
     default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
         return new ApplicationListDto(
