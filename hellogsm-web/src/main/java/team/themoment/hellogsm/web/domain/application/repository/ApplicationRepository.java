@@ -27,5 +27,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     void deleteApplicationByUserId(Long userId);
 
-    Page<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus, Pageable pageable);
+    List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);
 }

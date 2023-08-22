@@ -21,7 +21,6 @@ import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReq
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.*;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
-import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 
 import java.util.List;
 
@@ -123,20 +122,18 @@ public interface ApplicationMapper {
     })
     AdmissionStatusDto admissionStatusToAdmissionStatusDto(AdmissionStatus admissionStatus);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"middleSchoolGrade", "admissionGrade", "userId"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "middleSchoolGrade", "admissionGrade", "userId"})
     @Mappings({
-            @Mapping(source = "id", target = "applicationId"),
             @Mapping(source = "admissionInfo.applicantName", target = "applicantName"),
-            @Mapping(source = "admissionInfo.applicantGender", target = "applicantGender"),
             @Mapping(source = "admissionInfo.applicantBirth", target = "applicantBirth"),
             @Mapping(source = "admissionInfo.applicantImageUri", target = "applicantImageUri"),
-            @Mapping(source = "admissionInfo.address", target = "address"),
-            @Mapping(source = "admissionInfo.graduation", target = "graduation"),
+            @Mapping(source = "admissionInfo.schoolName", target = "schoolName"),
+            @Mapping(source = "admissionInfo.screening", target = "screening"),
             @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
     })
     TicketResDto ApplicationToTicketResDto(Application application);
 
-    List<TicketResDto> ApplicationListToTicketResDtoList(List<Application> applicationList);
+    List<TicketResDto> ApplicationListToTicketResDtos(List<Application> applicationList);
 
     default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
         return new ApplicationListDto(

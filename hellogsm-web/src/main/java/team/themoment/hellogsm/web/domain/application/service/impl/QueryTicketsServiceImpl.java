@@ -1,10 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
@@ -21,11 +17,10 @@ public class QueryTicketsServiceImpl implements QueryTicketsService {
     final private ApplicationRepository applicationRepository;
 
     @Override
-    public List<TicketResDto> execute(Integer page, Integer size) {
-        Pageable pageable =  PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Application> applicationList =
-                applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS, pageable);
+    public List<TicketResDto> execute() {
+        List<Application> applicationList =
+                applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS);
 
-        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtoList(applicationList.getContent());
+        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtos(applicationList);
     }
 }
