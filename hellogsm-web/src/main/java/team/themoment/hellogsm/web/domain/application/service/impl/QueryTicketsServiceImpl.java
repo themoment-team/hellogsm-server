@@ -21,6 +21,6 @@ public class QueryTicketsServiceImpl implements QueryTicketsService {
         List<Application> applicationList =
                 applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS);
 
-        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtos(applicationList);
+        return ApplicationMapper.INSTANCE.applicationListToTicketResDtos(applicationList);
     }
 }
