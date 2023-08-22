@@ -123,20 +123,18 @@ public interface ApplicationMapper {
     })
     AdmissionStatusDto admissionStatusToAdmissionStatusDto(AdmissionStatus admissionStatus);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"middleSchoolGrade", "admissionGrade", "userId"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "middleSchoolGrade", "admissionGrade", "userId"})
     @Mappings({
-            @Mapping(source = "id", target = "applicationId"),
             @Mapping(source = "admissionInfo.applicantName", target = "applicantName"),
-            @Mapping(source = "admissionInfo.applicantGender", target = "applicantGender"),
             @Mapping(source = "admissionInfo.applicantBirth", target = "applicantBirth"),
             @Mapping(source = "admissionInfo.applicantImageUri", target = "applicantImageUri"),
-            @Mapping(source = "admissionInfo.address", target = "address"),
-            @Mapping(source = "admissionInfo.graduation", target = "graduation"),
+            @Mapping(source = "admissionInfo.schoolName", target = "schoolName"),
+            @Mapping(source = "admissionInfo.screening", target = "screening"),
             @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
     })
     TicketResDto ApplicationToTicketResDto(Application application);
 
-    List<TicketResDto> ApplicationListToTicketResDtoList(List<Application> applicationList);
+    List<TicketResDto> ApplicationListToTicketResDtoList(List<Application> applicationList); // TODO 이름 ~s로 교체
 
     default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
         return new ApplicationListDto(

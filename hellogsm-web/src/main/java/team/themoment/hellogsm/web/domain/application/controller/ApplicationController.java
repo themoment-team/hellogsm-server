@@ -97,13 +97,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/tickets")
-    public List<TicketResDto> tickets(
-            @RequestParam("page") Integer page,
-            @RequestParam("size") Integer size
-    ) {
-        if (page < 0 || size < 0)
-            throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        return queryTicketsService.execute(page, size);
+    public ResponseEntity<List<TicketResDto>> tickets() {
+        return ResponseEntity.status(HttpStatus.OK).body(queryTicketsService.execute());
     }
 
     @PostMapping("/image")

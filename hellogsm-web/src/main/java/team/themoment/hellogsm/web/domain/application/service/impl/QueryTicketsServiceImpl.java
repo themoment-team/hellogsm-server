@@ -21,11 +21,10 @@ public class QueryTicketsServiceImpl implements QueryTicketsService {
     final private ApplicationRepository applicationRepository;
 
     @Override
-    public List<TicketResDto> execute(Integer page, Integer size) {
-        Pageable pageable =  PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Application> applicationList =
-                applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS, pageable);
+    public List<TicketResDto> execute() {
+        List<Application> applicationList =
+                applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS);
 
-        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtoList(applicationList.getContent());
+        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtoList(applicationList);
     }
 }
