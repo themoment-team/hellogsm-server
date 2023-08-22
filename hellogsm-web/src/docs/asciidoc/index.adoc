@@ -1,4 +1,3 @@
-
 // ifndef::snippets[]
 // :snippets: ./build/generated-snippets
 // endif::[]
@@ -129,7 +128,6 @@ OAuth2 인증 후, FE 메인페이지로 리다이렉트됩니다.
 
 ==== `registrationId` 종류
 - google
-- github
 - kakao
 
 === [GET] logout
