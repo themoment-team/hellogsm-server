@@ -497,7 +497,7 @@ class ApplicationControllerTest {
                         Screening.SOCIAL,
                         Screening.GENERAL,
                         1L,
-                        "100"
+                        BigDecimal.valueOf(100)
                 ))
         );
 
@@ -547,7 +547,7 @@ class ApplicationControllerTest {
                                 fieldWithPath("applications[].screeningFirstEvaluationAt").type(enumAsString(Screening.class)).description("1차 평가 이후 전형 상태"),
                                 fieldWithPath("applications[]screeningSecondEvaluationAt").type(enumAsString(Screening.class)).description("2차 평가 이후 전형 상태"),
                                 fieldWithPath("applications[].registrationNumber").type(NUMBER).description("접수 번호"),
-                                fieldWithPath("applications[].secondScore").type(STRING).description("2차 시험 점수")
+                                fieldWithPath("applications[].secondScore").type(NUMBER).description("2차 시험 점수")
                         )
                 ));
     }
