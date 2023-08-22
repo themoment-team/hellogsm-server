@@ -1,10 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
@@ -25,6 +21,6 @@ public class QueryTicketsServiceImpl implements QueryTicketsService {
         List<Application> applicationList =
                 applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.PASS);
 
-        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtoList(applicationList);
+        return ApplicationMapper.INSTANCE.ApplicationListToTicketResDtos(applicationList);
     }
 }
