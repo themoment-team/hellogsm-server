@@ -616,18 +616,16 @@ class ApplicationControllerTest {
     void tickets() throws Exception {
         List<TicketResDto> ticketResDto = List.of(
                 new TicketResDto(
-                        1L,
                         "누군가",
-                        Gender.MALE,
                         "20030423",
                         "https://naver.com",
                         "이세상 어딘가",
-                        GraduationStatus.GRADUATE,
-                        1L
+                        Screening.GENERAL,
+                        1002L
                 )
         );
 
-        Mockito.when(queryTicketsService.execute(any(Integer.class), any(Integer.class))).thenReturn(ticketResDto);
+        Mockito.when(queryTicketsService.execute()).thenReturn(ticketResDto);
 
         this.mockMvc.perform(get("/application/v1/tickets")
                         .param("page", "0")
@@ -636,13 +634,11 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].applicationId").value(ticketResDto.get(0).applicationId()))
                 .andExpect(jsonPath("$[0].applicantName").value(ticketResDto.get(0).applicantName()))
-                .andExpect(jsonPath("$[0].applicantGender").value(ticketResDto.get(0).applicantGender().toString()))
                 .andExpect(jsonPath("$[0].applicantBirth").value(ticketResDto.get(0).applicantBirth()))
                 .andExpect(jsonPath("$[0].applicantImageUri").value(ticketResDto.get(0).applicantImageUri()))
-                .andExpect(jsonPath("$[0].address").value(ticketResDto.get(0).address()))
-                .andExpect(jsonPath("$[0].graduation").value(ticketResDto.get(0).graduation().toString()))
+                .andExpect(jsonPath("$[0].screening").value(ticketResDto.get(0).screening().toString()))
+                .andExpect(jsonPath("$[0].schoolName").value(ticketResDto.get(0).schoolName()))
                 .andExpect(jsonPath("$[0].registrationNumber").value(ticketResDto.get(0).registrationNumber()))
                 .andDo(this.documentationHandler.document(
                         queryParameters(
@@ -650,13 +646,11 @@ class ApplicationControllerTest {
                                 parameterWithName("size").description("원서 크기")
                         ),
                         responseFields(
-                                fieldWithPath("[].applicationId").type(NUMBER).description("원서 식별자"),
                                 fieldWithPath("[].applicantName").type(STRING).description("지원자 이름"),
-                                fieldWithPath("[].applicantGender").type(STRING).description("지원자 성별"),
                                 fieldWithPath("[].applicantBirth").type(STRING).description("지원자 생년월일"),
-                                fieldWithPath("[].applicantImageUri").type(STRING).description("지원자 증명사진"),
-                                fieldWithPath("[].address").type(STRING).description("지원자 주소"),
-                                fieldWithPath("[].graduation").type(STRING).description("지원자 졸업 상태"),
+                                fieldWithPath("[].applicantImageUri").type(STRING).description("지원자 증명사진 URL"),
+                                fieldWithPath("[].schoolName").type(STRING).description("지원자 학교 이름"),
+                                fieldWithPath("[].screening").type(STRING).description("지원자 지원 전형"),
                                 fieldWithPath("[].registrationNumber").type(NUMBER).description("접수 번호")
                         )
                 ));
