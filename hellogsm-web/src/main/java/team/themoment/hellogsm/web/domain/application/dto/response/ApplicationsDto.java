@@ -5,6 +5,8 @@ import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.Major;
 import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 
+import java.math.BigDecimal;
+
 public record ApplicationsDto(
         Long applicationId,
         String applicantName,
@@ -21,6 +23,6 @@ public record ApplicationsDto(
         Screening screeningFirstEvaluationAt,
         Screening screeningSecondEvaluationAt,
         Long registrationNumber,
-        String secondScore
+        BigDecimal secondScore
 ) {
 }

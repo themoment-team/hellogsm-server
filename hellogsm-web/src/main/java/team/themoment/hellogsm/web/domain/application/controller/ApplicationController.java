@@ -72,13 +72,13 @@ public class ApplicationController {
     }
 
     @GetMapping("/application/all")
-    public ApplicationListDto findAll(
+    public ResponseEntity<ApplicationListDto> findAll(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
-        return applicationListQuery.execute(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(applicationListQuery.execute(page, size));
     }
 
     @PutMapping("/status/{userId}")
