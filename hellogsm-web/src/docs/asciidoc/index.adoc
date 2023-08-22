@@ -258,7 +258,7 @@ operation::identity/identity/find-by-authenticated[snippets='http-response,respo
 operation::identity/identity/create-by-authenticated[snippets='curl-request,http-request,request-body']
 
 ==== Response
-사용자의 권한이 변경되어 세션 정보를 갱신하기 위해 로그아웃 URI로 리다이렉트됩니다.
+해당 작업이 문제없이 성공한다면, 사용자의 권한은 `본인인증이 되지 않은 사용자(ROLE_UNAUTHENTICATED)` 에서  `인증 된 유저(ROLE_USER)` 으로 변경된 상태입니다.
 
 operation::identity/identity/create-by-authenticated[snippets='http-response']
 
@@ -286,7 +286,6 @@ operation::identity/identity/find-by-user-id[snippets='http-response,response-fi
 operation::identity/identity/modify-by-authenticated[snippets='curl-request,http-request,request-body']
 
 ==== Response
-사용자의 권한이 변경되어 세션 정보를 갱신하기 위해 로그아웃 URI로 리다이렉트됩니다.
 
 operation::identity/identity/modify-by-authenticated[snippets='http-response']
 
