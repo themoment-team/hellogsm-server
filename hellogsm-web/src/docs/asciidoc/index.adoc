@@ -1,3 +1,4 @@
+
 // ifndef::snippets[]
 // :snippets: ./build/generated-snippets
 // endif::[]
@@ -33,7 +34,7 @@ AsciiDoc 문법에 관한 내용은 link:https://docs.asciidoctor.org/asciidoc/l
 [cols="2,5,3"]
 |====
 |환경     |DNS  |비고
-|개발(Dev)   | link:[https://api.dev.hellogsm.kr] |
+|개발(Dev)   | link:[https://api.test.hellogsm.kr] |
 |운영(Prod)    | link:[https://api.hellogsm.kr] | 해당 Link에선 Api 명세서 접근이 불가능합니다.
 |====
 
