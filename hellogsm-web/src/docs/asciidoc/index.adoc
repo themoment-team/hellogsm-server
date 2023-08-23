@@ -33,7 +33,7 @@ AsciiDoc 문법에 관한 내용은 link:https://docs.asciidoctor.org/asciidoc/l
 [cols="2,5,3"]
 |====
 |환경     |DNS  |비고
-|개발(Dev)   | link:[https://api.dev.hellogsm.kr] |
+|개발(Dev)   | link:[https://api.test.hellogsm.kr] |
 |운영(Prod)    | link:[https://api.hellogsm.kr] | 해당 Link에선 Api 명세서 접근이 불가능합니다.
 |====
 
@@ -122,14 +122,25 @@ CAUTION: 운영환경에 노출될 경우 보안 관련 문제가 발생할 수 
 
 WARNING: API 요청을 보내지 않고, 직접 이동해야 합니다.
 
-==== Response
-
-OAuth2 인증 후, FE 메인페이지로 리다이렉트됩니다.
-
 ==== `registrationId` 종류
 - google
-- github
 - kakao
+
+==== Response
+
+OAuth2 인증 후, FE 메인페이지로 리다이렉트됩니다. 사용자의 상태에 따라 특정한 파라미터를 포함하여 리다이렉트됩니다.
+
+===== Parameter
+
+- *verification=false* : `인증되지 않은 사용자(ROLE_UNAUTHENTICATED)` 가 로그인 하는 경우
+- *verification=ture* : `인증된 사용자(ROLE_USER)` 혹은 `관리자(ROLE_ADMIN)` 가 로그인 하는 경우
+- *login=failure* : 인증에 실패한 경우
+
+**예시**
+
+인증에 성공하였으며, 본인인증을 하지 않은 사용자라면 아래 주소로 리다이렉트 됩니다. (PROD 환경)
+
+`https://hellogsm.kr/?verification=false`
 
 === [GET] logout
 
@@ -139,7 +150,11 @@ WARNING: API 요청을 보내지 않고, 직접 이동해야 합니다.
 
 ==== Response
 
-로그아웃 이후, FE 메인페이지로 디라이렉트됩니다.
+로그아웃 이후, FE 메인페이지로 리다이렉트됩니다. 결과의 상태에 따라 특정한 파리미터를 포함하여 리다이렉트합니다.
+
+===== Parameter
+
+- *logout=success* : 로그아웃에 성공하는 경우
 
 == user/v1/
 *회원(User)*
@@ -259,7 +274,7 @@ operation::identity/identity/find-by-authenticated[snippets='http-response,respo
 operation::identity/identity/create-by-authenticated[snippets='curl-request,http-request,request-body']
 
 ==== Response
-사용자의 권한이 변경되어 세션 정보를 갱신하기 위해 로그아웃 URI로 리다이렉트됩니다.
+해당 작업이 문제없이 성공한다면, 사용자의 권한은 `본인인증이 되지 않은 사용자(ROLE_UNAUTHENTICATED)` 에서  `인증 된 유저(ROLE_USER)` 으로 변경된 상태입니다.
 
 operation::identity/identity/create-by-authenticated[snippets='http-response']
 
@@ -287,7 +302,6 @@ operation::identity/identity/find-by-user-id[snippets='http-response,response-fi
 operation::identity/identity/modify-by-authenticated[snippets='curl-request,http-request,request-body']
 
 ==== Response
-사용자의 권한이 변경되어 세션 정보를 갱신하기 위해 로그아웃 URI로 리다이렉트됩니다.
 
 operation::identity/identity/modify-by-authenticated[snippets='http-response']
 
@@ -470,7 +484,7 @@ operation::application/final-submission[snippets='http-response']
     ROLE_ADMIN
 
 ==== Request
-operation::application/tickets[snippets='curl-request,http-request,query-parameters']
+operation::application/tickets[snippets='curl-request,http-request']
 
 ==== Response
 operation::application/tickets[snippets='http-response,response-fields']

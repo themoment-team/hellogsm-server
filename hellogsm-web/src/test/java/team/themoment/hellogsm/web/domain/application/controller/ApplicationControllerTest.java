@@ -628,8 +628,6 @@ class ApplicationControllerTest {
         Mockito.when(queryTicketsService.execute()).thenReturn(ticketResDto);
 
         this.mockMvc.perform(get("/application/v1/tickets")
-                        .param("page", "0")
-                        .param("size", "1")
                         .cookie(new Cookie("SESSION", "SESSIONID12345"))
                 )
                 .andExpect(status().isOk())
@@ -641,10 +639,6 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$[0].schoolName").value(ticketResDto.get(0).schoolName()))
                 .andExpect(jsonPath("$[0].registrationNumber").value(ticketResDto.get(0).registrationNumber()))
                 .andDo(this.documentationHandler.document(
-                        queryParameters(
-                                parameterWithName("page").description("페이지"),
-                                parameterWithName("size").description("원서 크기")
-                        ),
                         responseFields(
                                 fieldWithPath("[].applicantName").type(STRING).description("지원자 이름"),
                                 fieldWithPath("[].applicantBirth").type(STRING).description("지원자 생년월일"),
