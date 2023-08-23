@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraduateAdmissionGradeMock {
+public class PerfectGraduateAdmissionGradeMock {
     ObjectMapper objectMapper = new ObjectMapper();
     List<BigDecimal> subjectPerfectScore = createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5});
 

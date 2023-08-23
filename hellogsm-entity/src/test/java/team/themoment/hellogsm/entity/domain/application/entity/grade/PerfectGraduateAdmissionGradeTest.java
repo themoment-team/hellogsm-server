@@ -9,15 +9,15 @@ import java.math.RoundingMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GraduateAdmissionGradeTest {
-    GraduateAdmissionGradeMock graduateAdmissionGradeMock = new GraduateAdmissionGradeMock();
+public class PerfectGraduateAdmissionGradeTest {
+    PerfectGraduateAdmissionGradeMock perfectGraduateAdmissionGradeMock = new PerfectGraduateAdmissionGradeMock();
 
 
     @Test
     @DisplayName("일반 만점 테스트")
     public void perfectTest() throws JsonProcessingException {
         // given
-        String value = graduateAdmissionGradeMock.perfectTest();
+        String value = perfectGraduateAdmissionGradeMock.perfectTest();
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
 
         // when
@@ -37,7 +37,7 @@ public class GraduateAdmissionGradeTest {
     @DisplayName("1학년 자유 학년제 만점 테스트")
     public void grad1FreeSchoolYearPerfectScoreTest() throws JsonProcessingException {
         // given
-        String value = graduateAdmissionGradeMock.grad1FreeSchoolYearPerfectScore();
+        String value = perfectGraduateAdmissionGradeMock.grad1FreeSchoolYearPerfectScore();
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
 
         // when
@@ -53,11 +53,12 @@ public class GraduateAdmissionGradeTest {
         assertThat(testScore.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
+    //TODO 자유학년제 2학년은 없음
     @Test
     @DisplayName("2학년 자유 학년제 만점 테스트")
     public void grad2FreeSchoolYearPerfectScoreTest() throws JsonProcessingException {
         // given
-        String value = graduateAdmissionGradeMock.grad2FreeSchoolYearPerfectScore();
+        String value = perfectGraduateAdmissionGradeMock.grad2FreeSchoolYearPerfectScore();
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
 
         // when
@@ -77,7 +78,7 @@ public class GraduateAdmissionGradeTest {
     @DisplayName("1학년 1학기 자유 학기제 만점 테스트")
     public void grade1Semester1PerfectScoreTest() throws JsonProcessingException {
         // given
-        String value = graduateAdmissionGradeMock.grade1Semester1PerfectScore();
+        String value = perfectGraduateAdmissionGradeMock.grade1Semester1PerfectScore();
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
 
         // when
@@ -96,7 +97,7 @@ public class GraduateAdmissionGradeTest {
     @DisplayName("1학년 2학기 자유 학기제 만점 테스트")
     public void grade1Semester2PerfectScoreTest() throws JsonProcessingException {
         // given
-        String value = graduateAdmissionGradeMock.grade1Semester2PerfectScore();
+        String value = perfectGraduateAdmissionGradeMock.grade1Semester2PerfectScore();
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
 
         // when
@@ -115,7 +116,7 @@ public class GraduateAdmissionGradeTest {
     @DisplayName("2학년 1학기 자유 학기제 만점 테스트")
     public void grade2Semester1PerfectScoreTest() throws JsonProcessingException {
         // given
-        String value = graduateAdmissionGradeMock.grade2Semester1PerfectScore();
+        String value = perfectGraduateAdmissionGradeMock.grade2Semester1PerfectScore();
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
 
         // when
