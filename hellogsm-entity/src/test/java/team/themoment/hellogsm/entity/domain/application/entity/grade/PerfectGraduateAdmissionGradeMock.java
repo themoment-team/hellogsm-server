@@ -54,27 +54,6 @@ public class PerfectGraduateAdmissionGradeMock {
         return objectMapper.writeValueAsString(value);
     }
 
-    public String grad2FreeSchoolYearPerfectScore() throws JsonProcessingException {
-        GeneralScoreData value = new GeneralScoreData(
-                subjectPerfectScore,
-                subjectPerfectScore,
-                null,
-                null,
-                subjectPerfectScore,
-                createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5}),
-                createBigDecimalArray(new int[]{0, 0, 0}),
-                createBigDecimalArray(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0}),
-                createBigDecimalArray(new int[]{0, 0, 0}),
-                new ArrayList<String>(),
-                new ArrayList<String>(),
-                new ArrayList<String>(),
-                "자유학년제",
-                null
-        );
-
-        return objectMapper.writeValueAsString(value);
-    }
-
     public String grade1Semester1PerfectScore() throws JsonProcessingException {
         GeneralScoreData scoreData = new GeneralScoreData(
                 null,

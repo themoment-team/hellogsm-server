@@ -53,27 +53,6 @@ public class PerfectGraduateAdmissionGradeTest {
         assertThat(testScore.percentileRank).isEqualTo(toBigDecimal(8, 3));
     }
 
-    //TODO 자유학년제 2학년은 없음
-    @Test
-    @DisplayName("2학년 자유 학년제 만점 테스트")
-    public void grad2FreeSchoolYearPerfectScoreTest() throws JsonProcessingException {
-        // given
-        String value = perfectGraduateAdmissionGradeMock.grad2FreeSchoolYearPerfectScore();
-        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(null, value);
-
-        // when
-        GraduateAdmissionGrade testScore = new GraduateAdmissionGrade(middleSchoolGrade);
-
-        // then
-        assertThat(testScore.getArtisticScore()).isEqualTo(toBigDecimal(60, 3));
-        assertThat(testScore.getCurricularSubtotalScore()).isEqualTo(toBigDecimal(180 + 60, 4));
-        assertThat(testScore.getAttendanceScore()).isEqualTo(toBigDecimal(30, 0));
-        assertThat(testScore.getVolunteerScore()).isEqualTo(toBigDecimal(6, 0));
-        assertThat(testScore.getExtracurricularSubtotalScore()).isEqualTo(toBigDecimal(36, 4));
-        assertThat(testScore.totalScore).isEqualTo(toBigDecimal(276, 3));
-        assertThat(testScore.percentileRank).isEqualTo(toBigDecimal(8, 3));
-    }
-
     @Test
     @DisplayName("1학년 1학기 자유 학기제 만점 테스트")
     public void grade1Semester1PerfectScoreTest() throws JsonProcessingException {
