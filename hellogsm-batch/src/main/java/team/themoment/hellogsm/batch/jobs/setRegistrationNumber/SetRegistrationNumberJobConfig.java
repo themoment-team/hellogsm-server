@@ -84,7 +84,7 @@ public class SetRegistrationNumberJobConfig {
                     public ExitStatus afterStep(StepExecution stepExecution) {
                         final String exitCode = stepExecution.getExitStatus().getExitCode();
                         log.info("afterStep clearRegistrationNumberStep - Status : {}", exitCode); //TODO 문구 수정
-                        if (exitCode.equals(ExitStatus.FAILED.getExitCode()))
+                        if (stepExecution.getExitStatus().getExitCode().equals(ExitStatus.FAILED.getExitCode()))
                             log.error("clearRegistrationNumberStep FAIL!!"); //TODO 문구 수정
                         return null;
                     }
@@ -116,7 +116,7 @@ public class SetRegistrationNumberJobConfig {
                     public ExitStatus afterStep(StepExecution stepExecution) {
                         final String exitCode = stepExecution.getExitStatus().getExitCode();
                         log.info("afterStep setRegistrationNumberStep - Status : {}", exitCode); //TODO 문구 수정
-                        if (stepExecution.getExitStatus().getExitCode().equals(exitCode))
+                        if (stepExecution.getExitStatus().getExitCode().equals(ExitStatus.FAILED.getExitCode()))
                             log.error("setRegistrationNumberStep FAIL!!"); //TODO 문구 수정
                         registrationNumberSequence.clear();
                         return null; // ExitStatus을 수정하지 않고 그대로 리턴
