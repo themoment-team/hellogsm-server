@@ -48,9 +48,6 @@ public class GedAdmissionGrade extends AdmissionGrade {
             throw new IllegalArgumentException("MiddleSchoolGrade값이 올바르지 않습니다");
         }
 
-        if (result.nonCurriculumScoreSubtotal().compareTo(result.curriculumScoreSubtotal()) > 0)
-            throw new IllegalStateException("계산 결과가 올바르지 않습니다");
-
         gedTotalScore = result.curriculumScoreSubtotal();
         gedMaxScore = result.nonCurriculumScoreSubtotal();
         this.percentileRank = calcPercentileRank(result.curriculumScoreSubtotal(), result.nonCurriculumScoreSubtotal());
@@ -67,10 +64,10 @@ public class GedAdmissionGrade extends AdmissionGrade {
     }
 
     private BigDecimal calcPercentileRank(BigDecimal score, BigDecimal maxScore) {
-        return maxScore
-                .divide(score, 3, RoundingMode.HALF_DOWN)
-                .subtract(BigDecimal.ONE)
-                .multiply(BigDecimal.valueOf(100));
+        return BigDecimal.ONE
+                .subtract(score.divide(maxScore, 10, RoundingMode.HALF_DOWN))
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(3, RoundingMode.HALF_UP);
     }
 
     // ((300 - (300 * rankpercentage) / 100) * 0.87).tofixed(3),

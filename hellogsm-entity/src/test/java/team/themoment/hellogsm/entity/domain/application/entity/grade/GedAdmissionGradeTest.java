@@ -42,8 +42,8 @@ class GedAdmissionGradeTest {
         GedAdmissionGrade testScore = new GedAdmissionGrade(middleSchoolGrade);
 
         // then
-        assertThat(testScore.getGedMaxScore()).isEqualTo(new BigDecimal("123"));
-        assertThat(testScore.getGedTotalScore()).isEqualTo(new BigDecimal("1234"));
+        assertThat(testScore.getGedTotalScore()).isEqualTo(new BigDecimal("123"));
+        assertThat(testScore.getGedMaxScore()).isEqualTo(new BigDecimal("1234"));
         assertThat(testScore.totalScore).isEqualTo(new BigDecimal("26.016"));
         assertThat(testScore.percentileRank).isEqualTo(new BigDecimal("90.032"));
     }
@@ -59,8 +59,8 @@ class GedAdmissionGradeTest {
         GedAdmissionGrade testScore = new GedAdmissionGrade(middleSchoolGrade);
 
         // then
-        assertThat(testScore.getGedMaxScore()).isEqualTo(new BigDecimal("1200"));
-        assertThat(testScore.getGedTotalScore()).isEqualTo(new BigDecimal("1234"));
+        assertThat(testScore.getGedTotalScore()).isEqualTo(new BigDecimal("1200"));
+        assertThat(testScore.getGedMaxScore()).isEqualTo(new BigDecimal("1234"));
         assertThat(testScore.totalScore).isEqualTo(new BigDecimal("253.809"));
         assertThat(testScore.percentileRank).isEqualTo(new BigDecimal("2.755"));
     }

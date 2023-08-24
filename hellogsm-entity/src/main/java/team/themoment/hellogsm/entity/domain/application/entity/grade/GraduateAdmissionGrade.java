@@ -148,7 +148,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
         return scoreArray.stream().reduce(BigDecimal.valueOf(0), (current, hour) -> {
             // 7 이상
             if (hour.compareTo(new BigDecimal("7")) >= 0)
-                return current.add(BigDecimal.valueOf(7));
+                return current.add(BigDecimal.valueOf(10));
                 // 6시간 이상
             else if (hour.compareTo(new BigDecimal("6")) >= 0)
                 return current.add(BigDecimal.valueOf(8));
