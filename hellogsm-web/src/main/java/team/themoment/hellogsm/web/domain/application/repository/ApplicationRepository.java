@@ -20,7 +20,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findByUserId(Long userId);
     Boolean existsByUserId(Long userId);
 
-    @Query("select a from Application a join fetch a.admissionGrade join fetch a.admissionInfo join fetch a.admissionStatus join fetch a.middleSchoolGrade")
+    @Query("select a from Application a join fetch a.admissionGrade join fetch a.admissionInfo join fetch a.admissionStatus join fetch a.middleSchoolGrade where a.userId = :userId")
     Optional<Application> findByUserIdEagerFetch(Long userId);
 
     Page<Application> findAll(Pageable pageable);
