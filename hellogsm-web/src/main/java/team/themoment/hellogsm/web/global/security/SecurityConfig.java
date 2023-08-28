@@ -132,6 +132,7 @@ public class SecurityConfig {
 
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
+                .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // For CORS
                 .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v1/**").permitAll()
                 // user
