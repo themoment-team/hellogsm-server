@@ -23,7 +23,7 @@ public class MiddleSchoolGrade {
     private Long id;
 
     @Lob
-    @Column(name = "middle_school_grade_text", nullable = false)
+    @Column(name = "middle_school_grade_text", nullable = false, length = 10000)
     private String middleSchoolGradeText;
 }
 
