@@ -1,6 +1,17 @@
 package team.themoment.hellogsm.web.global.security;
 
+import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import team.themoment.hellogsm.entity.domain.user.enums.Role;
+import team.themoment.hellogsm.web.global.data.profile.ServerProfile;
+import team.themoment.hellogsm.web.global.security.auth.AuthEnvironment;
+import team.themoment.hellogsm.web.global.security.handler.CustomAccessDeniedHandler;
+import team.themoment.hellogsm.web.global.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -8,18 +19,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import team.themoment.hellogsm.entity.domain.user.enums.Role;
-import team.themoment.hellogsm.web.global.data.profile.ServerProfile;
-import team.themoment.hellogsm.web.global.security.auth.AuthEnvironment;
-import team.themoment.hellogsm.web.global.security.handler.CustomAccessDeniedHandler;
-import team.themoment.hellogsm.web.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsm.web.global.security.handler.CustomUrlAuthenticationSuccessHandler;
 
 import java.util.Arrays;
+
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 /**
  * SecurityConfig <br>
@@ -42,7 +49,7 @@ public class SecurityConfig {
 
     @Configuration
     @EnableWebSecurity
-    @Profile({ServerProfile.LOCAL, ServerProfile.DEV})
+    @Profile({ServerProfile.LOCAL,ServerProfile.DEV})
     public class LocalSecurityConfig {
 
         @Bean
@@ -95,6 +102,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -114,7 +122,7 @@ public class SecurityConfig {
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout -> logout
                 .logoutUrl(logoutUri)
-                .logoutSuccessUrl(authEnv.redirectBaseUri() + "?logout=success")
+                .logoutSuccessUrl(authEnv.redirectBaseUri()+"?logout=success")
         );
     }
 
