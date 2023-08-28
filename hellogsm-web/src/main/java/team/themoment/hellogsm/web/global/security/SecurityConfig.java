@@ -58,7 +58,7 @@ public class SecurityConfig {
                     .formLogin().disable()
                     .httpBasic().disable()
                     .headers().frameOptions().sameOrigin().and()
-                    .cors().disable()
+                    .cors().configurationSource(corsConfigurationSource()).and()
                     .csrf().disable();
             logout(http);
             oauth2Login(http);
@@ -96,10 +96,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(authEnv.allowedOrigins());
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -131,6 +134,7 @@ public class SecurityConfig {
 
     private void authorizeHttpRequests(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(httpRequests -> httpRequests
+                .requestMatchers(HttpMethod.OPTIONS, "/**/*").permitAll() // For CORS
                 .requestMatchers("/csrf").permitAll()
                 .requestMatchers("/auth/v1/**").permitAll()
                 // user
