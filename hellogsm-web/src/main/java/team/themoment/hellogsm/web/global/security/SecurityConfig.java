@@ -58,7 +58,7 @@ public class SecurityConfig {
                     .formLogin().disable()
                     .httpBasic().disable()
                     .headers().frameOptions().sameOrigin().and()
-                    .cors().disable()
+                    .cors().configurationSource(corsConfigurationSource()).and()
                     .csrf().disable();
             logout(http);
             oauth2Login(http);
@@ -100,6 +100,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(authEnv.allowedOrigins());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
