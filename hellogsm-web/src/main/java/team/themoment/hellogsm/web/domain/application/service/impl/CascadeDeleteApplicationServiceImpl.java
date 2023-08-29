@@ -22,7 +22,12 @@ public class CascadeDeleteApplicationServiceImpl implements CascadeDeleteApplica
         final Optional<Application> optionalApplication = applicationRepository.findByUserId(userId);
 
         if (optionalApplication.isPresent()) {
-            applicationRepository.deleteById(optionalApplication.get().getId());
+            Application application = optionalApplication.get();
+            if (application.getAdmissionStatus().getIsFinalSubmitted()) {
+                log.warn("최종제출 된 Application 삭제 요청 발생, 최종제출 된 Application은 삭제되지 않습니다. - User Id: {}", userId);
+            } else {
+                applicationRepository.deleteById(application.getId());
+            }
         } else {
             log.warn("존재하지 않는 Application 삭제 요청 발생 - User Id: {}", userId);
         }
