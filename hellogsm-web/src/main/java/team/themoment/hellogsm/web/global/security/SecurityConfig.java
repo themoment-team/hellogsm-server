@@ -142,6 +142,10 @@ public class SecurityConfig {
                         Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole()
                 )
+                .requestMatchers(HttpMethod.DELETE, "/user/v1/user/me").hasAnyRole(
+                        Role.ROLE_UNAUTHENTICATED.getRole(),
+                        Role.ROLE_USER.getRole()
+                )
                 .requestMatchers(HttpMethod.GET, "/user/v1/user/*").hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
                 )
