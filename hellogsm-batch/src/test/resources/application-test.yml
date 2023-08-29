@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:hello-batch-test;MODE=MySQL;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:hello-batch-test;MODE=MySQL;DB_CLOSE_DELAY=-1 #로컬에서 결과 보고싶을때 jdbc:h2:tcp://localhost/~/hello-batch
     username: sa
     password:
     driverClassName: org.h2.Driver
