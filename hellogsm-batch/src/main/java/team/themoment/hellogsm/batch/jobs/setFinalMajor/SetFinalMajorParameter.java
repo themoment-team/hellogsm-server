@@ -5,7 +5,7 @@ import team.themoment.hellogsm.batch.common.BaseVersionParameter;
 
 @Getter
 public class SetFinalMajorParameter extends BaseVersionParameter {
-    private final Integer giot;
+    private final Long giot;
     private final Integer gsw;
     private final Integer gai;
     private final Integer siot;
