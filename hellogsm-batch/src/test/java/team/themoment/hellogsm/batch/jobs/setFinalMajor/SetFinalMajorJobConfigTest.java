@@ -32,6 +32,9 @@ class SetFinalMajorJobConfigTest {
         jobLauncherTestUtils.setJobRepository(jobLauncherTestUtils.getJobRepository());
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("VERSION", LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) // Unique Job 실행을 위해서 사용
+                .addLong("IOT", 12L)
+                .addLong("SW", 24L)
+                .addLong("AI", 12L)
                 .toJobParameters();
 
         // when
