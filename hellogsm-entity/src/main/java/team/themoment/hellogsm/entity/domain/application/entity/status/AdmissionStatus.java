@@ -25,7 +25,6 @@ import java.util.Optional;
 public class AdmissionStatus {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_status_id")
     private Long id;
 

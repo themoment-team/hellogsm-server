@@ -18,7 +18,6 @@ import lombok.*;
 public class MiddleSchoolGrade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "middle_school_grade_id", nullable = false)
     private Long id;
 
