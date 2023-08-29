@@ -213,6 +213,12 @@ operation::user/find-by-authenticated[snippets='http-response,response-fields']
 
 Request Body에 담긴 휴대폰 전화번호로 본인인증 코드를 발신합니다.
 
+WARNING: 본인인증 코드는 만료 기간(30분)을 가집니다. +
+인증된 코드라도 30분이 지나면 삭제되어 유효하지 않은 인증으로 처리됩니다.
+
+===== 예외 발생 조건
+1. 코드 만료 시간(30분) 이내에 5번 이상 Code 요청 시
+
 ==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
@@ -241,6 +247,13 @@ operation::identity/code/send-code-test[snippets='http-response']
 === [POST] identity/me/auth-code
 휴대폰으로 발송된 인증코드를 인증하는 엔드포인트입니다.
 
+===== 예외 발생 조건 [[auth-code-ex]]
+1. 잘못된 코드로 본인인증 시도 시
+- 가장 최근에 요청하지 않은 코드가 아닌 경우
+- 인증된 Code가 아닌 경우
+- 올바르지 않은 Code인 경우
+2. 사용자가 코드 만료 시간(30분) 내에 Code 요청을 한 적이 없는 경우
+
 ==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
 
@@ -266,6 +279,11 @@ operation::identity/identity/find-by-authenticated[snippets='http-response,respo
 본인인증 코드와 개인정보를 입력받아서 `Identity` 를 생성하는 엔드포인트입니다.
 
 사용자의 개인정보(본인인증 정보)를 등록하고 권한을 `인증된 유저(ROLE_USER)` 로 변경합니다.
+
+===== 예외 발생 조건
+1. 인증 Code가 잘못된 경우
+- 자세한 조건은 <<_post_identitymeauth_code>>의 <<auth-code-ex>> 참고
+2. 인증(<<_post_identitymeauth_code>>)에 사용된 전화번호와 개인정보 요청(<<_post_identityme>>)에 사용된 전화번호가 일치하지 않는 경우
 
 ==== 사용 가능한 권한
     ROLE_UNAUTHENTICATED, ROLE_USER
