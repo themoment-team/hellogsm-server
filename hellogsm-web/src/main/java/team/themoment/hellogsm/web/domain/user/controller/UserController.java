@@ -28,7 +28,7 @@ public class UserController {
     @DeleteMapping("/user/me")
     public ResponseEntity<Map<String,String>> delete() {
         deleteUserService.execute(manager.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("massage","삭제되었습니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message","삭제되었습니다."));
     }
 
     @GetMapping("/user/{userId}")
