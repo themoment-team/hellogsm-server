@@ -34,15 +34,23 @@ public class SetFinalMajorJobConfig {
     private final PlatformTransactionManager platformTransactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
+//    @Bean(BEAN_PREFIX + "major_capacity")
+//    @JobScope
+//    public MajorCapacity majorCapacity() {
+//    }
+
     @Bean(BEAN_PREFIX + "parameter")
     @JobScope
     public SetFinalMajorParameter parameter(
             @Value("#{jobParameters[VERSION]}") Long version,
-            @Value("#{jobParameters[IOT]}") Integer iot,
-            @Value("#{jobParameters[SW]}") Integer sw,
-            @Value("#{jobParameters[AI]}") Integer ai
+            @Value("#{jobParameters[G_IOT]}") Integer giot,
+            @Value("#{jobParameters[G_SW]}") Integer gsw,
+            @Value("#{jobParameters[G_AI]}") Integer gai,
+            @Value("#{jobParameters[S_IOT]}") Integer siot,
+            @Value("#{jobParameters[S_SW]}") Integer ssw,
+            @Value("#{jobParameters[S_AI]}") Integer sai
     ) {
-        return new SetFinalMajorParameter(version, iot, sw, ai);
+        return new SetFinalMajorParameter(version, giot, gsw, gai, siot, ssw, sai);
     }
 
     @Bean(JOB_NAME)
@@ -95,7 +103,26 @@ public class SetFinalMajorJobConfig {
                 )
                 .build();
     }
-    
+
+    @Bean
+    @StepScope
+    public ItemProcessor<Application, AdmissionStatus> setFinalMajorIP() {
+        return application -> {
+            AdmissionStatus admissionStatus = application.getAdmissionStatus();
+            AdmissionStatus clearAdmissionStatus = AdmissionStatus.builder()
+                    .id(admissionStatus.getId())
+                    .isFinalSubmitted(admissionStatus.isFinalSubmitted())
+                    .isPrintsArrived(admissionStatus.isPrintsArrived())
+                    .firstEvaluation(admissionStatus.getFirstEvaluation())
+                    .secondEvaluation(admissionStatus.getSecondEvaluation())
+                    .registrationNumber(null)
+                    .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))
+                    .finalMajor(OptionalUtils.fromOptional(admissionStatus.getFinalMajor()))
+                    .build();
+            return clearAdmissionStatus;
+        };
+    }
+
     @Bean
     @StepScope
     public JpaItemWriter<AdmissionStatus> finalMajorIW() {
