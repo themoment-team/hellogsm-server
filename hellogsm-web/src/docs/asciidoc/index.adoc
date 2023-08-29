@@ -200,6 +200,22 @@ operation::user/find-by-authenticated[snippets='curl-request,http-request']
 ==== Response
 operation::user/find-by-authenticated[snippets='http-response,response-fields']
 
+=== [DELETE] user/me
+현재 사용자 정보를 삭제하는 엔드포인트입니다.
+
+관련된 본인인증과 원서 데이터 또한 삭제됩니다.
+
+WARNING: 단, 최종제출 된(실물 서류 접수 여부과 무관하게) 원서는 삭제되지 않습니다.
+
+==== 사용 가능한 권한
+    ROLE_UNAUTHENTICATED, ROLE_USER
+
+==== Request
+operation::user/delete-by-authenticated[snippets='curl-request,http-request']
+
+==== Response
+operation::user/delete-by-authenticated[snippets='http-response,response-fields']
+
 == identity/v1/
 *신원(Identity)*
 
