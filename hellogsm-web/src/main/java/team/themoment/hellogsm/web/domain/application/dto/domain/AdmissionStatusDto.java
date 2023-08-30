@@ -11,7 +11,6 @@ public record AdmissionStatusDto(
         Boolean isPrintsArrived,
         EvaluationStatus firstEvaluation,
         EvaluationStatus secondEvaluation,
-        Screening screeningSubmittedAt,
         Screening screeningFirstEvaluationAt,
         Screening screeningSecondEvaluationAt,
         Long registrationNumber,

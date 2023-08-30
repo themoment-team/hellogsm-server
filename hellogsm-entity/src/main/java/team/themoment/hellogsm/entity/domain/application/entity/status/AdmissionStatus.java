@@ -43,10 +43,6 @@ public class AdmissionStatus {
     private EvaluationStatus secondEvaluation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "screening_submitted_at", nullable = true)
-    private Screening screeningSubmittedAt;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "screening_first_evaluation_at", nullable = true)
     private Screening screeningFirstEvaluationAt;
 
@@ -63,10 +59,6 @@ public class AdmissionStatus {
     @Enumerated(EnumType.STRING)
     @Column(name = "final_major", nullable = true)
     private Major finalMajor;
-
-    public Optional<Screening> getScreeningSubmittedAt() {
-        return Optional.ofNullable(screeningSubmittedAt);
-    }
 
     public Optional<Screening> getScreeningFirstEvaluationAt() {
         return Optional.ofNullable(screeningFirstEvaluationAt);
@@ -108,7 +100,6 @@ public class AdmissionStatus {
                 .isPrintsArrived(false)
                 .firstEvaluation(EvaluationStatus.NOT_YET)
                 .secondEvaluation(EvaluationStatus.NOT_YET)
-                .screeningSubmittedAt(null)
                 .screeningFirstEvaluationAt(null)
                 .screeningSecondEvaluationAt(null)
                 .finalMajor(null)
