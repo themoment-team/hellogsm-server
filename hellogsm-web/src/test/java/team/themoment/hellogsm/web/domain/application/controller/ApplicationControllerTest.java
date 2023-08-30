@@ -245,7 +245,6 @@ class ApplicationControllerTest {
                         null,
                         null,
                         null,
-                        null,
                         null
                 ));
     }
@@ -491,7 +490,6 @@ class ApplicationControllerTest {
                         true,
                         EvaluationStatus.NOT_YET,
                         EvaluationStatus.NOT_YET,
-                        Screening.SPECIAL_VETERANS,
                         Screening.SOCIAL,
                         Screening.GENERAL,
                         1L,
@@ -557,7 +555,6 @@ class ApplicationControllerTest {
                 true,
                 "NOT_YET",
                 "NOT_YET",
-                "SPECIAL_VETERANS",
                 "SOCIAL",
                 "GENERAL",
                 1L,
