@@ -1,0 +1,4 @@
+spring:
+  sql:
+    init:
+      data-locations: data-one.sql
