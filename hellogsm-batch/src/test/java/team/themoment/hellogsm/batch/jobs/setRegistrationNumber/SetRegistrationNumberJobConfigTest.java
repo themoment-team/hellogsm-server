@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("접수번호 할당 배치 Job 테스트")
 @SpringBatchTest
-@ActiveProfiles(value = {"test"})
+@ActiveProfiles(value = {"test-bf"})
 @SpringBootTest
 class SetRegistrationNumberJobConfigTest {
 
