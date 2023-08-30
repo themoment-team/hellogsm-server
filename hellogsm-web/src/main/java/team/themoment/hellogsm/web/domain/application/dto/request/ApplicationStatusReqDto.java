@@ -22,9 +22,6 @@ public record ApplicationStatusReqDto(
         String secondEvaluation,
 
         @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION|)$") // null 포함
-        String screeningSubmittedAt,
-
-        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION|)$") // null 포함
         String screeningFirstEvaluationAt,
 
         @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION|)$") // null 포함
