@@ -7,7 +7,6 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: data-bf.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
