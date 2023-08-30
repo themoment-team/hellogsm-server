@@ -160,6 +160,8 @@ public class SetRegistrationNumberJobConfig {
                     .firstEvaluation(admissionStatus.getFirstEvaluation())
                     .secondEvaluation(admissionStatus.getSecondEvaluation())
                     .registrationNumber(null)
+                    .screeningFirstEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningFirstEvaluationAt()))
+                    .screeningFirstEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningSecondEvaluationAt()))
                     .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))
                     .finalMajor(OptionalUtils.fromOptional(admissionStatus.getFinalMajor()))
                     .build();
@@ -182,6 +184,8 @@ public class SetRegistrationNumberJobConfig {
                     .firstEvaluation(admissionStatus.getFirstEvaluation())
                     .secondEvaluation(admissionStatus.getSecondEvaluation())
                     .registrationNumber(registrationNumber)
+                    .screeningFirstEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningFirstEvaluationAt()))
+                    .screeningFirstEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningSecondEvaluationAt()))
                     .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))
                     .finalMajor(OptionalUtils.fromOptional(admissionStatus.getFinalMajor()))
                     .build();
