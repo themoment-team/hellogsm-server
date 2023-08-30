@@ -15,6 +15,7 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeR
 import team.themoment.hellogsm.web.domain.identity.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
+import team.themoment.hellogsm.web.domain.identity.service.GenerateTestCodeService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 @RestController
@@ -23,6 +24,7 @@ import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager
 public class CodeController {
     private final AuthenticatedUserManager manager;
     private final GenerateCodeService generateCodeService;
+    private final GenerateTestCodeService generateTestCodeService;
     private final AuthenticateCodeService authenticateCodeService;
 
     @PostMapping("/identity/me/send-code")
@@ -37,7 +39,7 @@ public class CodeController {
     public ResponseEntity<Map> sendCodeTest(
             @RequestBody @Valid GenerateCodeReqDto reqDto
     ) {
-        var code = generateCodeService.execute(manager.getId(), reqDto);
+        var code = generateTestCodeService.execute(manager.getId(), reqDto);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "전송되었습니다. : " + code));
     }
 

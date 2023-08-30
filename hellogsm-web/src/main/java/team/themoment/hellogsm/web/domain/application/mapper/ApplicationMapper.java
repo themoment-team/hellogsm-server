@@ -242,7 +242,7 @@ public interface ApplicationMapper {
         MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(userId, applicationReqDto.middleSchoolGrade());
 
         return new Application(
-                userId,
+                appId,
                 admissionInfo,
                 admissionStatus,
                 middleSchoolGrade,
