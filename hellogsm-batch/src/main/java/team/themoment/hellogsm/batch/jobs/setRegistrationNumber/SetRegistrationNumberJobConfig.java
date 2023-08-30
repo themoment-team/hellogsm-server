@@ -60,7 +60,7 @@ public class SetRegistrationNumberJobConfig {
                 .to(clearRegistrationNumberStep()) // 접수번호 초기화 Step
                 .on("FAILED") // 접수번호 초기화 실패 시
                 .fail() // Job fail
-                .on("FAILED") // 접수번호 초기화 결과가 FAILED를 제외한 모든 경우에
+                .on("*") // 접수번호 초기화 결과가 FAILED를 제외한 모든 경우에
                 .end() // Flow 종료
                 .from(setRegistrationNumberStep()) // 접수번호 할당 Job으로부터
                 .on("*") // FAILED를 제외한 모든 경우에
