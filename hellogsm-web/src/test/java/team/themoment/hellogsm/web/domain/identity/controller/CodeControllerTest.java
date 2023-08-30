@@ -38,6 +38,7 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeR
 import team.themoment.hellogsm.web.domain.identity.dto.request.GenerateCodeReqDto;
 import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
+import team.themoment.hellogsm.web.domain.identity.service.GenerateTestCodeService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 @Tag("restDocsTest")
@@ -54,6 +55,8 @@ class CodeControllerTest {
     private AuthenticatedUserManager manager;
     @MockBean
     private GenerateCodeService generateCodeService;
+    @MockBean
+    private GenerateTestCodeService generateTestCodeService;
     @MockBean
     private AuthenticateCodeService authenticateCodeService;
 
@@ -91,7 +94,7 @@ class CodeControllerTest {
         Long userId = 1L;
         GenerateCodeReqDto request = new GenerateCodeReqDto("0101234678");
         String generatedCode = "123456";
-        Mockito.when(generateCodeService.execute(any(Long.class), any(GenerateCodeReqDto.class))).thenReturn(generatedCode);
+        Mockito.when(generateTestCodeService.execute(any(Long.class), any(GenerateCodeReqDto.class))).thenReturn(generatedCode);
         Mockito.when(manager.getId()).thenReturn(userId);
 
         this.mockMvc.perform(post("/identity/v1/identity/me/send-code-test", userId, MediaType.APPLICATION_JSON)

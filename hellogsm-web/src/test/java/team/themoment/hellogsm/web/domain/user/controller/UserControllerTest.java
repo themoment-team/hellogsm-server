@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -21,24 +20,23 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.common.ControllerTestUtil;
-import team.themoment.hellogsm.web.domain.identity.controller.IdentityController;
 import team.themoment.hellogsm.web.domain.user.dto.domain.UserDto;
+import team.themoment.hellogsm.web.domain.user.service.DeleteUserService;
 import team.themoment.hellogsm.web.domain.user.service.UserByIdQuery;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
-import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static team.themoment.hellogsm.web.domain.common.ControllerTestUtil.enumAsString;
 
@@ -56,6 +54,9 @@ class UserControllerTest {
 
     @MockBean
     private UserByIdQuery userByIdQuery;
+
+    @MockBean
+    private DeleteUserService deleteUserService;
 
     @MockBean
     private AuthenticatedUserManager manager;
@@ -119,6 +120,21 @@ class UserControllerTest {
                 .andDo(this.documentationHandler.document(
                         pathParameters(parameterWithName("userId").description("조회하고자 하는 USER의 식별자")),
                         responseFields(userResponseFields)
+                ));
+    }
+
+    @Test
+    @DisplayName("인증된 유저 정보로  USER 삭제(관련된 Identity, Application 포함)")
+    void deleteByAuthenticated() throws Exception {
+        Mockito.doNothing().when(deleteUserService).execute(any(Long.class));
+
+        this.mockMvc.perform(delete("/user/v1/user/me")
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        ControllerTestUtil.requestSessionCookie(),
+                        responseFields(fieldWithPath("message").type(STRING).description("결과 설명 메시지"))
                 ));
     }
 }
