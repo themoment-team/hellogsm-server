@@ -113,7 +113,6 @@ public interface ApplicationMapper {
             @Mapping(source = "printsArrived", target = "isPrintsArrived"),
             @Mapping(source = "firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "secondEvaluation", target = "secondEvaluation"),
-            @Mapping(source = "screeningSubmittedAt", target = "screeningSubmittedAt"),
             @Mapping(source = "screeningFirstEvaluationAt", target = "screeningFirstEvaluationAt"),
             @Mapping(source = "screeningSecondEvaluationAt", target = "screeningSecondEvaluationAt"),
             @Mapping(source = "registrationNumber", target = "registrationNumber"),
@@ -155,7 +154,6 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionStatus.isPrintsArrived", target = "isPrintsArrived"),
             @Mapping(source = "admissionStatus.firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "admissionStatus.secondEvaluation", target = "secondEvaluation"),
-            @Mapping(source = "admissionStatus.screeningSubmittedAt", target = "screeningSubmittedAt"),
             @Mapping(source = "admissionStatus.screeningFirstEvaluationAt", target = "screeningFirstEvaluationAt"),
             @Mapping(source = "admissionStatus.screeningSecondEvaluationAt", target = "screeningSecondEvaluationAt"),
             @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
@@ -165,15 +163,12 @@ public interface ApplicationMapper {
 
     default AdmissionStatus createNewAdmissionStatus(Long admissionStatusId, ApplicationStatusReqDto applicationStatusReqDto) {
         Major finalMajor = null;
-        Screening screeningSubmittedAt = null;
         Screening screeningFirstEvaluationAt = null;
         Screening screeningSecondEvaluationAt = null;
 
         try {
             if (applicationStatusReqDto.finalMajor() != null)
                 finalMajor = Major.valueOf(applicationStatusReqDto.finalMajor());
-            if (applicationStatusReqDto.screeningSubmittedAt() != null)
-                screeningSubmittedAt = Screening.valueOf(applicationStatusReqDto.screeningSubmittedAt());
             if (applicationStatusReqDto.screeningFirstEvaluationAt() != null)
                 screeningFirstEvaluationAt = Screening.valueOf(applicationStatusReqDto.screeningFirstEvaluationAt());
             if (applicationStatusReqDto.screeningSecondEvaluationAt() != null)
@@ -189,7 +184,6 @@ public interface ApplicationMapper {
                 .secondEvaluation(EvaluationStatus.valueOf(applicationStatusReqDto.secondEvaluation()))
                 .isFinalSubmitted(applicationStatusReqDto.isFinalSubmitted())
                 .registrationNumber(applicationStatusReqDto.registrationNumber())
-                .screeningSubmittedAt(screeningSubmittedAt)
                 .screeningFirstEvaluationAt(screeningFirstEvaluationAt)
                 .screeningSecondEvaluationAt(screeningSecondEvaluationAt)
                 .finalMajor(finalMajor)
@@ -208,7 +202,6 @@ public interface ApplicationMapper {
                 .firstEvaluation(admissionStatus.getFirstEvaluation())
                 .secondEvaluation(admissionStatus.getSecondEvaluation())
                 .registrationNumber(OptionalUtils.fromOptional(admissionStatus.getRegistrationNumber()))
-                .screeningSubmittedAt(OptionalUtils.fromOptional(admissionStatus.getScreeningSubmittedAt()))
                 .screeningFirstEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningFirstEvaluationAt()))
                 .screeningSecondEvaluationAt(OptionalUtils.fromOptional(admissionStatus.getScreeningSecondEvaluationAt()))
                 .secondScore(OptionalUtils.fromOptional(admissionStatus.getSecondScore()))

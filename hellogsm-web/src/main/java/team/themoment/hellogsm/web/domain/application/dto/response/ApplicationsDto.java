@@ -19,7 +19,6 @@ public record ApplicationsDto(
         Boolean isPrintsArrived,
         EvaluationStatus firstEvaluation,
         EvaluationStatus secondEvaluation,
-        Screening screeningSubmittedAt,
         Screening screeningFirstEvaluationAt,
         Screening screeningSecondEvaluationAt,
         Long registrationNumber,
