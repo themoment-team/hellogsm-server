@@ -1,6 +1,9 @@
 package team.themoment.hellogsm.entity.domain.application.entity.grade;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -28,9 +31,15 @@ public abstract class AdmissionGrade {
     @Column(name = "admission_grade_id", nullable = false)
     protected Long id;
 
+    @Digits(integer = 3, fraction = 3)
+    @DecimalMin(value = "78")
+    @DecimalMax(value = "300")
     @Column(name = "total_score", nullable = false)
     protected BigDecimal totalScore;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "74")
     @Column(name = "percentile_rank", nullable = false)
     protected BigDecimal percentileRank;
 }

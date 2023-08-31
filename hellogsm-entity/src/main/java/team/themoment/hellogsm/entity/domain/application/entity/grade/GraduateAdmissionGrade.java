@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.data.GeneralScoreData;
@@ -30,33 +33,63 @@ import java.util.stream.Stream;
 @ToString
 public class GraduateAdmissionGrade extends AdmissionGrade {
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "3.6")
+    @DecimalMax(value = "18")
     @Column(name = "grade_1_semester_1_score", nullable = false)
-    private BigDecimal grade1Semester1Score;  // 1 grade(학년) 1 semester(학기) 점수
+    private BigDecimal grade1Semester1Score; // 1 grade(학년) 1 semester(학기) 점수
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "7.2")
+    @DecimalMax(value = "36")
     @Column(name = "grade_1_semester_2_score", nullable = false)
     private BigDecimal grade1Semester2Score;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "7.2")
+    @DecimalMax(value = "54")
     @Column(name = "grade_2_semester_1_score", nullable = false)
     private BigDecimal grade2Semester1Score;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "7.2")
+    @DecimalMax(value = "54")
     @Column(name = "grade_2_semester_2_score", nullable = false)
     private BigDecimal grade2Semester2Score;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "14.4")
+    @DecimalMax(value = "72")
     @Column(name = "grade_3_semester_1_score", nullable = false)
     private BigDecimal grade3Semester1Score;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "36")
+    @DecimalMax(value = "60")
     @Column(name = "artistic_score", nullable = false)
     private BigDecimal artisticScore;
 
+    @Digits(integer = 3, fraction = 3)
+    @DecimalMin(value = "36")
+    @DecimalMax(value = "180")
     @Column(name = "curricular_subtotal_score", nullable = false)
     private BigDecimal curricularSubtotalScore;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "30")
     @Column(name = "attendance_score", nullable = false)
     private BigDecimal attendanceScore;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "6")
+    @DecimalMax(value = "30")
     @Column(name = "volunteer_score", nullable = false)
     private BigDecimal volunteerScore;
 
+    @Digits(integer = 2, fraction = 3)
+    @DecimalMin(value = "6")
+    @DecimalMax(value = "60")
     @Column(name = "extracurricular_subtotal_score", nullable = false)
     private BigDecimal extracurricularSubtotalScore;
 
