@@ -14,6 +14,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,6 @@ import java.util.HashMap;
 
 @Slf4j
 @Configuration
-@RequiredArgsConstructor
 public class DocumentEvaluationJobConfig {
     public final static int CHUNK_SIZE = 10;
     public final static String JOB_NAME = "documentEvaluationJob";
@@ -41,7 +41,21 @@ public class DocumentEvaluationJobConfig {
     private final EvaluationDecisionProvider decisionProvider;
     private final DocumentEvaluationParameter parameter;
 
+    public DocumentEvaluationJobConfig(
+            JobRepository jobRepository,
+            PlatformTransactionManager platformTransactionManager,
+            EntityManagerFactory entityManagerFactory,
+            @Qualifier(BEAN_PREFIX + "decision_provider") EvaluationDecisionProvider decisionProvider,
+            DocumentEvaluationParameter parameter) {
+        this.jobRepository = jobRepository;
+        this.platformTransactionManager = platformTransactionManager;
+        this.entityManagerFactory = entityManagerFactory;
+        this.decisionProvider = decisionProvider;
+        this.parameter = parameter;
+    }
+
     @Bean(BEAN_PREFIX + "decision_provider")
+    @Qualifier(BEAN_PREFIX + "decision_provider")
     @JobScope
     public EvaluationDecisionProvider decisionProvider() {
         return new EvaluationDecisionProvider(parameter.getGeneral(),
@@ -60,7 +74,7 @@ public class DocumentEvaluationJobConfig {
         return new DocumentEvaluationParameter(version, general, social, specialVeterans, specialAdmission);
     }
     @Bean(JOB_NAME)
-    public Job setFinalMajorJobConfig() {
+    public Job documentEvaluationJobConfig() {
         return new JobBuilder(JOB_NAME, this.jobRepository)
                 .preventRestart() // 재시작 false
                 .start(documentEvaluationStep()) // 서류 평가 Step 시작
