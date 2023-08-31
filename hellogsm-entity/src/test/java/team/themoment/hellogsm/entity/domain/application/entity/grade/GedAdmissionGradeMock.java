@@ -19,4 +19,26 @@ public class GedAdmissionGradeMock {
 
         return objectMapper.writeValueAsString(gedScoreData);
     }
+
+    public String nomal1() throws JsonProcessingException {
+        GedScoreData gedScoreData = new GedScoreData(
+                BigDecimal.valueOf(123),
+                BigDecimal.valueOf(1234),
+                BigDecimal.valueOf(90.032),
+                BigDecimal.valueOf(26.016)
+        );
+
+        return objectMapper.writeValueAsString(gedScoreData);
+    }
+
+    public String nomal2() throws JsonProcessingException {
+        GedScoreData gedScoreData = new GedScoreData(
+                BigDecimal.valueOf(1200),
+                BigDecimal.valueOf(1234),
+                BigDecimal.valueOf(2.755),
+                BigDecimal.valueOf(253.809)
+        );
+
+        return objectMapper.writeValueAsString(gedScoreData);
+    }
 }

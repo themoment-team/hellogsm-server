@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraduateAdmissionGradeMock {
+public class PerfectGraduateAdmissionGradeMock {
     ObjectMapper objectMapper = new ObjectMapper();
     List<BigDecimal> subjectPerfectScore = createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5});
 
@@ -39,27 +39,6 @@ public class GraduateAdmissionGradeMock {
                 null,
                 subjectPerfectScore,
                 subjectPerfectScore,
-                subjectPerfectScore,
-                createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5}),
-                createBigDecimalArray(new int[]{0, 0, 0}),
-                createBigDecimalArray(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0}),
-                createBigDecimalArray(new int[]{0, 0, 0}),
-                new ArrayList<String>(),
-                new ArrayList<String>(),
-                new ArrayList<String>(),
-                "자유학년제",
-                null
-        );
-
-        return objectMapper.writeValueAsString(value);
-    }
-
-    public String grad2FreeSchoolYearPerfectScore() throws JsonProcessingException {
-        GeneralScoreData value = new GeneralScoreData(
-                subjectPerfectScore,
-                subjectPerfectScore,
-                null,
-                null,
                 subjectPerfectScore,
                 createBigDecimalArray(new int[]{5, 5, 5, 5, 5, 5, 5, 5, 5}),
                 createBigDecimalArray(new int[]{0, 0, 0}),
