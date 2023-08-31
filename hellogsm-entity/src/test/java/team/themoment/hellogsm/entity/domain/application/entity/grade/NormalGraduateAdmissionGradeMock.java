@@ -18,7 +18,7 @@ public class NormalGraduateAdmissionGradeMock {
                 createBigDecimalArray(new int[]{4, 5, 3, 5, 4, 5, 3, 5}),
                 createBigDecimalArray(new int[]{5, 2, 5, 5, 4, 1, 5, 5}),
                 createBigDecimalArray(new int[]{3, 5, 3, 5, 1, 3, 5, 2}),
-                createBigDecimalArray(new int[]{5, 4, 5, 3, 5, 0, 5, 3}),
+                createBigDecimalArray(new int[]{5, 4, 5, 3, 5, 0, 5, 3, 5}),
                 createBigDecimalArray(new int[]{2, 0, 0}),
                 createBigDecimalArray(new int[]{0, 4, 0, 0, 0, 0, 0, 0, 0}),
                 createBigDecimalArray(new int[]{7, 3, 4}),
@@ -121,8 +121,8 @@ public class NormalGraduateAdmissionGradeMock {
     public String 추가과목_O_1학년_2학기() throws JsonProcessingException {
         GeneralScoreData value = new GeneralScoreData(
                 createBigDecimalArray(new int[]{5, 5, 3, 5, 3, 2, 5, 1, 5, 2, 5, 5}),
-                createBigDecimalArray(new int[]{5, 0, 2, 5, 5, 3, 5, 5, 2, 2, 5, 0}),
                 createBigDecimalArray(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+                createBigDecimalArray(new int[]{5, 0, 2, 5, 5, 3, 5, 5, 2, 2, 5, 0}),
                 createBigDecimalArray(new int[]{5, 5, 3, 2, 5, 5, 3, 2, 5, 5, 4, 3}),
                 createBigDecimalArray(new int[]{3, 2, 5, 3, 5, 3, 3, 5, 5, 2, 5, 2}),
                 createBigDecimalArray(new int[]{5, 4, 5, 5, 0, 5, 4, 5, 0}),
