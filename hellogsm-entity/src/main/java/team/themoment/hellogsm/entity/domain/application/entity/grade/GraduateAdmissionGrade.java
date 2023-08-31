@@ -106,6 +106,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
     }
 
     private BigDecimal calc(List<BigDecimal> scoreArray, BigDecimal maxPoint) {
+        if (scoreArray == null || scoreArray.isEmpty()) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
         List<BigDecimal> noZeroScoreArray = scoreArray.stream().filter((score) -> score.compareTo(BigDecimal.ZERO) != 0).toList();
         if (noZeroScoreArray.isEmpty()) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
 
