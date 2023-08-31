@@ -1,24 +1,10 @@
 package team.themoment.hellogsm.web.domain.application.dto.request;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.http.HttpStatus;
-import team.themoment.hellogsm.entity.domain.application.entity.Application;
-import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
-import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
-import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
-import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleSchoolGrade;
-import team.themoment.hellogsm.entity.domain.application.enums.Gender;
-import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
-import team.themoment.hellogsm.entity.domain.application.enums.Major;
-import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 import team.themoment.hellogsm.web.domain.application.annotation.NotSpace;
-import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +29,7 @@ public record ApplicationReqDto(
         @Pattern(regexp = "^(CANDIDATE|GRADUATE|GED)$")
         String graduation,
 
-        @NotBlank
+        @NotSpace
         @Pattern(regexp = "^0(?:\\d|\\d{2})(?:\\d{3}|\\d{4})\\d{4}$")
         String telephone,
 
