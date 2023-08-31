@@ -15,6 +15,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "auth")
 public record AuthEnvironment(
         String redirectBaseUri,
+        String redirectAdminUri,
         String redirectLoginFailureUri,
         List<String> allowedOrigins
 ) {
