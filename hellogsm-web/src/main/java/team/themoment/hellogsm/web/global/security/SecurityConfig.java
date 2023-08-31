@@ -113,7 +113,7 @@ public class SecurityConfig {
                 oauth2Login
                         .authorizationEndpoint().baseUri(oauth2LoginEndpointBaseUri).and()
                         .loginProcessingUrl(oauth2LoginProcessingUri)
-                        .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri()))
+                        .successHandler(new CustomUrlAuthenticationSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler(authEnv.redirectLoginFailureUri()))
 
         );

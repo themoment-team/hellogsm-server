@@ -11,13 +11,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final String defaultTargetUrl;
+    private final String adminUrl;
 
-    public CustomUrlAuthenticationSuccessHandler(String defaultTargetUrl) {
+    public CustomUrlAuthenticationSuccessHandler(String defaultTargetUrl, String adminUrl) {
         this.defaultTargetUrl = defaultTargetUrl;
+        this.adminUrl = adminUrl;
     }
 
     @Override
@@ -26,8 +29,11 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         boolean isUnAuthentication = authentication.getAuthorities().stream()
                 .anyMatch(authority -> Role.ROLE_UNAUTHENTICATED.name().equals(authority.getAuthority()));
 
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> Role.ROLE_ADMIN.name().equals(authority.getAuthority()));
+
         String redirectUrlWithParameter = UriComponentsBuilder
-                .fromUriString(defaultTargetUrl)
+                .fromUriString(getTargetUrl(isAdmin))
                 .queryParam("verification", !isUnAuthentication)
                 .build()
                 .toUriString();
@@ -35,6 +41,14 @@ public class CustomUrlAuthenticationSuccessHandler implements AuthenticationSucc
         response.sendRedirect(redirectUrlWithParameter);
 
         clearAuthenticationAttributes(request);
+    }
+
+    protected final String getTargetUrl(boolean isAdmin) {
+        if (isAdmin) {
+            return adminUrl;
+        } else {
+            return defaultTargetUrl;
+        }
     }
 
     protected final void clearAuthenticationAttributes(HttpServletRequest request) {
