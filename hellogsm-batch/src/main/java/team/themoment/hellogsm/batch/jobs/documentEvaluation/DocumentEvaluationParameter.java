@@ -7,12 +7,14 @@ import team.themoment.hellogsm.batch.common.BaseVersionParameter;
 public class DocumentEvaluationParameter extends BaseVersionParameter {
     private final Integer general;
     private final Integer social;
-    private final Integer special;
+    private final Integer specialVeterans;
+    private final Integer specialAdmission;
 
-    public DocumentEvaluationParameter(Long version , Integer general, Integer social, Integer special) {
+    public DocumentEvaluationParameter(Long version, Integer general, Integer social, Integer specialVeterans, Integer specialAdmission) {
         super(version);
         this.general = general;
         this.social = social;
-        this.special = special;
+        this.specialVeterans = specialVeterans;
+        this.specialAdmission = specialAdmission;
     }
 }
