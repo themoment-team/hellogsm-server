@@ -280,4 +280,30 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionInfo.desiredMajor.thirdDesiredMajor", target = "desiredMajor.thirdDesiredMajor"),
     })
     AdmissionInfo toConsistentAdmissionInfoWithIdentity(AdmissionInfo admissionInfo, Identity identity);
+
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "middleSchoolGrade", "admissionGrade", "userId"})
+    @Mappings({
+            @Mapping(source = "admissionInfo.id", target = "applicationId"),
+            @Mapping(source = "admissionStatus.isFinalSubmitted", target = "isFinalSubmitted"),
+            @Mapping(source = "admissionStatus.isPrintsArrived", target = "isPrintsArrived"),
+            @Mapping(source = "admissionInfo.applicantName", target = "applicantName"),
+            @Mapping(source = "admissionInfo.screening", target = "screening"),
+            @Mapping(source = "admissionInfo.schoolName", target = "schoolName"),
+            @Mapping(source = "admissionInfo.applicantPhoneNumber", target = "applicantPhoneNumber"),
+            @Mapping(source = "admissionInfo.guardianPhoneNumber", target = "guardianPhoneNumber"),
+            @Mapping(source = "admissionInfo.teacherPhoneNumber", target = "teacherPhoneNumber"),
+            @Mapping(source = "admissionStatus.firstEvaluation", target = "firstEvaluation"),
+            @Mapping(source = "admissionStatus.secondEvaluation", target = "secondEvaluation"),
+            @Mapping(source = "admissionStatus.secondScore", target = "secondScore"),
+    })
+    SearchApplicationResDto applicationToSearchApplicationResDto(Application application);
+
+    List<SearchApplicationResDto> applicationsToSearchApplicationResDtos(List<Application> applications);
+
+    default SearchApplicationsResDto applicationsToSearchApplicationsResDto(List<Application> applications) {
+        return new SearchApplicationsResDto(
+                new ApplicationListInfoDto(applications.size()),
+                applicationsToSearchApplicationResDtos(applications)
+        );
+    }
 }
