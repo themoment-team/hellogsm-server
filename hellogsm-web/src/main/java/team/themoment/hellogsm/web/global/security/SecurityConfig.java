@@ -1,17 +1,7 @@
 package team.themoment.hellogsm.web.global.security;
 
-import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
-import team.themoment.hellogsm.entity.domain.user.enums.Role;
-import team.themoment.hellogsm.web.global.data.profile.ServerProfile;
-import team.themoment.hellogsm.web.global.security.auth.AuthEnvironment;
-import team.themoment.hellogsm.web.global.security.handler.CustomAccessDeniedHandler;
-import team.themoment.hellogsm.web.global.security.handler.CustomAuthenticationEntryPoint;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -19,14 +9,23 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import team.themoment.hellogsm.entity.domain.user.enums.Role;
+import team.themoment.hellogsm.web.global.data.profile.ServerProfile;
+import team.themoment.hellogsm.web.global.security.auth.AuthEnvironment;
+import team.themoment.hellogsm.web.global.security.filter.TimeBasedFilter;
+import team.themoment.hellogsm.web.global.security.handler.CustomAccessDeniedHandler;
+import team.themoment.hellogsm.web.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsm.web.global.security.handler.CustomUrlAuthenticationSuccessHandler;
+import team.themoment.hellogsm.web.global.security.schedule.ScheduleEnvironment;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 /**
  * SecurityConfig <br>
@@ -40,6 +39,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthEnvironment authEnv;
+    private final ScheduleEnvironment scheduleEnv;
     private static final String logoutUri = "/auth/v1/logout";
     private static final String oauth2LoginEndpointBaseUri = "/auth/v1/oauth2/authorization";
     private static final String oauth2LoginProcessingUri = "/auth/v1/oauth2/code/*";
@@ -47,9 +47,21 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    @Bean
+    public Filter timeBasedFilter() {
+        LocalDateTime startReception = LocalDateTime.of(scheduleEnv.startReceptionDate(), LocalTime.MIN);
+        LocalDateTime endReception = LocalDateTime.of(scheduleEnv.endReceptionDate(), LocalTime.MAX);
+        return new TimeBasedFilter()
+                .addTimeConstraint(HttpMethod.PUT, "/identity/v1/identity/me", startReception, endReception)
+                .addTimeConstraint(HttpMethod.POST, "/application/v1/application/me", startReception, endReception)
+                .addTimeConstraint(HttpMethod.PUT, "/application/v1/application/me", startReception, endReception)
+                .addTimeConstraint(HttpMethod.DELETE, "/application/v1/application/me", startReception, endReception)
+                .addTimeConstraint(HttpMethod.PUT, "/application/v1/final-submit", startReception, endReception);
+    }
+
     @Configuration
     @EnableWebSecurity
-    @Profile({ServerProfile.LOCAL,ServerProfile.DEV})
+    @Profile({ServerProfile.LOCAL, ServerProfile.DEV})
     public class LocalSecurityConfig {
 
         @Bean
@@ -86,7 +98,8 @@ public class SecurityConfig {
                     .formLogin().disable()
                     .httpBasic().disable()
                     .cors().configurationSource(corsConfigurationSource()).and()
-                    .csrf().disable();
+                    .csrf().disable()
+                    .addFilterBefore(timeBasedFilter(), UsernamePasswordAuthenticationFilter.class);
             logout(http);
             oauth2Login(http);
             authorizeHttpRequests(http);
@@ -122,7 +135,7 @@ public class SecurityConfig {
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout -> logout
                 .logoutUrl(logoutUri)
-                .logoutSuccessUrl(authEnv.redirectBaseUri()+"?logout=success")
+                .logoutSuccessUrl(authEnv.redirectBaseUri() + "?logout=success")
         );
     }
 
