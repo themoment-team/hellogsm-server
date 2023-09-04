@@ -390,6 +390,15 @@ operation::identity/identity/modify-by-authenticated[snippets='http-response']
 |`SPECIAL_VETERANS`| [정원 외 특별전형] 국가보훈대상자
 |`SPECIAL_ADMISSION`| [정원 외 특별전형] 특례입학대상자
 |====
+==== SearchTag
+검색 조건
+[cols="2,3"]
+|====
+|Name |설명
+|`APPLICANT`| 지원자 이름
+|`SCHOOL`| 지원자 학교
+|`PHONE_NUMBER`| 전화번호 (지원자, 보호자, 선생님 전부)
+|====
 
 === [GET] application/me
 현재 사용자의 원서 정보를 가져오는 엔드포인트입니다.
@@ -470,6 +479,15 @@ operation::application/delete-application[snippets='curl-request,http-request']
 
 ==== Response
 operation::application/delete-application[snippets='http-response']
+
+=== [GET] application/search
+최종제출이 완료된 사용자를 검색하는 엔드포인트입니다.
+
+==== Request
+operation::application/search[snippets='curl-request,http-request,query-parameters']
+
+==== Response
+operation::application/search[snippets='http-response,response-fields']
 
 === [GET] application/all
 모든 사용자의 원서를 조회하는 엔드포인트입니다.

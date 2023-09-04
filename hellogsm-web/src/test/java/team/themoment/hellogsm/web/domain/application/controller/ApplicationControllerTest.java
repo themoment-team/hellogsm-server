@@ -28,12 +28,9 @@ import team.themoment.hellogsm.entity.domain.application.entity.admission.Desire
 import team.themoment.hellogsm.entity.domain.application.enums.*;
 import team.themoment.hellogsm.web.domain.application.dto.domain.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListInfoDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationsDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
-import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
-import team.themoment.hellogsm.web.domain.application.dto.response.TicketResDto;
+import team.themoment.hellogsm.web.domain.application.enums.SearchTag;
 import team.themoment.hellogsm.web.domain.application.service.*;
 import team.themoment.hellogsm.web.domain.common.ControllerTestUtil;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
@@ -85,6 +82,8 @@ class ApplicationControllerTest {
     private ApplicationListQuery applicationListQuery;
     @MockBean
     private ModifyApplicationStatusService modifyApplicationStatusService;
+    @MockBean
+    private SearchApplicationsService searchApplicationsService;
     @MockBean
     private DeleteApplicationService deleteApplicationService;
     @MockBean
@@ -542,6 +541,77 @@ class ApplicationControllerTest {
                                 fieldWithPath("applications[].screeningFirstEvaluationAt").type(enumAsString(Screening.class)).description("1차 평가 이후 전형 상태"),
                                 fieldWithPath("applications[]screeningSecondEvaluationAt").type(enumAsString(Screening.class)).description("2차 평가 이후 전형 상태"),
                                 fieldWithPath("applications[].registrationNumber").type(NUMBER).description("접수 번호"),
+                                fieldWithPath("applications[].secondScore").type(NUMBER).description("2차 시험 점수")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("원서 리스트 검색")
+    void search() throws Exception {
+        SearchApplicationsResDto searchApplicationsResDto = new SearchApplicationsResDto(
+                new ApplicationListInfoDto(1),
+                List.of(new SearchApplicationResDto(
+                        1L,
+                        true,
+                        true,
+                        "홍길동",
+                        Screening.SOCIAL,
+                        "광주소프트웨어마이스터고등학교",
+                        "01012341234",
+                        "01012341234",
+                        "01012341234",
+                        EvaluationStatus.PASS,
+                        EvaluationStatus.NOT_YET,
+                        BigDecimal.valueOf(100)
+                ))
+        );
+
+        Mockito.when(searchApplicationsService.execute(any(Integer.class), any(Integer.class) ,any(SearchTag.class),any(String.class))).thenReturn(searchApplicationsResDto);
+
+        this.mockMvc.perform(get("/application/v1/application/search")
+                        .param("page", "0")
+                        .param("size", "1")
+                        .param("tag", "APPLICANT")
+                        .param("keyword", "홍길")
+                        .cookie(new Cookie("SESSION", "SESSIONID12345"))
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.info.count").value(searchApplicationsResDto.info().count()))
+                .andExpect(jsonPath("$.applications[0].applicationId").value(searchApplicationsResDto.applications().get(0).applicationId()))
+                .andExpect(jsonPath("$.applications[0].applicantName").value(searchApplicationsResDto.applications().get(0).applicantName()))
+                .andExpect(jsonPath("$.applications[0].isFinalSubmitted").value(searchApplicationsResDto.applications().get(0).isFinalSubmitted()))
+                .andExpect(jsonPath("$.applications[0].isPrintsArrived").value(searchApplicationsResDto.applications().get(0).isPrintsArrived()))
+                .andExpect(jsonPath("$.applications[0].screening").value(searchApplicationsResDto.applications().get(0).screening().name()))
+                .andExpect(jsonPath("$.applications[0].schoolName").value(searchApplicationsResDto.applications().get(0).schoolName()))
+                .andExpect(jsonPath("$.applications[0].applicantPhoneNumber").value(searchApplicationsResDto.applications().get(0).applicantPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].teacherPhoneNumber").value(searchApplicationsResDto.applications().get(0).teacherPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].guardianPhoneNumber").value(searchApplicationsResDto.applications().get(0).guardianPhoneNumber()))
+                .andExpect(jsonPath("$.applications[0].firstEvaluation").value(searchApplicationsResDto.applications().get(0).firstEvaluation().name()))
+                .andExpect(jsonPath("$.applications[0].secondEvaluation").value(searchApplicationsResDto.applications().get(0).secondEvaluation().name()))
+                .andExpect(jsonPath("$.applications[0].secondScore").value(searchApplicationsResDto.applications().get(0).secondScore()))
+                .andDo(this.documentationHandler.document(
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("원서 크기"),
+                                parameterWithName("tag").description("검색 태그"),
+                                parameterWithName("keyword").description("검색 키워드")
+                        ),
+                        requestSessionCookie(),
+                        responseFields(
+                                fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
+                                fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
+                                fieldWithPath("applications[].isFinalSubmitted").type(BOOLEAN).description("최종 제출 여부"),
+                                fieldWithPath("applications[].isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
+                                fieldWithPath("applications[].applicantName").type(STRING).description("지원자 이름"),
+                                fieldWithPath("applications[].screening").type(enumAsString(Screening.class)).description("지원자 지원 전형"),
+                                fieldWithPath("applications[].schoolName").type(STRING).description("지원자 학교 이름"),
+                                fieldWithPath("applications[].applicantPhoneNumber").type(STRING).description("지원자 전화번호"),
+                                fieldWithPath("applications[].guardianPhoneNumber").type(STRING).description("보호자 전화번호"),
+                                fieldWithPath("applications[].teacherPhoneNumber").type(STRING).description("선생님 전화번호"),
+                                fieldWithPath("applications[].firstEvaluation").type(enumAsString(EvaluationStatus.class)).description("1차 평가 결과"),
+                                fieldWithPath("applications[].secondEvaluation").type(enumAsString(EvaluationStatus.class)).description("2차 평가 결과"),
                                 fieldWithPath("applications[].secondScore").type(NUMBER).description("2차 시험 점수")
                         )
                 ));
