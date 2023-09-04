@@ -32,14 +32,10 @@ public abstract class AdmissionGrade {
     protected Long id;
 
     @Digits(integer = 3, fraction = 3)
-    @DecimalMin(value = "78")
-    @DecimalMax(value = "300")
     @Column(name = "total_score", nullable = false)
     protected BigDecimal totalScore;
 
     @Digits(integer = 2, fraction = 3)
-    @DecimalMin(value = "0")
-    @DecimalMax(value = "74")
     @Column(name = "percentile_rank", nullable = false)
     protected BigDecimal percentileRank;
 }
