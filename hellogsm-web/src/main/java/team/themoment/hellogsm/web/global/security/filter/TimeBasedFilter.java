@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,18 +36,27 @@ public class TimeBasedFilter extends OncePerRequestFilter {
         }
     }
 
-    public TimeBasedFilter addTimeConstraint(String url, LocalDateTime startTime, LocalDateTime endTime) {
-        urlTimeConstraints.put(url, new TimeRange(startTime, endTime));
+    public TimeBasedFilter addTimeConstraint(String url, HttpMethod httpMethod, LocalDateTime startTime, LocalDateTime endTime) {
+        urlTimeConstraints.put(url + ":" + httpMethod, new TimeRange(startTime, endTime));
         return this;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestUrl = request.getRequestURI();
+        HttpMethod requestMethod;
+        try {
+            requestMethod = HttpMethod.valueOf(request.getMethod());
+        } catch (IllegalArgumentException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "유효하지 않은 HTTP 메소드 : " + request.getMethod());
+            return;
+        }
         LocalDateTime currentTime = LocalDateTime.now();
 
-        if (urlTimeConstraints.containsKey(requestUrl)) {
-            TimeRange timeRange = urlTimeConstraints.get(requestUrl);
+        String constraintKey = requestUrl + ":" + requestMethod;
+
+        if (urlTimeConstraints.containsKey(constraintKey)) {
+            TimeRange timeRange = urlTimeConstraints.get(constraintKey);
             if (timeRange.isWithinRange(currentTime)) {
                 filterChain.doFilter(request, response);
                 return;
