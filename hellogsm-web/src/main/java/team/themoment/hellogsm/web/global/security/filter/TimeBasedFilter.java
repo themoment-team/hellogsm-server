@@ -61,11 +61,14 @@ public class TimeBasedFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             } else {
-                String message = String.format("요청이 거부되었습니다. 현재 시간: %s, 해당 요청은 %s ~ %s 이내에만 처리 가능합니다.", currentTime, timeRange.startTime, timeRange.endTime);
+                String message = String.format("%s 요청이 거부되었습니다. " +
+                        "현재 시간: %s, 해당 요청은 %s ~ %s 이내에만 처리 가능합니다.", constraintKey, currentTime, timeRange.startTime, timeRange.endTime);
                 log.warn(message);
                 sendErrorResponse(response, message);
+                return;
             }
         }
+        filterChain.doFilter(request, response);
     }
 
     private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
