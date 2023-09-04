@@ -34,19 +34,19 @@ import java.util.stream.Stream;
 public class GraduateAdmissionGrade extends AdmissionGrade {
 
     @Digits(integer = 2, fraction = 3)
-    @DecimalMin(value = "3.6")
+    @DecimalMin(value = "0") // 자유학년/학기제 라면 0점, 아닌 경우 3.6가 최저점
     @DecimalMax(value = "18")
     @Column(name = "grade_1_semester_1_score", nullable = false)
     private BigDecimal grade1Semester1Score; // 1 grade(학년) 1 semester(학기) 점수
 
     @Digits(integer = 2, fraction = 3)
-    @DecimalMin(value = "7.2")
+    @DecimalMin(value = "0") // 자유학년/학기제 라면 0점, 아닌 경우 7.2가 최저점
     @DecimalMax(value = "36")
     @Column(name = "grade_1_semester_2_score", nullable = false)
     private BigDecimal grade1Semester2Score;
 
     @Digits(integer = 2, fraction = 3)
-    @DecimalMin(value = "7.2")
+    @DecimalMin(value = "0") // 자유학년/학기제 라면 0점, 아닌 경우 7.2가 최저점
     @DecimalMax(value = "54")
     @Column(name = "grade_2_semester_1_score", nullable = false)
     private BigDecimal grade2Semester1Score;
@@ -70,8 +70,8 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
     private BigDecimal artisticScore;
 
     @Digits(integer = 3, fraction = 3)
-    @DecimalMin(value = "36")
-    @DecimalMax(value = "180")
+    @DecimalMin(value = "72")
+    @DecimalMax(value = "240")
     @Column(name = "curricular_subtotal_score", nullable = false)
     private BigDecimal curricularSubtotalScore;
 
