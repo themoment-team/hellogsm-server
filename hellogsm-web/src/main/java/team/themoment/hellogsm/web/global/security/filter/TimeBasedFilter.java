@@ -36,7 +36,7 @@ public class TimeBasedFilter extends OncePerRequestFilter {
         }
     }
 
-    public TimeBasedFilter addTimeConstraint(String url, HttpMethod httpMethod, LocalDateTime startTime, LocalDateTime endTime) {
+    public TimeBasedFilter addTimeConstraint(HttpMethod httpMethod, String url, LocalDateTime startTime, LocalDateTime endTime) {
         urlTimeConstraints.put(url + ":" + httpMethod, new TimeRange(startTime, endTime));
         return this;
     }
