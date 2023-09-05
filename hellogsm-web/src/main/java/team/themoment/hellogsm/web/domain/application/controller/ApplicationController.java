@@ -5,7 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
+import team.themoment.hellogsm.web.domain.application.dto.response.SearchApplicationsResDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
+import team.themoment.hellogsm.web.domain.application.enums.SearchTag;
 import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
 import team.themoment.hellogsm.web.domain.application.service.CreateApplicationService;
 import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
@@ -38,6 +40,7 @@ public class ApplicationController {
     private final CreateApplicationService createApplicationService;
     private final ModifyApplicationService modifyApplicationService;
     private final QuerySingleApplicationService querySingleApplicationService;
+    private final SearchApplicationsService searchApplicationsService;
     private final ApplicationListQuery applicationListQuery;
     private final ModifyApplicationStatusService modifyApplicationStatusService;
     private final DeleteApplicationService deleteApplicationService;
@@ -79,6 +82,24 @@ public class ApplicationController {
         if (page < 0 || size < 0)
             throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         return ResponseEntity.status(HttpStatus.OK).body(applicationListQuery.execute(page, size));
+    }
+
+    @GetMapping("/application/search")
+    public ResponseEntity<SearchApplicationsResDto> findAll(
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size,
+            @RequestParam("tag") String tag,
+            @RequestParam("keyword") String keyword
+    ) {
+        if (page < 0 || size < 0)
+            throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
+        SearchTag searchTag = null;
+        try {
+            searchTag = SearchTag.valueOf(tag);
+        } catch (IllegalArgumentException e) {
+            throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(searchApplicationsService.execute(page, size, searchTag, keyword));
     }
 
     @PutMapping("/status/{userId}")

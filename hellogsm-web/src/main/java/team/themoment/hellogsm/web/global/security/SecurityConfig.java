@@ -200,6 +200,7 @@ public class SecurityConfig {
                         HttpMethod.GET,
                         "/application/v1/ticket",
                         "/application/v1/application/all",
+                        "/application/v1/application/search",
                         "/application/v1/application/*"
                 ).hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
