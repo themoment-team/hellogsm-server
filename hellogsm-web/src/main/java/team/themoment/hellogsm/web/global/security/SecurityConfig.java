@@ -76,7 +76,7 @@ public class SecurityConfig {
             oauth2Login(http);
             http.authorizeHttpRequests(
                     httpRequests -> httpRequests
-                            .requestMatchers(HttpMethod.GET, "/identity/v1/identity/me/send-code-test")
+                            .requestMatchers(HttpMethod.POST, "/identity/v1/identity/me/send-code-test")
                             .hasAnyRole(
                                     Role.ROLE_UNAUTHENTICATED.getRole(),
                                     Role.ROLE_USER.getRole())
@@ -177,7 +177,6 @@ public class SecurityConfig {
                 .requestMatchers(
                         HttpMethod.POST,
                         "/identity/v1/identity/me/send-code",
-                        "/identity/v1/identity/me/send-code-test",
                         "/identity/me/auth-code").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole()
