@@ -235,6 +235,8 @@ public interface ApplicationMapper {
                 .teacherName(applicationReqDto.teacherName())
                 .teacherPhoneNumber(applicationReqDto.teacherPhoneNumber())
                 .screening(Screening.valueOf(applicationReqDto.screening()))
+                .schoolName(applicationReqDto.schoolName())
+                .schoolLocation(applicationReqDto.schoolLocation())
                 .desiredMajor(desiredMajor)
                 .build();
 
