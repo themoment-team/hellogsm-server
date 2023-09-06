@@ -37,6 +37,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             "a.admissionStatus.isFinalSubmitted = TRUE"  )
     Page<Application> findAllByIsFinalSubmittedAndPhoneNumberContaining(@Param("keyword") String keyword, Pageable pageable);
 
+    Page<Application> findAllByAdmissionStatusIsFinalSubmitted(Boolean isFinalSubmitted, Pageable pageable);
+
     void deleteApplicationByUserId(Long userId);
 
     List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);

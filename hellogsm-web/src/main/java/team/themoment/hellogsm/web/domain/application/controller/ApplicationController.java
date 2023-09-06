@@ -88,14 +88,16 @@ public class ApplicationController {
     public ResponseEntity<SearchApplicationsResDto> findAll(
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer size,
-            @RequestParam("tag") String tag,
-            @RequestParam("keyword") String keyword
+            @RequestParam(name = "tag", required = false) String tag,
+            @RequestParam(name = "keyword", required = false) String keyword
     ) {
         if (page < 0 || size < 0)
             throw new ExpectedException("0 이상만 가능합니다", HttpStatus.BAD_REQUEST);
         SearchTag searchTag = null;
         try {
-            searchTag = SearchTag.valueOf(tag);
+            if (tag != null) {
+                searchTag = SearchTag.valueOf(tag);
+            }
         } catch (IllegalArgumentException e) {
             throw new ExpectedException("유효하지 않은 tag입니다", HttpStatus.BAD_REQUEST);
         }

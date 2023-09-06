@@ -484,7 +484,11 @@ operation::application/delete-application[snippets='http-response']
 최종제출이 완료된 사용자를 검색하는 엔드포인트입니다.
 
 ==== Request
-operation::application/search[snippets='curl-request,http-request,query-parameters']
+operation::application/search[snippets='curl-request,http-request']
+operation::application/search[snippets='query-parameters']
+WARNING: `tag` 파라미터를 사용하지 않는 경우, `keyword` 파라미터의 값은 무시됩니다.
+
+
 
 ==== Response
 operation::application/search[snippets='http-response,response-fields']
