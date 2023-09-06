@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds">
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <!--로그 파일 저장 위치-->
+  <property name="LOG_PATH" value="./logs"/>
+  <property name="LOG_NAME" value="hellolog"/>
+
+  <springProfile name = "local | dev | prod" >
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        <charset>${CONSOLE_LOG_CHARSET}</charset>
+      </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="INFO">
+      <appender-ref ref="CONSOLE" />
+    </logger>
+    <logger name="org.hibernate.orm.jdbc.bind" level="trace">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="team.themoment.hellogsm">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+  </springProfile>
+
+  <springProfile name = "dev | prod" >
+    <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_PATH}/${LOG_NAME}.log</file>
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>${FILE_LOG_PATTERN}</pattern>
+        <charset>${FILE_LOG_CHARSET}</charset>
+      </encoder>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>${LOG_PATH}/${LOG_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+          <maxFileSize>10MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <maxHistory>365</maxHistory>
+        <totalSizeCap>10GB</totalSizeCap>
+      </rollingPolicy>
+    </appender>
+
+    <logger name="org.springframework" level="INFO">
+      <appender-ref ref="ROLLING-FILE"/>
+    </logger>
+    <logger name="org.hibernate.orm.jdbc.bind" level="trace">
+      <appender-ref ref="ROLLING-FILE"/>
+    </logger>
+    <logger name="team.themoment.hellogsm" level="trace">
+      <appender-ref ref="ROLLING-FILE"/>
+    </logger>
+  </springProfile>
+</configuration>
