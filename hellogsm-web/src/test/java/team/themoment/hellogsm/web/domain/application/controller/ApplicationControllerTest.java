@@ -595,8 +595,8 @@ class ApplicationControllerTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("원서 크기"),
-                                parameterWithName("tag").description("검색 태그"),
-                                parameterWithName("keyword").description("검색 키워드")
+                                parameterWithName("tag").description("[Optional] 검색 태그"),
+                                parameterWithName("keyword").description("[Optional] 검색 키워드")
                         ),
                         requestSessionCookie(),
                         responseFields(
