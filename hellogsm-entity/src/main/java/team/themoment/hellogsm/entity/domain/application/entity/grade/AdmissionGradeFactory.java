@@ -5,9 +5,6 @@ import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 
 /**
  * {@link AdmissionGrade}의 구현체를 생성하는 팩토리 클래스입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class AdmissionGradeFactory {
@@ -26,7 +23,7 @@ public class AdmissionGradeFactory {
         } else if (graduationStatus.equals(GraduationStatus.GED)) {
             return new GedAdmissionGrade(middleSchoolGrades);
         } else {
-            throw new IllegalArgumentException("원서의 졸업싱태와 중학교 성적의 형식이 일치하지 않습니다.");
+            throw new IllegalArgumentException("지원하지 않는 GraduationStatus Type 입니다. GraduationStatus : " + graduationStatus);
         }
     }
 }

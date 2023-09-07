@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 
 /**
  * 입학 원서의 점수을 저장하는 역할의 추상클래스입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @Entity
 @Table(name = "admission_grade")

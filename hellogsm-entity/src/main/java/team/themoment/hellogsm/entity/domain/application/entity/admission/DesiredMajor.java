@@ -15,11 +15,7 @@ import java.util.Set;
 
 /**
  * 희망 학과를 저장하는 embedded type 객체입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
-
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

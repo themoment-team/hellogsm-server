@@ -13,11 +13,7 @@ import java.util.Optional;
 
 /**
  * 입학 원서의 인적사항을 저장하는 Entity입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
-
 @Entity
 @Table(name = "admission_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

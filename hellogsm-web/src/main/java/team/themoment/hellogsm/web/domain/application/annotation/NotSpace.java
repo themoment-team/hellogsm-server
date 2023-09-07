@@ -7,9 +7,6 @@ import java.lang.annotation.*;
 
 /**
  * null은 허용하지만 공백과 빈 문자열은 허용하지 않음
- *
- * @author 변찬우
- * @since 1.0.0
  */
 @Documented
 @Constraint(validatedBy = NotSpaceValidator.class)

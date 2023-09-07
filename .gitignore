@@ -3,6 +3,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,java,gradle,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,java,gradle,macos,windows
 
+# 로그 파일
+./logs
+
 # 환경변수 숨기기
 **/application-*.yml
 

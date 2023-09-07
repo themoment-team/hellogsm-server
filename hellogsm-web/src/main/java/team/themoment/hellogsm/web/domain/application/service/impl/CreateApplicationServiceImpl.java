@@ -17,9 +17,6 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 /**
  * 원서 생성을 위한 service interface 입니다
- *
- * @author 변찬우
- * @since 1.0.0
  */
 @Service
 @RequiredArgsConstructor
