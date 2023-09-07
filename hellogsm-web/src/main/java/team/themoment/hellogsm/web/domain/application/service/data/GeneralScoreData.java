@@ -7,9 +7,6 @@ import java.util.List;
 
 /**
  * 학기별 성적을 저장하는 record 입니다
- *
- * @author 변찬우
- * @since 1.0.0
  */
 public record GeneralScoreData(
         // 국어, 도덕, 사회, 역사, 수학, 과학, 기가, 영어, ...

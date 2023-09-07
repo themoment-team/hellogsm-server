@@ -20,9 +20,6 @@ import org.springframework.http.HttpStatus;
  *  </pre>
  *
  *  @see HttpStatus
- *
- *  @author 양시준
- *  @since 1.0.0
  */
 public class ExpectedException extends RuntimeException {
 

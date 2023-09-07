@@ -12,9 +12,6 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 /**
  * IdentityQuery의 기본 구현체입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @Service
 @RequiredArgsConstructor

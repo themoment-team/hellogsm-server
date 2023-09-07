@@ -2,9 +2,6 @@ package team.themoment.hellogsm.web.global.exception.model;
 
 /**
  *  Exception 발생 시 클라이언트에 반환할 Response 객체입니다
- *
- *  @author 양시준
- *  @since 1.0.0
  */
 public record ExceptionResponseEntity(String message) {
 
