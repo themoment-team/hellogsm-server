@@ -12,9 +12,6 @@ import java.util.Optional;
 
 /**
  * 입학 원서의 상태를 저장하는 Entity입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -20,9 +20,6 @@ import java.util.stream.Stream;
 
 /**
  * 졸업예정, 졸업 학생의 입학 원서 성적을 저장하는 서브타입의 Entity입니다.
- *
- * @author 양시준, 변찬우
- * @since 1.0.0
  */
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

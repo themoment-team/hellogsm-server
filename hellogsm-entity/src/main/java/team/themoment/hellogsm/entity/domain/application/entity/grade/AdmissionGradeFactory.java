@@ -5,9 +5,6 @@ import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 
 /**
  * 입학 원서의 성적을 {@code AdmissionGrade}의 구현체를 생성하는 팩토리 클래스입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class AdmissionGradeFactory {

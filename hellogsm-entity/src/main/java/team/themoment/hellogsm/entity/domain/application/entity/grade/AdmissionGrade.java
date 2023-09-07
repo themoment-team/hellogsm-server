@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 
 /**
  * 학생의 입학 원서 성적을 저장하는 슈퍼타입의 Entity입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @Entity
 @Table(name = "admission_grade")
