@@ -21,6 +21,9 @@ import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager
 
 import java.util.Map;
 
+/**
+ * 본인인증 정보와 관련된 요청을 처리하는 Controller입니다.
+ */
 @RestController
 @RequestMapping("/identity/v1")
 @RequiredArgsConstructor

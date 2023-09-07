@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 원서를 관리하는 controller 입니다
+ * 원서와 관련된 요청을 처리하는 Controller입니다.
  */
 @RestController
 @RequiredArgsConstructor
