@@ -8,7 +8,7 @@ public enum ScreeningCategory {
     /**
      * 일반전형
      */
-    GENERAL, // 일반전형
+    GENERAL,
 
     /**
      * 특별전형(사회통합전형)
