@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 졸업예정, 졸업 학생의 입학 원서 성적을 저장하는 서브타입의 Entity입니다.
+ * 졸업예정, 졸업 학생의 점수를 저장하는 Entity입니다. <br/>
+ * {@link AdmissionGrade}의 구현체 입니다.
  *
+ * @see AdmissionGrade
  * @author 양시준, 변찬우
  * @since 1.0.0
  */

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * {@code AdmissionInfo}의 희망 학과를 저장하는 embedded type입니다.
+ * 희망 학과를 저장하는 embedded type 객체입니다.
  *
  * @author 양시준
  * @since 1.0.0

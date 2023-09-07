@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * 학생의 입학 중학교 성적을 저장하는 Entity입니다.
+ * 입학 원서의 중학교 성적을 저장하는 Entity입니다.
  *
  * @author 양시준
  * @since 1.0.0
