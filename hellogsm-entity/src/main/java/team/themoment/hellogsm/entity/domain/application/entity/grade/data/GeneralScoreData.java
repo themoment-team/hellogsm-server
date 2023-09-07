@@ -5,9 +5,6 @@ import java.util.List;
 
 /**
  * 학기별 성적을 저장하는 record 입니다
- *
- * @author 변찬우
- * @since 1.0.0
  */
 public record GeneralScoreData(
         List<BigDecimal> score1_1,

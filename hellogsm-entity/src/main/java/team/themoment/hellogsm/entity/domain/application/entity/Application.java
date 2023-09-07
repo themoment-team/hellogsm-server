@@ -15,9 +15,6 @@ import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
  * 원서의 신청 정보를 저장하는 Entity입니다. <br>
  * cascade = CascadeType.ALL, orphanRemoval = true 설정으로 관련된 엔티티들의 라이프사이클을 관리합니다.
  * FetchType.LAZY 설정으로 필요한 경우에만 연관된 엔티티를 로딩합니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @Entity
 @Table(name = "application")
