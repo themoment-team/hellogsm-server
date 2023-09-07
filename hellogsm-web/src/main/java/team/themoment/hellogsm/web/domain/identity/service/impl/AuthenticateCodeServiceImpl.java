@@ -24,6 +24,16 @@ public class AuthenticateCodeServiceImpl implements AuthenticateCodeService {
 
     private final CodeRepository codeRepository;
 
+    /**
+     * userId와 인증 코드를 받아서 해당 코드를 인증합니다.
+     *
+     * @param userId
+     * @param reqDto
+     * @throws ExpectedException 발생조건은 아래와 같음 <br/>
+     *      1. 인증 코드가 존재하지 않은 경우 <br/>
+     *      2. 인증 코드가 가장 최신의 code가 아닌 경우 <br/>
+     *      3. 인증 코드가 유효하지 않은 경우  <br/>
+     */
     @Override
     public void execute(Long userId, AuthenticateCodeReqDto reqDto) {
         List<AuthenticationCode> codes = codeRepository.findByUserId(userId);

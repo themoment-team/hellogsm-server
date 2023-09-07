@@ -43,7 +43,13 @@ public class CreateIdentityServiceImpl implements CreateIdentityService {
      * @param identityReqDto 생성할 Identity 정보가 담긴 DTO
      * @param userId         생성할 Identity에 대한 User의 userId
      * @return 생성된 Identity 정보가 담긴 DTO
-     * @throws ExpectedException 존재하지 않는 User나 이미 존재하는 Identity일 경우 발생
+     * @throws ExpectedException 발생조건은 아래와 같음 <br/>
+     *      1. 존재하지 않는 User <br/>
+     *      2. 이미 존재하는 Identity <br/>
+     *      3. 잘못된 Code인 경우  <br/>
+     *      3-1. 인증받지 않은 코드 <br/>
+     *      3-2. 유효하지 않은 코드 <br/>
+     *      3-3. 코드 인증 시의 휴대폰 번호와, 본인인증 시 휴대폰 번호가 일치하지 않은 경우
      */
     @Override
     public CreateIdentityResDto execute(IdentityReqDto identityReqDto, Long userId) {
