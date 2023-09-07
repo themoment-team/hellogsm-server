@@ -20,9 +20,6 @@ import java.util.Map;
 
 /**
  * Global한 예외를 핸들링 하는 Handler입니다.
- *
- * @author 양시준
- * @since 1.0.0
  */
 @Slf4j
 @EnableWebMvc

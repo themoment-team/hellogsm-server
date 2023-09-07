@@ -30,10 +30,7 @@ import java.util.Arrays;
 /**
  * SecurityConfig <br>
  * Spring Security를 위한 설정 클래스입니다. <br>
- * inner class로 프로필별 설정을 관리합니다. - 아직 예정임
- *
- * @author 양시준
- * @since 1.0.0
+ * inner class로 프로필별 설정을 관리합니다.
  */
 @Configuration
 @RequiredArgsConstructor

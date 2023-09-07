@@ -11,9 +11,6 @@ import java.util.Set;
 
 /**
  * 원서 생성을 담당하는 dto 입니다
- *
- * @author 변찬우
- * @since 1.0.0
  */
 public record ApplicationReqDto(
         @NotBlank

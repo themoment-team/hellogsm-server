@@ -28,9 +28,6 @@ import java.util.Map;
 
 /**
  * 원서를 관리하는 controller 입니다
- *
- * @author 변찬우
- * @since 1.0.0
  */
 @RestController
 @RequiredArgsConstructor
