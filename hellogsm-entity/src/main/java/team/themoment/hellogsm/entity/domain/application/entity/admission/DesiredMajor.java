@@ -14,9 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * {@code AdmissionInfo}의 희망 학과를 저장하는 embedded type입니다.
+ * 희망 학과를 저장하는 embedded type 객체입니다.
  */
-
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

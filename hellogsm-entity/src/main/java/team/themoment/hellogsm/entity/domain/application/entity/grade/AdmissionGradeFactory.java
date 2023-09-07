@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import team.themoment.hellogsm.entity.domain.application.enums.GraduationStatus;
 
 /**
- * 입학 원서의 성적을 {@code AdmissionGrade}의 구현체를 생성하는 팩토리 클래스입니다.
+ * {@link AdmissionGrade}의 구현체를 생성하는 팩토리 클래스입니다.
  */
 @RequiredArgsConstructor
 public class AdmissionGradeFactory {
 
     /**
-     * 졸업 상태와 중학교 성적을 기반으로 입학 원서 성적을 생성합니다.
+     * 졸업 상태에 맞는 {@link AdmissionGrade}의 구현체를 중학교 성적을 입력받아 생성합니다.
      *
      * @param graduationStatus   졸업 상태
      * @param middleSchoolGrades 중학교 성적

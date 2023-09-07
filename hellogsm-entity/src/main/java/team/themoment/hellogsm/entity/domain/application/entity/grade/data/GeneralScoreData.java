@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 학기별 성적을 저장하는 record 입니다
+ * 학기별 성적을 저장하는 record 입니다. <br/>
+ * {@link team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade} 생성에 사용됩니다.
  */
 public record GeneralScoreData(
         List<BigDecimal> score1_1,

@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 
 /**
- * 학생의 입학 원서 성적을 저장하는 슈퍼타입의 Entity입니다.
+ * 입학 원서의 점수을 저장하는 역할의 추상클래스입니다.
  */
 @Entity
 @Table(name = "admission_grade")
