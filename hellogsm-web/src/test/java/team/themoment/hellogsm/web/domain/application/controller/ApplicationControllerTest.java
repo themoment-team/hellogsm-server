@@ -476,7 +476,7 @@ class ApplicationControllerTest {
     @DisplayName("원서 전체 조회")
     void findAll() throws Exception {
         ApplicationListDto applicationListDto = new ApplicationListDto(
-                new ApplicationListInfoDto(1),
+                new ApplicationListInfoDto(1, 1L),
                 List.of(new ApplicationsDto(
                         1L,
                         "human",
@@ -505,7 +505,8 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.info.count").value(applicationListDto.info().count()))
+                .andExpect(jsonPath("$.info.totalPages").value(applicationListDto.info().totalPages()))
+                .andExpect(jsonPath("$.info.totalElements").value(applicationListDto.info().totalElements()))
                 .andExpect(jsonPath("$.applications[0].applicationId").value(applicationListDto.applications().get(0).applicationId()))
                 .andExpect(jsonPath("$.applications[0].applicantName").value(applicationListDto.applications().get(0).applicantName()))
                 .andExpect(jsonPath("$.applications[0].graduation").value(applicationListDto.applications().get(0).graduation().toString()))
@@ -526,7 +527,8 @@ class ApplicationControllerTest {
                         ),
                         requestSessionCookie(),
                         responseFields(
-                                fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
+                                fieldWithPath("info.totalPages").type(NUMBER).description("총 페이지 개수"),
+                                fieldWithPath("info.totalElements").type(NUMBER).description("모든 원서 개수"),
                                 fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
                                 fieldWithPath("applications[].applicantName").type(STRING).description("지원자 이름"),
                                 fieldWithPath("applications[].graduation").type(STRING).description("중학교 졸업 상태"),
@@ -550,7 +552,7 @@ class ApplicationControllerTest {
     @DisplayName("원서 리스트 검색")
     void search() throws Exception {
         SearchApplicationsResDto searchApplicationsResDto = new SearchApplicationsResDto(
-                new ApplicationListInfoDto(1),
+                new ApplicationListInfoDto(1,1L),
                 List.of(new SearchApplicationResDto(
                         1L,
                         true,
@@ -578,7 +580,8 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.info.count").value(searchApplicationsResDto.info().count()))
+                .andExpect(jsonPath("$.info.totalPages").value(searchApplicationsResDto.info().totalPages()))
+                .andExpect(jsonPath("$.info.totalElements").value(searchApplicationsResDto.info().totalElements()))
                 .andExpect(jsonPath("$.applications[0].applicationId").value(searchApplicationsResDto.applications().get(0).applicationId()))
                 .andExpect(jsonPath("$.applications[0].applicantName").value(searchApplicationsResDto.applications().get(0).applicantName()))
                 .andExpect(jsonPath("$.applications[0].isFinalSubmitted").value(searchApplicationsResDto.applications().get(0).isFinalSubmitted()))
@@ -600,7 +603,8 @@ class ApplicationControllerTest {
                         ),
                         requestSessionCookie(),
                         responseFields(
-                                fieldWithPath("info.count").type(NUMBER).description("원서 개수"),
+                                fieldWithPath("info.totalPages").type(NUMBER).description("총 페이지 개수"),
+                                fieldWithPath("info.totalElements").type(NUMBER).description("모든 원서 개수"),
                                 fieldWithPath("applications[].applicationId").type(NUMBER).description("원서 식별자"),
                                 fieldWithPath("applications[].isFinalSubmitted").type(BOOLEAN).description("최종 제출 여부"),
                                 fieldWithPath("applications[].isPrintsArrived").type(BOOLEAN).description("서류 도착 여부"),
