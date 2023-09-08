@@ -134,10 +134,10 @@ public interface ApplicationMapper {
 
     List<TicketResDto> applicationListToTicketResDtos(List<Application> applicationList);
 
-    default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
+    default ApplicationListDto createApplicationListDto(List<Application> applications) {
         return new ApplicationListDto(
-                new ApplicationListInfoDto(applicationList.size()),
-                applicationListToApplicationsDtoList(applicationList)
+                new ApplicationListInfoDto(applications.size()),
+                applicationListToApplicationsDtoList(applications)
         );
     }
 
