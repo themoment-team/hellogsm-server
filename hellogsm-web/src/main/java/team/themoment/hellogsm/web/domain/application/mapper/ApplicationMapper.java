@@ -137,8 +137,8 @@ public interface ApplicationMapper {
 
     default ApplicationListDto createApplicationListDto(Page<Application> applications) {
         return new ApplicationListDto(
-                new ApplicationListInfoDto(applications.toList().size()),
-                applicationListToApplicationsDtoList(applications)
+                new ApplicationListInfoDto(applications.getTotalPages(), applications.getTotalElements()),
+                applicationListToApplicationsDtoList(applications.toList())
         );
     }
 
@@ -303,10 +303,10 @@ public interface ApplicationMapper {
 
     List<SearchApplicationResDto> applicationsToSearchApplicationResDtos(List<Application> applications);
 
-    default SearchApplicationsResDto applicationsToSearchApplicationsResDto(List<Application> applications) {
+    default SearchApplicationsResDto applicationsToSearchApplicationsResDto(Page<Application> applications) {
         return new SearchApplicationsResDto(
-                new ApplicationListInfoDto(applications.size()),
-                applicationsToSearchApplicationResDtos(applications)
+                new ApplicationListInfoDto(applications.getTotalPages(), applications.getTotalElements()),
+                applicationsToSearchApplicationResDtos(applications.getContent())
         );
     }
 }
