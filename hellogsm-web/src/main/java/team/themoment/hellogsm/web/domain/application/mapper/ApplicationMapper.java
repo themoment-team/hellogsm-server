@@ -3,6 +3,7 @@ package team.themoment.hellogsm.web.domain.application.mapper;
 import io.micrometer.common.lang.Nullable;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
@@ -134,9 +135,9 @@ public interface ApplicationMapper {
 
     List<TicketResDto> applicationListToTicketResDtos(List<Application> applicationList);
 
-    default ApplicationListDto createApplicationListDto(List<Application> applications) {
+    default ApplicationListDto createApplicationListDto(Page<Application> applications) {
         return new ApplicationListDto(
-                new ApplicationListInfoDto(applications.size()),
+                new ApplicationListInfoDto(applications.toList().size()),
                 applicationListToApplicationsDtoList(applications)
         );
     }
