@@ -22,7 +22,7 @@ public class SearchApplicationsServiceImpl implements SearchApplicationsService 
     @Override
     public SearchApplicationsResDto execute(Integer page, Integer size, @Nullable SearchTag tag, @Nullable String keyword) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        return ApplicationMapper.INSTANCE.applicationsToSearchApplicationsResDto(applicationPage(tag, keyword, pageable).getContent());
+        return ApplicationMapper.INSTANCE.applicationsToSearchApplicationsResDto(applicationPage(tag, keyword, pageable));
     }
 
     public Page<Application> applicationPage(SearchTag tag, String keyword, Pageable pageable) {

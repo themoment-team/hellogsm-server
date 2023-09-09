@@ -3,6 +3,7 @@ package team.themoment.hellogsm.web.domain.application.mapper;
 import io.micrometer.common.lang.Nullable;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
@@ -134,10 +135,10 @@ public interface ApplicationMapper {
 
     List<TicketResDto> applicationListToTicketResDtos(List<Application> applicationList);
 
-    default ApplicationListDto createApplicationListDto(List<Application> applicationList) {
+    default ApplicationListDto createApplicationListDto(Page<Application> applications) {
         return new ApplicationListDto(
-                new ApplicationListInfoDto(applicationList.size()),
-                applicationListToApplicationsDtoList(applicationList)
+                new ApplicationListInfoDto(applications.getTotalPages(), applications.getTotalElements()),
+                applicationListToApplicationsDtoList(applications.toList())
         );
     }
 
@@ -302,10 +303,10 @@ public interface ApplicationMapper {
 
     List<SearchApplicationResDto> applicationsToSearchApplicationResDtos(List<Application> applications);
 
-    default SearchApplicationsResDto applicationsToSearchApplicationsResDto(List<Application> applications) {
+    default SearchApplicationsResDto applicationsToSearchApplicationsResDto(Page<Application> applications) {
         return new SearchApplicationsResDto(
-                new ApplicationListInfoDto(applications.size()),
-                applicationsToSearchApplicationResDtos(applications)
+                new ApplicationListInfoDto(applications.getTotalPages(), applications.getTotalElements()),
+                applicationsToSearchApplicationResDtos(applications.getContent())
         );
     }
 }
