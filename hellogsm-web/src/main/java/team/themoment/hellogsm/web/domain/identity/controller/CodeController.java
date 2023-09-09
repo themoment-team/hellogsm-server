@@ -18,6 +18,9 @@ import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
 import team.themoment.hellogsm.web.domain.identity.service.GenerateTestCodeService;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
+/**
+ * 휴대폰 본인인증에 관련된 요청을 처리하는 Controller입니다.
+ */
 @RestController
 @RequestMapping("/identity/v1")
 @RequiredArgsConstructor

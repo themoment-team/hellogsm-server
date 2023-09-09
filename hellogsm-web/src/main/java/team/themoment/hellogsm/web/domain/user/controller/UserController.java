@@ -11,6 +11,9 @@ import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager
 
 import java.util.Map;
 
+/**
+ * 유저와 관련된 요청을 처리하는 Controller입니다.
+ */
 @RestController
 @RequestMapping("/user/v1")
 @RequiredArgsConstructor

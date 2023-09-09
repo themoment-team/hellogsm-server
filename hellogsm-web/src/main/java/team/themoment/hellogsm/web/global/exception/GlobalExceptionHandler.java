@@ -95,6 +95,12 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionResponseEntity(HttpStatus.NOT_FOUND.getReasonPhrase()));
     }
 
+    /**
+     * {@code MaxUploadSizeExceededException}을 처리하는 메소드입니다.
+     *
+     * @param ex MaxUploadSizeExceededException
+     * @return ResponseEntity
+     */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ExceptionResponseEntity> maxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         log.warn("The file is too big : {}", ex.getMessage());
@@ -103,6 +109,12 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionResponseEntity("The file is too big, limited file size : " + ex.getMaxUploadSize()));
     }
 
+    /**
+     * 유효하지 않은 validation 내용을 json으로 변환하여 리턴합니다.
+     *
+     * @param ex {@code MethodArgumentNotValidException} - 유효성 검사 예외 객체
+     * @return json으로 변환된 문자열
+     */
     private static String methodArgumentNotValidExceptionToJson(MethodArgumentNotValidException ex) {
         Map<String, Object> globalResults = new HashMap<>();
         Map<String, String> fieldResults = new HashMap<>();

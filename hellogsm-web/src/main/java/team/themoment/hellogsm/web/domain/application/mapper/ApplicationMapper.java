@@ -25,6 +25,9 @@ import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 
 import java.util.List;
 
+/**
+ * {@link Application}과 관련된 객체를 Mapping하는 역할의 객체입니다.
+ */
 @Mapper(
         componentModel = "spring",
         unmappedSourcePolicy = ReportingPolicy.ERROR,
