@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.identity.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 @Transactional(rollbackFor = {Exception.class})
 public class ModifyIdentityServiceImpl implements ModifyIdentityService {

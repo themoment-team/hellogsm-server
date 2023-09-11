@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.identity.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
  * CreateIdentityService의 기본 구현체입니다.
  */
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 @Transactional(rollbackFor = {Exception.class})
 public class CreateIdentityServiceImpl implements CreateIdentityService {

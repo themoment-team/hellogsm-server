@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepo
 import team.themoment.hellogsm.web.domain.application.service.ApplicationListQuery;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class ApplicationListQueryImpl implements ApplicationListQuery {
     final ApplicationRepository applicationRepository;

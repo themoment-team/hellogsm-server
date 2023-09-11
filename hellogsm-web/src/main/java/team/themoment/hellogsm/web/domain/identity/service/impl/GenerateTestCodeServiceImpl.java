@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.identity.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class GenerateTestCodeServiceImpl implements GenerateTestCodeService {
     private final static Random RANDOM = new Random();

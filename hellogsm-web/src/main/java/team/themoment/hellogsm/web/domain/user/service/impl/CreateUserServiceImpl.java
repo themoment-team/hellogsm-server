@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.user.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import team.themoment.hellogsm.web.domain.user.service.CreateUserService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 @Transactional(rollbackFor = {Exception.class})
 public class CreateUserServiceImpl implements CreateUserService {

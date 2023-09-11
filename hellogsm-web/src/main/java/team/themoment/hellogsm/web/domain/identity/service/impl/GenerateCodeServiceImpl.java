@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.identity.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import team.themoment.hellogsm.web.domain.identity.service.GenerateCodeService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class GenerateCodeServiceImpl implements GenerateCodeService {
 

@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import io.awspring.cloud.sns.sms.SmsMessageAttributes;
 import io.awspring.cloud.sns.sms.SmsType;
 import io.awspring.cloud.sns.sms.SnsSmsTemplate;
@@ -10,6 +11,7 @@ import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.SendSmsServ
 import team.themoment.hellogsm.web.global.thirdParty.aws.service.template.AwsTemplate;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 @Slf4j
 public class SendSmsServiceImpl implements SendSmsService {
