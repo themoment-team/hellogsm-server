@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class ImageUploadServiceImpl implements ImageUploadService {
     private final S3Template s3Template;

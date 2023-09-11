@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import team.themoment.hellogsm.web.domain.application.service.QuerySingleApplica
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class QuerySingleApplicationServiceImpl implements QuerySingleApplicationService {
     final private ApplicationRepository applicationRepository;

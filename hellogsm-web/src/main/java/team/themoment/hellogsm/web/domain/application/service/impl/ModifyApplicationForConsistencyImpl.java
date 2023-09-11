@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
@@ -12,6 +13,7 @@ import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationF
 import java.util.Optional;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class ModifyApplicationForConsistencyImpl implements ModifyApplicationForConsistency {
     private final ApplicationRepository applicationRepository;

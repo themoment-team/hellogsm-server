@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.identity.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
  * IdentityQuery의 기본 구현체입니다.
  */
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class IdentityQueryImpl implements IdentityQuery {
 

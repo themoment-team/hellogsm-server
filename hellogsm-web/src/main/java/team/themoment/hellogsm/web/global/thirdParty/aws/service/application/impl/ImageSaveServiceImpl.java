@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.global.thirdParty.aws.service.application.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.ImageUpload
 import java.util.Objects;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class ImageSaveServiceImpl implements ImageSaveService {
     private final ImageUploadService imageUploadService;
