@@ -11,6 +11,7 @@ import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.domain.user.service.UserByProviderQuery;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
+@Service
 @XRayEnabled
 @RequiredArgsConstructor
 public class UserByProviderQueryImpl implements UserByProviderQuery {
