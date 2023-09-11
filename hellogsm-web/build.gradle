@@ -57,6 +57,7 @@ dependencies {
 
     /** production **/
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'ca.pjer:logback-awslogs-appender:1.6.0'
 }
 
 task restDocsTest(type: Test) {
