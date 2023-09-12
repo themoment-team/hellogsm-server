@@ -8,7 +8,7 @@
     <springProperty name="AWS_SECRET_KEY" source="spring.cloud.aws.credentials.secret-key"/>
 
     <!--로그 파일 저장 위치-->
-    <property name="LOG_PATH" value="./logs"/>
+    <property name="LOG_PATH" value="/var/log/hellogsm"/>
     <property name="LOG_NAME" value="hellolog"/>
 
     <!--로그 콘솔 출력-->
