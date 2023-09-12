@@ -53,8 +53,7 @@
         <!--로그 AWS CloudWatch로 등록-->
         <appender name="CLOUD-WATCH" class="ca.pjer.logback.AwsLogsAppender">
             <layout>
-                <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %X{AWS-XRAY-TRACE-ID} %level [%thread] %logger{35} : %msg%n
-                </pattern>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
             </layout>
             <logGroupName>hello-dev-test</logGroupName>
             <logStreamUuidPrefix>hello-log-</logStreamUuidPrefix>
