@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.repository;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,7 @@ import java.util.Optional;
 /**
  * application을 위한 repository 입니다
  */
+@XRayEnabled
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     Optional<Application> findByUserId(Long userId);
     Boolean existsByUserId(Long userId);
