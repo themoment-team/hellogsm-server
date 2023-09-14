@@ -4,7 +4,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!--로그 파일 저장 위치-->
-    <property name="LOG_PATH" value="./log/hellogsm/batch"/>
+    <property name="LOG_PATH" value="/var/log/hellogsm/batch"/>
     <property name="LOG_NAME" value="log"/>
 
     <!--로그 콘솔 출력-->
