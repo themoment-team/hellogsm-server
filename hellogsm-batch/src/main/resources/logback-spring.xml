@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<configuration scan="true" scanPeriod="3 seconds"> <!-- 30초 간격으로 SCAN -->
+<configuration scan="true" scanPeriod="30 seconds"> <!-- 30초 간격으로 SCAN -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!--로그 파일 저장 위치-->
-    <property name="LOG_PATH" value="/var/log/hellogsm/batch"/>
+    <property name="LOG_PATH" value="./log/hellogsm/batch"/>
     <property name="LOG_NAME" value="log"/>
 
     <!--로그 콘솔 출력-->
-    <springProfile name="test | dev | prod">
+    <springProfile name="local | dev | prod">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN}</pattern>
@@ -28,7 +28,7 @@
     </springProfile>
 
 
-    <springProfile name="test | dev | prod">
+    <springProfile name="local | dev | prod">
 
         <!--로그 파일 저장, 혹시 모를 Backup 용 -->
         <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -43,7 +43,7 @@
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <fileNamePattern>${LOG_PATH}/backup/${LOG_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                    <maxFileSize>1MB</maxFileSize>
+                    <maxFileSize>10MB</maxFileSize>
                 </timeBasedFileNamingAndTriggeringPolicy>
                 <maxHistory>365</maxHistory>
                 <totalSizeCap>10GB</totalSizeCap>
@@ -59,7 +59,7 @@
                 <charset>${FILE_LOG_CHARSET}</charset>
             </encoder>
             <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-                <maxFileSize>1KB</maxFileSize> <!-- 각 파일의 최대 크기 -->
+                <maxFileSize>10MB</maxFileSize> <!-- 각 파일의 최대 크기 -->
             </triggeringPolicy>
             <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
                 <fileNamePattern>${LOG_PATH}/cloudwatch/${LOG_NAME}.%i.log</fileNamePattern>
