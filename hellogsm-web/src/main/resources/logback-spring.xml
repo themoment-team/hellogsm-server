@@ -2,11 +2,7 @@
 
 <configuration scan="true" scanPeriod="30 seconds"> <!-- 30초 간격으로 SCAN -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-
-    <!--Spring 환경변수 불러오기-->
-    <springProperty name="AWS_ACCESS_KEY" source="spring.cloud.aws.credentials.access-key"/>
-    <springProperty name="AWS_SECRET_KEY" source="spring.cloud.aws.credentials.secret-key"/>
-
+    
     <!--로그 파일 저장 위치-->
     <property name="LOG_PATH" value="/var/log/hellogsm/web"/>
     <property name="LOG_NAME" value="log"/>
