@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.identity.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class CascadeDeleteIdentityServiceImpl implements CascadeDeleteIdentityService {
     private final IdentityRepository identityRepository;

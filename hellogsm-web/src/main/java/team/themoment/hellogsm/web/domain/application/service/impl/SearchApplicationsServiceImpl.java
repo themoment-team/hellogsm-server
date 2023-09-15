@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepo
 import team.themoment.hellogsm.web.domain.application.service.SearchApplicationsService;
 
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class SearchApplicationsServiceImpl implements SearchApplicationsService {
     final ApplicationRepository applicationRepository;

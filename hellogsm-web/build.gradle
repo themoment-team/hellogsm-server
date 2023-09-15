@@ -19,6 +19,12 @@ configurations {
     asciidoctorExt
 }
 
+dependencyManagement {
+    imports {
+        mavenBom ('com.amazonaws:aws-xray-recorder-sdk-bom:2.14.0')
+    }
+}
+
 dependencies {
     /** entity **/
     implementation project(':hellogsm-entity')
@@ -57,7 +63,7 @@ dependencies {
 
     /** production **/
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'ca.pjer:logback-awslogs-appender:1.6.0'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-spring'
 }
 
 task restDocsTest(type: Test) {

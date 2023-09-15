@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.global.security.oauth;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import team.themoment.hellogsm.entity.domain.user.entity.User;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@XRayEnabled
 public class CustomOauth2UserService implements OAuth2UserService {
 
     private final OAuth2UserService<OAuth2UserRequest, OAuth2User> delegateOauth2UserService;

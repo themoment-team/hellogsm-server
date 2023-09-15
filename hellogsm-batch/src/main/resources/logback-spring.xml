@@ -2,9 +2,9 @@
 
 <configuration scan="true" scanPeriod="30 seconds"> <!-- 30초 간격으로 SCAN -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    
+
     <!--로그 파일 저장 위치-->
-    <property name="LOG_PATH" value="/var/log/hellogsm/web"/>
+    <property name="LOG_PATH" value="/var/log/hellogsm/batch"/>
     <property name="LOG_NAME" value="log"/>
 
     <!--로그 콘솔 출력-->
@@ -28,7 +28,7 @@
     </springProfile>
 
 
-    <springProfile name="dev | prod">
+    <springProfile name="local | dev | prod">
 
         <!--로그 파일 저장, 혹시 모를 Backup 용 -->
         <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">

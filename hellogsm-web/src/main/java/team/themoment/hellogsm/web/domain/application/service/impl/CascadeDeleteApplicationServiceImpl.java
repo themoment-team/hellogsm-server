@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class CascadeDeleteApplicationServiceImpl implements CascadeDeleteApplicationService {
     private final ApplicationRepository applicationRepository;

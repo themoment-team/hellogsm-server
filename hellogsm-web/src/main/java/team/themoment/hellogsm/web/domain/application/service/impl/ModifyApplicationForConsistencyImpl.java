@@ -1,6 +1,8 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
@@ -11,7 +13,9 @@ import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationF
 
 import java.util.Optional;
 
+@Slf4j
 @Service
+@XRayEnabled
 @RequiredArgsConstructor
 public class ModifyApplicationForConsistencyImpl implements ModifyApplicationForConsistency {
     private final ApplicationRepository applicationRepository;
@@ -33,6 +37,8 @@ public class ModifyApplicationForConsistencyImpl implements ModifyApplicationFor
                             savedApplication.getMiddleSchoolGrade(),
                             savedApplication.getUserId()
                     ));
+        } else {
+            log.warn("Application이 없는 User의 Identity 수정 발생 - User Id: {}", identity.getUserId());
         }
     }
 }
