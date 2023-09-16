@@ -10,6 +10,9 @@ import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepo
 import team.themoment.hellogsm.web.domain.application.service.DeleteApplicationService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
+/**
+ * 현재 사용자의 원서를 삭제하는 service implementation 입니다.
+ */
 @Service
 @XRayEnabled
 @RequiredArgsConstructor
@@ -17,6 +20,15 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 public class DeleteApplicationServiceImpl implements DeleteApplicationService {
     private final ApplicationRepository applicationRepository;
 
+    /**
+     * 매개변수로 요청한 유저의 userId값을 받아 userId에 해당하는 원서를 찾습니다. <br>
+     * 찾은 원서가 최종제출된 원서가 아니라면 삭제합니다.
+     *
+     * @param userId 요청한 유저의 pk값
+     * @throws ExpectedException 발생조건은 아래와 같음 <br>
+     *      1. 원서가 존재하지 않을 경우 <br>
+     *      2. 최종제출이 완료된 원서일 경우 <br>
+     */
     @Override
     public void execute(Long userId) {
         Application application = applicationRepository.findByUserId(userId)
