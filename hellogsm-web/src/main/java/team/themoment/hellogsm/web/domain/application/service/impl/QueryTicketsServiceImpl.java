@@ -12,12 +12,21 @@ import team.themoment.hellogsm.web.domain.application.service.QueryTicketsServic
 
 import java.util.List;
 
+/**
+ * 모든 사용자의 수험표 정보를 조회하는 service implementation 입니다.
+ */
 @Service
 @XRayEnabled
 @RequiredArgsConstructor
 public class QueryTicketsServiceImpl implements QueryTicketsService {
     final private ApplicationRepository applicationRepository;
 
+    /**
+     * 1차 평가를 통과한 사용자의 원서를 찾습니다. <br>
+     * 찾은 원서를 바탕으로 필요한 정보만 추려 수험표 정보를 반환합니다.
+     *
+     * @return {@link TicketResDto} (List)모든 사용자의 수험표 정보
+     */
     @Override
     public List<TicketResDto> execute() {
         List<Application> applicationList =
