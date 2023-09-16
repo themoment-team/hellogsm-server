@@ -31,8 +31,8 @@ public class ModifyApplicationServiceImpl implements ModifyApplicationService {
      * 매개변수로 수정할 원서 정보와 요청한 유저의 Id값을 받아 userId값으로 원서와 본인인증 정보를 찾습니다. <br>
      * 찾은 원서와 본인인증 정보를 바탕으로 새로운 원서 객체를 생성하여 저장합니다.
      *
-     * @param body
-     * @param userId
+     * @param body 수정할 원서 정보
+     * @param userId 요청한 유저의 pk값
      * @throws ExpectedException 발생조건은 아래와 같음 <br>
      *      1. 존재하지 않는 유저일 경우 <br>
      *      2. 원서가 존재하지 않을 경우 <br>
