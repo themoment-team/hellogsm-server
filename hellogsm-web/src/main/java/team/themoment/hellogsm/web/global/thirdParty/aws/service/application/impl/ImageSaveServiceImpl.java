@@ -21,7 +21,7 @@ public class ImageSaveServiceImpl implements ImageSaveService {
     private final ImageUploadService imageUploadService;
 
     /**
-     * 매개변수로 이미지 파일을 받아 저장 후 이미지 url을 반환해 줍니다.
+     * 이미지를 저장하고 이미지url을 반환합니다.
      *
      * @param multipartFile 이미지 파일
      * @return 이미지 url

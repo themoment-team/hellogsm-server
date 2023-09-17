@@ -22,8 +22,7 @@ public class FinalSubmissionServiceImpl implements FinalSubmissionService {
     private final ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 요청한 유저의 userId값을 받아 userId에 해당하는 원서를 찾습니다. <br>
-     * 찾은 원서의 최종제출 여부를 수정하고 새로운 원서 객체를 만들어 저장합니다.
+     * 원서를 찾고 해당 원서의 최종제출 여부를 수정합니다.
      *
      * @param userId 요청한 유저의 pk값
      * @throws ExpectedException 발생조건은 아래와 같음 <br>

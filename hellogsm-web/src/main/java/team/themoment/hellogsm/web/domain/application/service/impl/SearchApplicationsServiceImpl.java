@@ -25,8 +25,7 @@ public class SearchApplicationsServiceImpl implements SearchApplicationsService 
     final ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 page, size, tag, keyword를 받아 최종제출된 원서들중 tag, keyword에 해당하는 원서들을 찾습니다. <br>
-     * 찾은 원서 내용을 페이지 정보와 필요한 정보들로만 다듬어 반환합니다.
+     * tag와 keyword로 원서들을 찾고 해당 원서 정보를 가공하여 반환합니다.
      *
      * @param page 몇번째 페이지를 조회할 것인지 결정합니다. 첫번째 페이지의 인덱스는 0입니다.
      * @param size 한 페이지에 몇개의 원서를 담을 것인지 결정합니다.

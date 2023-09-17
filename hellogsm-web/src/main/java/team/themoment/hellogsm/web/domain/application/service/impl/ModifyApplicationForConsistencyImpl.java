@@ -24,9 +24,8 @@ public class ModifyApplicationForConsistencyImpl implements ModifyApplicationFor
     private final ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 수정된 본인인증 정보를 받아 해당 본인인증 정보의 userId로 원서를 찾습니다. <br>
-     * 원서를 찾았다면 기존 원서와 수정된 본인인증 정보를 바탕으로 새로운 원서 객체를 하고 저장합니다. <br>
-     * 본인인증 정보의 userId에 해당하는 원서가 존재하지 않는다면 warn수준의 log를 찍습니다.
+     * 수정된 본인인증 정보를 바탕으로 원서를 수정합니다. <br>
+     * 원서가 존재하지 않는 요청은 무시합니다.
      *
      * @param identity 수정 된 본인인증 정보
      */

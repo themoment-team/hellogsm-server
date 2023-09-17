@@ -24,8 +24,7 @@ public class ModifyApplicationStatusServiceImpl implements ModifyApplicationStat
     final private ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 변경될 유저의 pk값과 변경할 원서상태 정보를 받아 userId로 원서를 찾습니다. <br>
-     * 찾은 원서와 변경할 원서상태 정보를 바탕으로 새로운 원서 객체를 생성하여 저장합니다.
+     * 원서를 찾고 해당 원서와 원서상태 정보를 바탕으로 원서의 입학 현황을 수정합니다.
      *
      * @param userId 변경될 유저의 pk값
      * @param applicationStatusReqDto 변경할 원서상태 정보

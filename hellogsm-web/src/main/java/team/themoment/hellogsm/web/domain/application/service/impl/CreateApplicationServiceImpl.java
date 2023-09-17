@@ -28,8 +28,7 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private final ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 원서에 작성할 정보, userId를 받아 해당 userId의 본인인증 정보를 찾습니다. <br>
-     * 찾은 본인인증 정보와 원서에 작성할 정보를 바탕으로 원서를 생성하고 DB에 저장합니다.
+     * 본인인증 정보와 원서에 작성할 정보를 바탕으로 원서를 생성합니다.
      *
      * @param body 원서에 작성할 정보
      * @param userId 요청한 유저의 pk값

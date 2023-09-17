@@ -23,7 +23,7 @@ public class ApplicationListQueryImpl implements ApplicationListQuery {
     final ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 page, size를 받아 그 값을 기준으로 원서들을 paging하여 반환해주는 메서드입니다.
+     * 원서들을 pagination하여 반환해줍니다.
      *
      * @param page 몇번째 페이지를 조회할 것인지 결정합니다. 첫번째 페이지의 인덱스는 0입니다.
      * @param size 한 페이지에 몇개의 원서를 담을 것인지 결정합니다.

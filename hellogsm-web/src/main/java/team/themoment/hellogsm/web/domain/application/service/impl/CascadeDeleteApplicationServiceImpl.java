@@ -22,9 +22,8 @@ public class CascadeDeleteApplicationServiceImpl implements CascadeDeleteApplica
     private final ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 userId를 받아 해당 userId가 작성한 원서를 찾습니다. <br>
-     * 찾은 원서가 최종제출된 원서가 아니라면 찾은 원서를 삭제합니다. <br>
-     * 최종제출된 혹은 존재하지 않는 원서에 대한 삭제 요청이 발생할시 warn수준의 log를 찍습니다.
+     * 원서를 찾고 해당 원서가 최종제출되지 않았다면 삭제합니다. <br>
+     * 최종제출된 혹은 존재하지 않는 원서에 대한 요청은 무시됩니다.
      *
      * @param userId user의 pk값
      */

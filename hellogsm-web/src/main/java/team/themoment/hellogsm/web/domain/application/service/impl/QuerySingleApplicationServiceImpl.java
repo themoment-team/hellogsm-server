@@ -21,8 +21,7 @@ public class QuerySingleApplicationServiceImpl implements QuerySingleApplication
     final private ApplicationRepository applicationRepository;
 
     /**
-     * 매개변수로 userId를 받아 userId에 해당하는 원서를 찾습니다. <br>
-     * 찾은 원서를 바탕으로 단일 원서 정보를 반환합니다.
+     * 원서를 찾고 해당 원서 정보를 가공하여 반환합니다.
      *
      * @param userId 사용자의 pk값
      * @return {@link SingleApplicationRes} 단일 원서 정보

@@ -22,8 +22,7 @@ public class QueryTicketsServiceImpl implements QueryTicketsService {
     final private ApplicationRepository applicationRepository;
 
     /**
-     * 1차 평가를 통과한 사용자의 원서를 찾습니다. <br>
-     * 찾은 원서를 바탕으로 필요한 정보만 추려 수험표 정보를 반환합니다.
+     * 1차 평가를 통과한 사용자의 원서를 찾고 해당 원서 정보를 가공하여 수험표 정보를 반환합니다.
      *
      * @return {@link TicketResDto} (List)모든 사용자의 수험표 정보
      */
