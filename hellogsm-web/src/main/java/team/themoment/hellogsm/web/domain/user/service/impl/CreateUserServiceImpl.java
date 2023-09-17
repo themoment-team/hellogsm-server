@@ -27,7 +27,7 @@ public class CreateUserServiceImpl implements CreateUserService {
      * createUserReqDto를 인자로 받아서 user를 생성하고,
      * 생성한 user 정보를 담은 DTO를 반환합니다.
      *
-     * @param createUserReqDto 생설할 user 정보가 담긴 DTO
+     * @param createUserReqDto 생성할 user 정보가 담긴 DTO
      * @return 생성된 user 정보를 담은 DTO
      */
     @Override
