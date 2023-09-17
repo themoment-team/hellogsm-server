@@ -14,7 +14,7 @@ import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationF
 import java.util.Optional;
 
 /**
- * Identity 수정 시 원서를 수정하는 service implementation 입니다.
+ * 본인인증 정보 수정 시 원서를 수정하는 service implementation 입니다.
  */
 @Slf4j
 @Service
