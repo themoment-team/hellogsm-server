@@ -24,8 +24,8 @@ public class UserByProviderQueryImpl implements UserByProviderQuery {
      * provider와 providerId를 인자로 받아서 user를 찾아오고,
      * 찾아온 user 정보가 담긴 DTO를 반환합니다.
      *
-     * @param provider 찾아올 user에 대한 provider
-     * @param providerId 찾아올 user에 대한 providerId
+     * @param provider 찾아올 user에 대한 provider(oauth 공급자)
+     * @param providerId 찾아올 user에 대한 providerId(oauth 공급자를 식별하는 고유 식별자)
      * @return 찾아온 user 정보가 담긴 DTO
      * @throws ExpectedException user가 존재하지 않을 경우 발생
      */
