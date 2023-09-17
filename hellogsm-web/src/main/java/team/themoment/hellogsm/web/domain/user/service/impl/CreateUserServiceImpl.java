@@ -38,8 +38,7 @@ public class CreateUserServiceImpl implements CreateUserService {
     }
 
     /**
-     * createUserReqDto를 인자로 받아서 user 유뮤를 판별하고,
-     * 이미 존재하는 user일 경우 예외를 발생
+     * createUserReqDto를 인자로 받아서 user 유무를 판별합니다.
      *
      * @param createUserReqDto 생성할 user 정보가 담긴 DTO
      * @throws ExpectedException 이미 존재하는 user 일때 발생
