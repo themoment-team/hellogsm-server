@@ -12,7 +12,7 @@ import team.themoment.hellogsm.web.domain.application.service.CascadeDeleteAppli
 import java.util.Optional;
 
 /**
- * 유저 탈퇴시 호출되는 원서 삭제 service implementation 입니다.
+ * 유저 탈퇴 시 호출되는 원서 삭제 service implementation 입니다.
  */
 @Slf4j
 @Service
