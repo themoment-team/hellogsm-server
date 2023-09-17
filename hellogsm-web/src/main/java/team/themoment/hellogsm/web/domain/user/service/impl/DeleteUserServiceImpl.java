@@ -12,6 +12,9 @@ import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.domain.user.service.DeleteUserService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
+/**
+ * DeleteUserService의 구현체입니다.
+ */
 @Service
 @XRayEnabled
 @RequiredArgsConstructor
@@ -20,6 +23,13 @@ public class DeleteUserServiceImpl implements DeleteUserService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    /**
+     * user를 삭제합니다.
+     *
+     * @param userId 삭제할 user에 대한 userId
+     * @throws ExpectedException user가 존재하지 않을 경우 발생
+     * @see DeleteUserEvent user 삭제를 리스너에게 알리기 위해 사용
+     */
     @Override
     public void execute(Long userId) {
         final User user = userRepository.findById(userId)
