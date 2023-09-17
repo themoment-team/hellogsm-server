@@ -16,7 +16,7 @@ public class ExistUserQueryImpl implements ExistUserQuery {
     private final UserRepository userRepository;
 
     /**
-     * provider와 providerId를 인자로 받아서 유저 유무를 판별합니다.
+     * user의 유무를 판별합니다.
      *
      * @param provider user의 유무를 판별할 provider(oauth 공급자)
      * @param providerId user의 유무를 판별할 providerId(oauth 공급자를 식별하는 고유 식별자)

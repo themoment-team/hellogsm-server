@@ -24,7 +24,7 @@ public class DeleteUserServiceImpl implements DeleteUserService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
-     * userId를 인자로 받아서 user를 삭제합니다.
+     * user를 삭제합니다.
      *
      * @param userId 삭제할 user에 대한 userId
      * @throws ExpectedException user가 존재하지 않을 경우 발생

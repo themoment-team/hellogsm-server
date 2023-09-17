@@ -24,8 +24,7 @@ public class CreateUserServiceImpl implements CreateUserService {
     private final UserRepository userRepository;
 
     /**
-     * createUserReqDto를 인자로 받아서 user를 생성하고,
-     * 생성한 user 정보를 담은 DTO를 반환합니다.
+     * user를 생성합니다.
      *
      * @param createUserReqDto 생성할 user 정보가 담긴 DTO
      * @return 생성된 user 정보를 담은 DTO
@@ -38,7 +37,7 @@ public class CreateUserServiceImpl implements CreateUserService {
     }
 
     /**
-     * createUserReqDto를 인자로 받아서 user 유무를 판별합니다.
+     * user의 유무를 판별합니다.
      *
      * @param createUserReqDto 생성할 user 정보가 담긴 DTO
      * @throws ExpectedException 이미 존재하는 user 일때 발생

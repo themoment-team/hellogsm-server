@@ -21,8 +21,7 @@ public class UserByIdQueryImpl implements UserByIdQuery {
     private final UserRepository userRepository;
 
     /**
-     * userId를 인자로 받아서 user를 찾아오고,
-     * 찾아온 user 정보가 담긴 DTO를 반환합니다.
+     * user를 찾아서 가져옵니다.
      *
      * @param userId 찾아올 user에 대한 userId
      * @return 찾아온 user 정보가 담긴 DTO
