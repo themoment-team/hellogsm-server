@@ -13,6 +13,9 @@ import team.themoment.hellogsm.web.domain.application.service.ModifyApplicationF
 
 import java.util.Optional;
 
+/**
+ * 본인인증 정보 수정 시 원서를 수정하는 service implementation 입니다.
+ */
 @Slf4j
 @Service
 @XRayEnabled
@@ -20,6 +23,12 @@ import java.util.Optional;
 public class ModifyApplicationForConsistencyImpl implements ModifyApplicationForConsistency {
     private final ApplicationRepository applicationRepository;
 
+    /**
+     * 수정된 본인인증 정보를 바탕으로 원서를 수정합니다. <br>
+     * 원서가 존재하지 않는 요청은 무시합니다.
+     *
+     * @param identity 수정 된 본인인증 정보
+     */
     @Override
     public void execute(Identity identity) {
         Optional<Application> savedApplicationOpt = applicationRepository.findByUserId(identity.getUserId());

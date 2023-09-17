@@ -17,7 +17,7 @@ import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 /**
- * 원서 생성을 위한 service interface 입니다
+ * 원서를 생성하는 service implementation 입니다.
  */
 @Service
 @XRayEnabled
@@ -27,6 +27,16 @@ public class CreateApplicationServiceImpl implements CreateApplicationService {
     private final IdentityRepository identityRepository;
     private final ApplicationRepository applicationRepository;
 
+    /**
+     * 본인인증 정보와 원서에 작성할 정보를 바탕으로 원서를 생성합니다.
+     *
+     * @param body 원서에 작성할 정보
+     * @param userId 요청한 유저의 pk값
+     * @throws ExpectedException 발생조건은 아래와 같음 <br>
+     *      1. 존재하지 않는 유저일 경우 <br>
+     *      2. 원서가 이미 존재할 경우 <br>
+     *      3. 본인인증이 되지 않은 유저일경우 <br>
+     */
     @Override
     public void execute(ApplicationReqDto body, Long userId) {
         if (!userRepository.existsById(userId))

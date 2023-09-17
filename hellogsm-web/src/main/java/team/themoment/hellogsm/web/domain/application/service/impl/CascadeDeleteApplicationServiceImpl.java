@@ -11,6 +11,9 @@ import team.themoment.hellogsm.web.domain.application.service.CascadeDeleteAppli
 
 import java.util.Optional;
 
+/**
+ * 유저 탈퇴 시 호출되는 원서 삭제 service implementation 입니다.
+ */
 @Slf4j
 @Service
 @XRayEnabled
@@ -18,6 +21,12 @@ import java.util.Optional;
 public class CascadeDeleteApplicationServiceImpl implements CascadeDeleteApplicationService {
     private final ApplicationRepository applicationRepository;
 
+    /**
+     * 원서를 찾고 해당 원서가 최종제출되지 않았다면 삭제합니다. <br>
+     * 최종제출된 혹은 존재하지 않는 원서에 대한 요청은 무시됩니다.
+     *
+     * @param userId user의 pk값
+     */
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void execute(Long userId) {

@@ -11,12 +11,24 @@ import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.ImageUpload
 
 import java.util.Objects;
 
+/**
+ * 이미지를 저장하는 service implementation 입니다.
+ */
 @Service
 @XRayEnabled
 @RequiredArgsConstructor
 public class ImageSaveServiceImpl implements ImageSaveService {
     private final ImageUploadService imageUploadService;
 
+    /**
+     * 이미지를 저장하고 이미지url을 반환합니다.
+     *
+     * @param multipartFile 이미지 파일
+     * @return 이미지 url
+     * @throws ExpectedException 발생조건은 아래와 같음 <br>
+     *      1. 파일이 존재하지 않을 경우 <br>
+     *      2. 파일 형식이 올바르지 않을 경우 <br>
+     */
     @Override
     public String execute(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) throw new ExpectedException("파일이 존재하지 않습니다", HttpStatus.BAD_REQUEST);
