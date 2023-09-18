@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateApplicationServiceImplTest {
@@ -58,14 +59,7 @@ public class CreateApplicationServiceImplTest {
            "GENERAL"
     );
 
-    private final Identity identity = new Identity(
-            1L,
-            "차무식",
-            "01012345678",
-            LocalDate.EPOCH,
-            Gender.MALE,
-            1L
-    );
+    private final Identity identity = mock(Identity.class);
 
     private void verifyExistence() {
         given(applicationRepository.existsByUserId(any(Long.class))).willReturn(false);
@@ -76,7 +70,7 @@ public class CreateApplicationServiceImplTest {
     public void 성공() {
         // given
         verifyExistence();
-        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
+        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(identity));
 
         // when & then
         assertDoesNotThrow(() -> createApplicationService.execute(applicationReqDto, 1L));
