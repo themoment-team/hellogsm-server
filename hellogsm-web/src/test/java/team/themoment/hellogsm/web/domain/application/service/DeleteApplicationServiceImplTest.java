@@ -47,12 +47,7 @@ public class DeleteApplicationServiceImplTest {
         given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
 
         //when & then
-        ExpectedException exception = assertThrows(ExpectedException.class, () ->
-                deleteApplicationService.execute(1L));
-
-        String expectedMessage = "원서가 존재하지 않습니다";
-
-        assertEquals(expectedMessage, exception.getMessage());
+        assertExpectedExceptionWithMessage("원서가 존재하지 않습니다");
     }
 
     @Test
@@ -63,10 +58,12 @@ public class DeleteApplicationServiceImplTest {
         given(application.getAdmissionStatus().isFinalSubmitted()).willReturn(true);
 
         //when & then
+        assertExpectedExceptionWithMessage("최종제출이 완료된 원서입니다");
+    }
+
+    private void assertExpectedExceptionWithMessage(String expectedMessage) {
         ExpectedException exception = assertThrows(ExpectedException.class, () ->
                 deleteApplicationService.execute(1L));
-
-        String expectedMessage = "최종제출이 완료된 원서입니다";
 
         assertEquals(expectedMessage, exception.getMessage());
     }
