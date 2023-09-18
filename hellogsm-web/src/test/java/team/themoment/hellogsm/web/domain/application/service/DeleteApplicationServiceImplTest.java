@@ -55,4 +55,20 @@ public class DeleteApplicationServiceImplTest {
         assertEquals(expectedMessage, exception.getMessage());
     }
 
+    @Test
+    public void 최종제출_완료된_Application() {
+        // given
+        given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(application));
+        given(application.getAdmissionStatus()).willReturn(admissionStatus);
+        given(application.getAdmissionStatus().isFinalSubmitted()).willReturn(true);
+
+        //when & then
+        ExpectedException exception = assertThrows(ExpectedException.class, () ->
+                deleteApplicationService.execute(1L));
+
+        String expectedMessage = "최종제출이 완료된 원서입니다";
+
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
 }
