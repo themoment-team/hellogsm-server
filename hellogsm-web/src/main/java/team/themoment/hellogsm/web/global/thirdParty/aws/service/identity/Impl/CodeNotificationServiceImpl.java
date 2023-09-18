@@ -18,7 +18,7 @@ public class CodeNotificationServiceImpl implements CodeNotificationService {
     /**
      * 코드를 전송합니다.
      *
-     * @param phoneNumber 전송할 핸드폰 번호
+     * @param phoneNumber 전송하는 핸드폰 번호
      * @param code        전송할 코드
      * @see SendSmsService 메세지를 보내는 서비스입니다.
      */

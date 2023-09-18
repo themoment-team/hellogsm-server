@@ -27,7 +27,7 @@ public class SendSmsServiceImpl implements SendSmsService {
     /**
      * 메세지를 전송합니다.
      *
-     * @param phoneNumber 전송할 핸드폰 번호
+     * @param phoneNumber 전송하는 핸드폰 번호
      * @param message     전송할 메세지
      */
     @Override
@@ -49,7 +49,7 @@ public class SendSmsServiceImpl implements SendSmsService {
     /**
      * 국가를 식별할 수 있는 phoneNumber를 생성합니다.
      *
-     * @param phoneNumber 전송할 핸드폰 번호
+     * @param phoneNumber 전송하는 핸드폰 번호
      * @return 대한민국의 국제 전화 코드와 phoneNumber를 조합한 문자열을 반환합니다.
      */
     private static String createPhoneNumber(String phoneNumber) {
