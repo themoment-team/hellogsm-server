@@ -33,8 +33,7 @@ public class DeleteApplicationServiceImplTest {
     @Test
     public void 성공() {
         // given
-        given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(application));
-        given(application.getAdmissionStatus()).willReturn(admissionStatus);
+        givenApplicationAndAdmissionStatus();
         given(application.getAdmissionStatus().isFinalSubmitted()).willReturn(false);
 
         // when & then
@@ -53,12 +52,16 @@ public class DeleteApplicationServiceImplTest {
     @Test
     public void 최종제출_완료된_Application() {
         // given
-        given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(application));
-        given(application.getAdmissionStatus()).willReturn(admissionStatus);
+        givenApplicationAndAdmissionStatus();
         given(application.getAdmissionStatus().isFinalSubmitted()).willReturn(true);
 
         //when & then
         assertExpectedExceptionWithMessage("최종제출이 완료된 원서입니다");
+    }
+
+    private void givenApplicationAndAdmissionStatus() {
+        given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(application));
+        given(application.getAdmissionStatus()).willReturn(admissionStatus);
     }
 
     private void assertExpectedExceptionWithMessage(String expectedMessage) {
