@@ -9,10 +9,11 @@ import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.impl.DeleteApplicationServiceImpl;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -38,6 +39,20 @@ public class DeleteApplicationServiceImplTest {
 
         // when & then
         assertDoesNotThrow(() -> deleteApplicationService.execute(1L));
+    }
+
+    @Test
+    public void 존재하지_않는_Application() {
+        // given
+        given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
+
+        //when & then
+        ExpectedException exception = assertThrows(ExpectedException.class, () ->
+                deleteApplicationService.execute(1L));
+
+        String expectedMessage = "원서가 존재하지 않습니다";
+
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
 }
