@@ -101,14 +101,14 @@ public class CreateApplicationServiceImplTest {
         verifyExistence();
         given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
 
-        // when & then
+        // when & thenㅍ
         assertExpectedExceptionWithMessage("Identity가 존재하지 않습니다");
     }
 
     private void assertExpectedExceptionWithMessage(String expectedMessage) {
         ExpectedException exception = assertThrows(ExpectedException.class, () ->
                 createApplicationService.execute(applicationReqDto, 1L));
-
+      
         assertEquals(expectedMessage, exception.getMessage());
     }
 }
