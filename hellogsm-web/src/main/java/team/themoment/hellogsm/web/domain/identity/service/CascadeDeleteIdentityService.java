@@ -4,7 +4,6 @@ package team.themoment.hellogsm.web.domain.identity.service;
  * Identity를 삭제하는 인터페이스입니다.
  */
 public interface CascadeDeleteIdentityService {
-
     /**
      * identity를 삭제합니다.
      *

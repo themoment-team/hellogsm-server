@@ -1,9 +1,11 @@
 package team.themoment.hellogsm.web.domain.identity.service;
 
+import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
 import team.themoment.hellogsm.web.domain.identity.dto.request.GenerateCodeReqDto;
 
 /**
  * code를 생성하는 인터페이스입니다.
+ * @see AuthenticationCode
  */
 public interface GenerateCodeService {
     /**
