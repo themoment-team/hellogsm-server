@@ -14,11 +14,12 @@ import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepo
 import team.themoment.hellogsm.web.domain.application.service.impl.CreateApplicationServiceImpl;
 import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -83,5 +84,19 @@ public class CreateApplicationServiceImplTest {
 
         // when & then
         assertDoesNotThrow(() -> createApplicationService.execute(applicationReqDto, 1L));
+    }
+
+    @Test
+    public void 존재하지_않는_User() {
+        // given
+        given(userRepository.existsById(any(Long.class))).willReturn(false);
+
+        // when & then
+        ExpectedException exception = assertThrows(ExpectedException.class, () ->
+                createApplicationService.execute(applicationReqDto, 1L));
+
+        String expectedMessage = "존재하지 않는 유저입니다";
+
+        assertEquals(expectedMessage, exception.getMessage());
     }
 }
