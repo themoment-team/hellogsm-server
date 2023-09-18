@@ -41,9 +41,9 @@ public class ModifyIdentityServiceImpl implements ModifyIdentityService {
     /**
      * identity를 수정합니다.
      *
-     * @param reqDto 수정할 Identity 정보가 담긴 DTO
-     * @param userId 수정할 Identity에 대한 User의 userId
-     * @return 수정한 Identity 정보가 담긴 DTO
+     * @param reqDto 수정할 identity 정보가 담긴 DTO
+     * @param userId 수정할 identity에 대한 user의 userId
+     * @return 수정한 identity 정보가 담긴 DTO
      * @throws ExpectedException 발생 조건은 아래와 같음<br/>
      *         1. 존재하지 않는 user <br/>
      *         2. 존재하지 않는 identity<br/>
