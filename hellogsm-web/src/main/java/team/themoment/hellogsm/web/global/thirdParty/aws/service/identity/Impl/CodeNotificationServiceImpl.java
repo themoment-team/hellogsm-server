@@ -20,7 +20,7 @@ public class CodeNotificationServiceImpl implements CodeNotificationService {
      *
      * @param phoneNumber 전송하는 핸드폰 번호
      * @param code        전송할 코드
-     * @see SendSmsService 메세지를 보내는 서비스입니다.
+     * @see SendSmsService
      */
     @Override
     public void execute(String phoneNumber, String code) {

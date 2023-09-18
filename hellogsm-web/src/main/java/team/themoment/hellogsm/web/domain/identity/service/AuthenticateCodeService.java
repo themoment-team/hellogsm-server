@@ -5,7 +5,7 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.AuthenticateCodeR
 
 /**
  * AuthenticationCode를 인증하는 인터페이스입니다.
- * @see AuthenticationCode 참고해주세요.
+ * @see AuthenticationCode
  */
 public interface AuthenticateCodeService {
     /**

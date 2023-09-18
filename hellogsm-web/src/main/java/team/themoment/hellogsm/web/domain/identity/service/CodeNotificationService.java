@@ -4,7 +4,7 @@ import team.themoment.hellogsm.web.domain.identity.domain.AuthenticationCode;
 
 /**
  * code를 전송하는 인터페이스입니다.
- * @see GenerateCodeService code 생성 과정
+ * @see GenerateCodeService
  */
 public interface CodeNotificationService {
     /**
