@@ -99,4 +99,19 @@ public class CreateApplicationServiceImplTest {
 
         assertEquals(expectedMessage, exception.getMessage());
     }
+
+    @Test
+    public void 이미_존재하는_Application() {
+        // given
+        given(userRepository.existsById(any(Long.class))).willReturn(true);
+        given(applicationRepository.existsByUserId(any(Long.class))).willReturn(true);
+
+        // when & then
+        ExpectedException exception = assertThrows(ExpectedException.class, () ->
+                createApplicationService.execute(applicationReqDto, 1L));
+
+        String expectedMessage = "원서가 이미 존재합니다";
+
+        assertEquals(expectedMessage, exception.getMessage());
+    }
 }
