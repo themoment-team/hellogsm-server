@@ -67,10 +67,6 @@ public class CreateApplicationServiceImplTest {
             1L
     );
 
-    private void givenIdentity() {
-        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
-    }
-
     private void verifyExistence() {
         given(applicationRepository.existsByUserId(any(Long.class))).willReturn(false);
         given(userRepository.existsById(any(Long.class))).willReturn(true);
@@ -79,8 +75,8 @@ public class CreateApplicationServiceImplTest {
     @Test
     public void 성공() {
         // given
-        givenIdentity();
         verifyExistence();
+        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
 
         // when & then
         assertDoesNotThrow(() -> createApplicationService.execute(applicationReqDto, 1L));
