@@ -101,7 +101,7 @@ public class CreateApplicationServiceImplTest {
         verifyExistence();
         given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
 
-        // when & thenㅍ
+        // when & then
         assertExpectedExceptionWithMessage("Identity가 존재하지 않습니다");
     }
 
