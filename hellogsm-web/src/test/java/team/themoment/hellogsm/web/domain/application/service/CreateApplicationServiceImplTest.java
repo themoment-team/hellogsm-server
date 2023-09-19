@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateApplicationServiceImplTest {
@@ -58,18 +59,7 @@ public class CreateApplicationServiceImplTest {
            "GENERAL"
     );
 
-    private final Identity identity = new Identity(
-            1L,
-            "차무식",
-            "01012345678",
-            LocalDate.EPOCH,
-            Gender.MALE,
-            1L
-    );
-
-    private void givenIdentity() {
-        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
-    }
+    private final Identity identity = mock(Identity.class);
 
     private void verifyExistence() {
         given(applicationRepository.existsByUserId(any(Long.class))).willReturn(false);
@@ -79,8 +69,8 @@ public class CreateApplicationServiceImplTest {
     @Test
     public void 성공() {
         // given
-        givenIdentity();
         verifyExistence();
+        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(identity));
 
         // when & then
         assertDoesNotThrow(() -> createApplicationService.execute(applicationReqDto, 1L));
@@ -92,12 +82,7 @@ public class CreateApplicationServiceImplTest {
         given(userRepository.existsById(any(Long.class))).willReturn(false);
 
         // when & then
-        ExpectedException exception = assertThrows(ExpectedException.class, () ->
-                createApplicationService.execute(applicationReqDto, 1L));
-
-        String expectedMessage = "존재하지 않는 유저입니다";
-
-        assertEquals(expectedMessage, exception.getMessage());
+        assertExpectedExceptionWithMessage("존재하지 않는 유저입니다");
     }
 
     @Test
@@ -107,12 +92,7 @@ public class CreateApplicationServiceImplTest {
         given(applicationRepository.existsByUserId(any(Long.class))).willReturn(true);
 
         // when & then
-        ExpectedException exception = assertThrows(ExpectedException.class, () ->
-                createApplicationService.execute(applicationReqDto, 1L));
-
-        String expectedMessage = "원서가 이미 존재합니다";
-
-        assertEquals(expectedMessage, exception.getMessage());
+        assertExpectedExceptionWithMessage("원서가 이미 존재합니다");
     }
 
     @Test
@@ -122,11 +102,13 @@ public class CreateApplicationServiceImplTest {
         given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
 
         // when & then
+        assertExpectedExceptionWithMessage("Identity가 존재하지 않습니다");
+    }
+
+    private void assertExpectedExceptionWithMessage(String expectedMessage) {
         ExpectedException exception = assertThrows(ExpectedException.class, () ->
                 createApplicationService.execute(applicationReqDto, 1L));
-
-        String expectedMessage = "Identity가 존재하지 않습니다";
-
+      
         assertEquals(expectedMessage, exception.getMessage());
     }
 }
