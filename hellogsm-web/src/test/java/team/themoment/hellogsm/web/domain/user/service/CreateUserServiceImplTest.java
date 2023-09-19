@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 import team.themoment.hellogsm.entity.domain.user.entity.User;
 import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.user.dto.domain.UserDto;
@@ -30,6 +29,7 @@ public class CreateUserServiceImplTest {
     private UserRepository userRepository;
 
     private final User user = new User(1L,"google", "12345678", Role.ROLE_UNAUTHENTICATED);
+
     private final CreateUserReqDto reqDto = new CreateUserReqDto("google", "12345678");
 
     private void givenValidUser(Boolean value){
