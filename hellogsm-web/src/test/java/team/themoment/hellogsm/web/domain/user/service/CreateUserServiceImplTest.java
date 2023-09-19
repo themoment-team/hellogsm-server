@@ -32,14 +32,14 @@ public class CreateUserServiceImplTest {
 
     private final CreateUserReqDto reqDto = new CreateUserReqDto("google", "12345678");
 
-    private void givenValidUser(Boolean value){
+    private void givenExistingUser(Boolean value){
         given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(value);
     }
 
     @Test
     public void 성공(){
         //given
-        givenValidUser(false);
+        givenExistingUser(false);
         given(userRepository.save(any(User.class))).willReturn(user);
 
         //when
@@ -52,7 +52,7 @@ public class CreateUserServiceImplTest {
     @Test
     public void 이미_존재하는_User(){
         //given
-        givenValidUser(true);
+        givenExistingUser(true);
 
         //when & then
         ExpectedException exception = assertThrows(ExpectedException.class,
