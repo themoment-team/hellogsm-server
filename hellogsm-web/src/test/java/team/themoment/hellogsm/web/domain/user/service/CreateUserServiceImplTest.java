@@ -32,10 +32,14 @@ public class CreateUserServiceImplTest {
     private final User user = new User(1L,"google", "12345678", Role.ROLE_UNAUTHENTICATED);
     private final CreateUserReqDto reqDto = new CreateUserReqDto("google", "12345678");
 
+    private void givenValidUser(Boolean value){
+        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(value);
+    }
+
     @Test
     public void 성공(){
         //given
-        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(false);
+        givenValidUser(false);
         given(userRepository.save(any(User.class))).willReturn(user);
 
         //when
@@ -48,7 +52,7 @@ public class CreateUserServiceImplTest {
     @Test
     public void 이미_존재하는_User(){
         //given
-        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(true);
+        givenValidUser(true);
 
         //when & then
         ExpectedException exception = assertThrows(ExpectedException.class,
