@@ -46,4 +46,18 @@ public class DeleteUserServiceImplTest {
         //then
         verify(applicationEventPublisher).publishEvent(any(DeleteUserEvent.class));
     }
+
+    @Test
+    public void 존재하지_않는_User(){
+        //given
+        given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
+
+        //when & then
+        ExpectedException exception = assertThrows(ExpectedException.class,
+                () -> deleteUserService.execute(user.getId()));
+
+        String expectedMessage = "존재하지 않는 사용자입니다.";
+
+        assertEquals(exception.getMessage(), expectedMessage);
+    }
 }
