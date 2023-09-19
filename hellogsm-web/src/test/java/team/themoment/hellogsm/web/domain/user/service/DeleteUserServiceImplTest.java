@@ -15,8 +15,7 @@ import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -40,10 +39,9 @@ public class DeleteUserServiceImplTest {
         //given
         given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
 
-        //when
-        deleteUserService.execute(user.getId());
+        //when & then
+        assertDoesNotThrow(() -> deleteUserService.execute(user.getId()));
 
-        //then
         verify(applicationEventPublisher).publishEvent(any(DeleteUserEvent.class));
     }
 
