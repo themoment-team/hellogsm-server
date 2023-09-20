@@ -11,6 +11,7 @@ import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.domain.user.service.impl.ExistUserQueryImpl;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -26,7 +27,7 @@ public class ExistUserQueryImplTest {
     private final User user = new User(1L, "google", "12345678", Role.ROLE_UNAUTHENTICATED);
 
     @Test
-    public void 존재하지_않는_user(){
+    public void 존재하지_않는_User(){
         //given
         given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(false);
 
@@ -35,5 +36,14 @@ public class ExistUserQueryImplTest {
 
         //then
         assertFalse(result);
+    }
+
+    @Test
+    public void 존재하는_User(){
+        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(true);
+
+        Boolean result = existUserQuery.execute(user.getProvider(), user.getProviderId());
+
+        assertTrue(result);
     }
 }
