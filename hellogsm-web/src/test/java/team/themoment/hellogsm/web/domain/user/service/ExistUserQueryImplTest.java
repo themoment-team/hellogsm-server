@@ -30,7 +30,7 @@ public class ExistUserQueryImplTest {
         given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(value);
     }
 
-    private Boolean executeResult(){
+    private Boolean checkIsExistUser(){
         return existUserQuery.execute(user.getProvider(), user.getProviderId());
     }
 
