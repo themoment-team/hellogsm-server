@@ -10,10 +10,11 @@ import team.themoment.hellogsm.entity.domain.user.enums.Role;
 import team.themoment.hellogsm.web.domain.user.dto.domain.UserDto;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.domain.user.service.impl.UserByIdQueryImpl;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -30,12 +31,27 @@ public class UserByIdQueryImplTest {
 
     @Test
     public void 성공(){
+        //given
         given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
 
+        //when
         UserDto result = userByIdQuery.execute(user.getId());
 
-        System.out.println(result);
-
+        //then
         assertNotNull(result);
+    }
+
+    @Test
+    public void 존재하지_않는_User(){
+        //given
+        given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
+
+        //when & then
+        ExpectedException exception = assertThrows(ExpectedException.class,
+                () -> userByIdQuery.execute(user.getId()));
+
+        String expectedMessage = "존재하지 않는 User 입니다";
+
+        assertEquals(exception.getMessage(), expectedMessage);
     }
 }
