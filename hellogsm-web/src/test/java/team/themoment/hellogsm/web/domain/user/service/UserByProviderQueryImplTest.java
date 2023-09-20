@@ -38,10 +38,9 @@ public class UserByProviderQueryImplTest {
         UserDto result = userByProviderQuery.execute(user.getProvider(), user.getProviderId());
 
         //then
-        assertEquals(result.id(), user.getId());
-        assertEquals(result.provider(), user.getProvider());
-        assertEquals(result.providerId(), user.getProviderId());
-        assertEquals(result.role(), user.getRole());
+        UserDto expectedResult = new UserDto(user.getId(), user.getProvider(), user.getProviderId(), user.getRole());
+
+        assertEquals(result, expectedResult);
     }
 
     @Test
