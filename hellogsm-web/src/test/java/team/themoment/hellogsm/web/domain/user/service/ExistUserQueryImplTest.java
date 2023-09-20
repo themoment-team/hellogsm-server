@@ -26,24 +26,29 @@ public class ExistUserQueryImplTest {
 
     private final User user = new User(1L, "google", "12345678", Role.ROLE_UNAUTHENTICATED);
 
+    private void givenExistingUser(Boolean value){
+        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(value);
+    }
+
+    private Boolean executeResult(){
+        return existUserQuery.execute(user.getProvider(), user.getProviderId());
+    }
+
     @Test
     public void 존재하지_않는_User(){
         //given
-        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(false);
+        givenExistingUser(false);
 
-        //when
-        Boolean result = existUserQuery.execute(user.getProvider(), user.getProviderId());
-
-        //then
-        assertFalse(result);
+        //when & then
+        assertFalse(executeResult());
     }
 
     @Test
     public void 존재하는_User(){
-        given(userRepository.existsByProviderAndProviderId(any(String.class), any(String.class))).willReturn(true);
+        //given
+        givenExistingUser(true);
 
-        Boolean result = existUserQuery.execute(user.getProvider(), user.getProviderId());
-
-        assertTrue(result);
+        //when & then
+        assertTrue(executeResult());
     }
 }
