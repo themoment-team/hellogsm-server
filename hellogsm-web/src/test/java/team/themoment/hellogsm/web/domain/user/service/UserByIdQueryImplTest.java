@@ -12,6 +12,7 @@ import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
 import team.themoment.hellogsm.web.domain.user.service.impl.UserByIdQueryImpl;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,10 @@ public class UserByIdQueryImplTest {
         UserDto result = userByIdQuery.execute(user.getId());
 
         //then
-        assertNotNull(result);
+        assertEquals(result.id(), user.getId());
+        assertEquals(result.provider(), user.getProvider());
+        assertEquals(result.providerId(), user.getProviderId());
+        assertEquals(result.role(), user.getRole());
     }
 
     @Test
