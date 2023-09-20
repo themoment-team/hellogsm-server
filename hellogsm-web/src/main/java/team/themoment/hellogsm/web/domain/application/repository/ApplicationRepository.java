@@ -30,10 +30,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Page<Application> findAllByAdmissionInfoSchoolNameContainingAndAdmissionStatus_IsFinalSubmitted(String keyword, Boolean isFinalSubmitted, Pageable pageable);
 
     @Query("SELECT a FROM Application a WHERE " +
-            "a.admissionInfo.applicantPhoneNumber LIKE %:keyword% OR " +
+            "(a.admissionInfo.applicantPhoneNumber LIKE %:keyword% OR " +
             "a.admissionInfo.guardianPhoneNumber LIKE %:keyword% OR " +
-            "a.admissionInfo.teacherPhoneNumber LIKE %:keyword% AND " +
-            "a.admissionStatus.isFinalSubmitted = TRUE"  )
+            "a.admissionInfo.teacherPhoneNumber LIKE %:keyword%) " +
+            "AND a.admissionStatus.isFinalSubmitted = TRUE")
     Page<Application> findAllByIsFinalSubmittedAndPhoneNumberContaining(@Param("keyword") String keyword, Pageable pageable);
 
     Page<Application> findAllByAdmissionStatusIsFinalSubmitted(Boolean isFinalSubmitted, Pageable pageable);
