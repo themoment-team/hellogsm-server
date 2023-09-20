@@ -40,7 +40,7 @@ public class ExistUserQueryImplTest {
         givenExistingUser(false);
 
         //when & then
-        assertFalse(executeResult());
+        assertFalse(checkIsExistUser());
     }
 
     @Test
@@ -49,6 +49,6 @@ public class ExistUserQueryImplTest {
         givenExistingUser(true);
 
         //when & then
-        assertTrue(executeResult());
+        assertTrue(checkIsExistUser());
     }
 }
