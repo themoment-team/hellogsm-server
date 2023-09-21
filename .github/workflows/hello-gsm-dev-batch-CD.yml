@@ -26,6 +26,15 @@ jobs:
       - name : Setup Gradls's permission
         run : chmod +x gradlew
 
+      - name: make yml file
+        run: mkdir ./hellogsm-batch/src/main/resources
+            
+          touch ./hellogsm-batch/src/main/resources/application-dev.yml
+            
+          echo "${{ secrets.DEV_BATCH_YML }}" > ./hellogsm-batch/src/main/resources/application-dev.yml
+
+        shell: bash
+
       - name: Build with Gradle
         run : ./gradlew clean hellogsm-batch:build
 
@@ -44,4 +53,4 @@ jobs:
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/dev/batch/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name ${{ secrets.CODE_DEPLOY_APP_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.DEPLOYMENT_GROUP_NAME }} --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/batch/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name hellogsm-dev-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name batch-server --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/batch/$GITHUB_SHA.zip
