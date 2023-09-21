@@ -6,7 +6,7 @@ on:
       - "hellogsm-batch/**"
     branches: [ "develop" ]
 
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   CI:
