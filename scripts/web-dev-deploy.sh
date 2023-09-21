@@ -18,4 +18,4 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 chmod +x $DEPLOY_JAR
-nohup java -jar &
+nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev &
