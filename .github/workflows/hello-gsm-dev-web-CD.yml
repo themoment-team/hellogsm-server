@@ -6,8 +6,6 @@ on:
       - "hellogsm-web/**"
     branches: [ "develop" ]
 
-  workflow_dispatch
-
 jobs:
   CI:
     runs-on: ubuntu-latest
