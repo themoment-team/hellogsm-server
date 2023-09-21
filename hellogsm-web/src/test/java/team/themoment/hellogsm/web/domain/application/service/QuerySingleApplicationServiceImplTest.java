@@ -21,12 +21,13 @@ import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplica
 import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.impl.QuerySingleApplicationServiceImpl;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -104,5 +105,21 @@ public class QuerySingleApplicationServiceImplTest {
 
         // when & then
         assertDoesNotThrow(() -> querySingleApplicationService.execute(1L));
+    }
+
+    @Test
+    public void 존재하지_않는_User() {
+        // given
+        given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.empty());
+
+        // when & then
+        assertExpectedExceptionWithMessage("존재하지 않는 유저입니다");
+    }
+
+    private void assertExpectedExceptionWithMessage(String expectedMessage) {
+        ExpectedException exception = assertThrows(ExpectedException.class, () ->
+                querySingleApplicationService.execute(1L));
+
+        assertEquals(expectedMessage, exception.getMessage());
     }
 }
