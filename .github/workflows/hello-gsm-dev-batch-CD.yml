@@ -27,9 +27,7 @@ jobs:
         run : chmod +x gradlew
 
       - name: make yml file
-        run: mkdir ./hellogsm-batch/src/main/resources
-            
-          touch ./hellogsm-batch/src/main/resources/application-dev.yml
+        run: touch ./hellogsm-batch/src/main/resources/application-dev.yml
             
           echo "${{ secrets.DEV_BATCH_YML }}" > ./hellogsm-batch/src/main/resources/application-dev.yml
 
