@@ -25,7 +25,7 @@ public class AuthenticateCodeServiceImplTest {
     private AuthenticateCodeServiceImpl authenticateCodeService;
 
     @Mock
-    CodeRepository codeRepository;
+    private CodeRepository codeRepository;
 
     private final List<AuthenticationCode> code = List.of(
             new AuthenticationCode("123456", 1L, true, "010-1234-5678", LocalDateTime.now()),
