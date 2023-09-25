@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 import team.themoment.hellogsm.entity.domain.application.enums.Gender;
 import team.themoment.hellogsm.entity.domain.identity.entity.Identity;
 import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
@@ -28,15 +29,25 @@ public class CascadeDeleteIdentityServiceImplTest {
 
     private final Identity identity = new Identity(1L, "유재석", "01012345678", LocalDate.EPOCH, Gender.MALE, 1L);
 
-    @Test
-    public void 성공(){
+    private void verifyIdentityDeletionForUser(Boolean identityExists, Integer wantedNumberOfInvocations){
         //given
-        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
+        given(identityRepository.findByUserId(any(Long.class)))
+                .willReturn(identityExists ? Optional.of(identity) : Optional.empty());
 
         //when
         cascadeDeleteIdentityService.execute(identity.getUserId());
 
         //then
-        verify(identityRepository, times(1)).deleteById(any(Long.class));
+        verify(identityRepository, times(wantedNumberOfInvocations)).deleteById(any(Long.class));
+    }
+
+    @Test
+    public void 성공(){
+        verifyIdentityDeletionForUser(true, 1);
+    }
+
+    @Test
+    public void 존재하지_않는_Identity_삭제_요청(){
+        verifyIdentityDeletionForUser(false, 0);
     }
 }
