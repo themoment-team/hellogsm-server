@@ -56,6 +56,7 @@ public class AuthenticateCodeServiceImplTest {
 
         //when & then
         AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(1);
+
         assertDoesNotThrow(() -> authenticateCodeService.execute(code.get(1).getUserId(), reqDto));
     }
 
