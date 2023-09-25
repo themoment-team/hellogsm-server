@@ -31,7 +31,7 @@ public class AuthenticateCodeServiceImplTest {
             new AuthenticationCode("123456", 1L, false, "010-1234-5678", LocalDateTime.now()),
             new AuthenticationCode("654321", 2L, true, "010-8765-4321", LocalDateTime.now()));
 
-    private final AuthenticationCode pastAuthenticationCode = codes.get(0);
+    private final AuthenticationCode pastAndInvalidAuthenticationCode = codes.get(0);
 
     private final AuthenticationCode recentAuthenticationCode = codes.get(1);
 
@@ -79,6 +79,6 @@ public class AuthenticateCodeServiceImplTest {
         givenValidCode();
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", pastAuthenticationCode);
+        assertThrowsExpectedExceptionWithMessage("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", pastAndInvalidAuthenticationCode);
     }
 }
