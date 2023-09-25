@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
+import team.themoment.hellogsm.entity.domain.application.enums.Screening;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,4 +42,16 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     void deleteApplicationByUserId(Long userId);
 
     List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);
+
+    List<Application> findAllByAdmissionStatusSecondEvaluation(EvaluationStatus evaluationStatus);
+
+    Boolean existsByAdmissionStatusFirstEvaluation(EvaluationStatus evaluationStatus);
+
+    Boolean existsByAdmissionStatusSecondEvaluation(EvaluationStatus evaluationStatus);
+
+    List<Application> findAllByAdmissionInfoScreening(Screening screening);
+
+    List<Application> findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening screening);
+
+    List<Application> findAllByAdmissionStatusScreeningSecondEvaluationAt(Screening screening);
 }

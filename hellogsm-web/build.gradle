@@ -45,6 +45,7 @@ dependencies {
 
     /** for business **/
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
 
     /** for test **/
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'

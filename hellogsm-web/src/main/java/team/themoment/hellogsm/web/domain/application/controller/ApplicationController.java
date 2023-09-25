@@ -1,5 +1,6 @@
 package team.themoment.hellogsm.web.domain.application.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
@@ -44,6 +45,7 @@ public class ApplicationController {
     private final QueryTicketsService queryTicketsService;
     private final ImageSaveService imageSaveService;
     private final FinalSubmissionService finalSubmissionService;
+    private final DownloadExcelService downloadExcelService;
 
     @GetMapping("/application/{userId}")
     public ResponseEntity<SingleApplicationRes> readOne(@PathVariable("userId") Long userId) {
@@ -131,5 +133,11 @@ public class ApplicationController {
     public ResponseEntity<Map<String, String>> finalSubmission() {
         finalSubmissionService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
+    @GetMapping(value = "/excel", produces = "applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8")
+    public ResponseEntity<Void> downloadExcel(HttpServletResponse response) {
+        downloadExcelService.execute(response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
