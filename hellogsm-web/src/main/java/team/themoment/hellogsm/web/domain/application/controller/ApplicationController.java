@@ -136,8 +136,8 @@ public class ApplicationController {
     }
 
     @GetMapping(value = "/excel", produces = "applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> downloadExcel(HttpServletResponse response) {
+    public ResponseEntity<Void> downloadExcel(HttpServletResponse response) {
         downloadExcelService.execute(response);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "다운로드되었습니다."));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
