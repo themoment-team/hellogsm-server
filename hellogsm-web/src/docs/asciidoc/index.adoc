@@ -554,7 +554,7 @@ operation::application/tickets[snippets='http-response,response-fields']
     ROLE_ADMIN
 
 ==== Request
-operation::application/excel[snippets='curl-request,http-request']
+operation::application/download-excel[snippets='curl-request,http-request']
 
 ==== Response
-operation::application/excel[snippets='http-response,response-fields']
+operation::application/download-excel[snippets='http-response']

@@ -134,10 +134,9 @@ public class ApplicationController {
         finalSubmissionService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
-
-    @GetMapping(value = "/excel", produces = "applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8")
-    public ResponseEntity<Void> downloadExcel(HttpServletResponse response) {
+    @GetMapping("/excel")
+    public ResponseEntity<Map<String, String>> downloadExcel(HttpServletResponse response) {
         downloadExcelService.execute(response);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "다운로드되었습니다"));
     }
 }

@@ -90,8 +90,6 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
             }
         }
 
-
-        response.setContentType("applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
 
         try {
