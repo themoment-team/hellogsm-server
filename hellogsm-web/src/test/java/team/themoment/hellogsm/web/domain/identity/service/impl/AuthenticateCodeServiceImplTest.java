@@ -27,37 +27,41 @@ public class AuthenticateCodeServiceImplTest {
     @Mock
     private CodeRepository codeRepository;
 
-    private final List<AuthenticationCode> code = List.of(
-            new AuthenticationCode("123456", 1L, true, "010-1234-5678", LocalDateTime.now()),
-            new AuthenticationCode("654321", 2L, false, "010-8765-4321", LocalDateTime.now()));
+    private final List<AuthenticationCode> codes = List.of(
+            new AuthenticationCode("123456", 1L, false, "010-1234-5678", LocalDateTime.now()),
+            new AuthenticationCode("654321", 2L, true, "010-8765-4321", LocalDateTime.now()));
 
-    private AuthenticateCodeReqDto createAuthenticateCodeReqDto(Integer codeIndex){
-        return new AuthenticateCodeReqDto(code.get(codeIndex).getCode());
+    private final AuthenticationCode beforeAuthenticationCode = codes.get(0);
+
+    private final AuthenticationCode recentAuthenticationCode = codes.get(1);
+
+    private AuthenticateCodeReqDto createAuthenticateCodeReqDto(AuthenticationCode authenticationCode){
+        return new AuthenticateCodeReqDto(authenticationCode.getCode());
     }
 
-    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage, Integer codeIndex){
-        AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(codeIndex);
+    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage, AuthenticationCode authenticationCode){
+        AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(authenticationCode);
 
         ExpectedException exception = assertThrows(ExpectedException.class,
-                () -> authenticateCodeService.execute(code.get(codeIndex).getUserId(), reqDto));;
+                () -> authenticateCodeService.execute(authenticationCode.getUserId(), reqDto));;
 
         assertEquals(exception.getMessage(), expectedMessage);
     }
 
     private void givenValidCode(){
-        given(codeRepository.findByUserId(any(Long.class))).willReturn(code);
+        given(codeRepository.findByUserId(any(Long.class))).willReturn(codes);
     }
 
     @Test
     public void 성공(){
         //given
         givenValidCode();
-        given(codeRepository.save(any(AuthenticationCode.class))).willReturn(code.get(1));
+        given(codeRepository.save(any(AuthenticationCode.class))).willReturn(codes.get(1));
 
         //when & then
-        AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(1);
+        AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(recentAuthenticationCode);
 
-        assertDoesNotThrow(() -> authenticateCodeService.execute(code.get(1).getUserId(), reqDto));
+        assertDoesNotThrow(() -> authenticateCodeService.execute(recentAuthenticationCode.getUserId(), reqDto));
     }
 
     @Test
@@ -66,7 +70,7 @@ public class AuthenticateCodeServiceImplTest {
         given(codeRepository.findByUserId(any(Long.class))).willReturn(Collections.emptyList());
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + code.get(1).getUserId(), 1);
+        assertThrowsExpectedExceptionWithMessage("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + recentAuthenticationCode.getUserId(), recentAuthenticationCode);
     }
 
     @Test
@@ -75,6 +79,6 @@ public class AuthenticateCodeServiceImplTest {
         givenValidCode();
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", 0);
+        assertThrowsExpectedExceptionWithMessage("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", beforeAuthenticationCode);
     }
 }
