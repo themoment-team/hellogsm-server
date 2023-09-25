@@ -31,16 +31,32 @@ public class AuthenticateCodeServiceImplTest {
             new AuthenticationCode("123456", 1L, true, "010-1234-5678", LocalDateTime.now()),
             new AuthenticationCode("654321", 2L, false, "010-8765-4321", LocalDateTime.now()));
 
-    private final AuthenticateCodeReqDto reqDto = new AuthenticateCodeReqDto(code.get(0).getCode());
+    private AuthenticateCodeReqDto createAuthenticateCodeReqDto(Integer codeIndex){
+        return new AuthenticateCodeReqDto(code.get(codeIndex).getCode());
+    }
+
+    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage, Integer codeIndex){
+        AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(codeIndex);
+
+        ExpectedException exception = assertThrows(ExpectedException.class,
+                () -> authenticateCodeService.execute(code.get(codeIndex).getUserId(), reqDto));;
+
+        assertEquals(exception.getMessage(), expectedMessage);
+    }
+
+    private void givenValidCode(){
+        given(codeRepository.findByUserId(any(Long.class))).willReturn(code);
+    }
 
     @Test
     public void 성공(){
         //given
-        given(codeRepository.findByUserId(any(Long.class))).willReturn(code);
-        given(codeRepository.save(any(AuthenticationCode.class))).willReturn(code.get(0));
+        givenValidCode();
+        given(codeRepository.save(any(AuthenticationCode.class))).willReturn(code.get(1));
 
         //when & then
-        assertDoesNotThrow(() -> authenticateCodeService.execute(code.get(0).getUserId(), reqDto));
+        AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(1);
+        assertDoesNotThrow(() -> authenticateCodeService.execute(code.get(1).getUserId(), reqDto));
     }
 
     @Test
@@ -49,11 +65,15 @@ public class AuthenticateCodeServiceImplTest {
         given(codeRepository.findByUserId(any(Long.class))).willReturn(Collections.emptyList());
 
         //when & then
-        ExpectedException exception = assertThrows(ExpectedException.class,
-                () -> authenticateCodeService.execute(code.get(0).getUserId(), reqDto));
+        assertThrowsExpectedExceptionWithMessage("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + code.get(1).getUserId(), 1);
+    }
 
-        String expectedMessage = "사용자의 code가 존재하지 않습니다. 사용자의 ID : " + code.get(0).getUserId();
+    @Test
+    public void 유효하지_않거나_최신이_아닌_AuthenticateCode(){
+        //given
+        givenValidCode();
 
-        assertEquals(exception.getMessage(), expectedMessage);
+        //when & then
+        assertThrowsExpectedExceptionWithMessage("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", 0);
     }
 }
