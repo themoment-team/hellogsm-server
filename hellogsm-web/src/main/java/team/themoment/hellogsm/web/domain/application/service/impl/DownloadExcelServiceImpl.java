@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
@@ -30,7 +31,7 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
 
-    Workbook workbook = new XSSFWorkbook();
+    Workbook workbook = new SXSSFWorkbook();
     Sheet generalUserSheet = workbook.createSheet("일반전형");
     Sheet socialUserSheet = workbook.createSheet("사회전형");
     Sheet specialUserSheet = workbook.createSheet("특별전형");
