@@ -16,7 +16,7 @@ import team.themoment.hellogsm.web.domain.identity.service.AuthenticateCodeServi
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 /**
- * CreateIdentityService의 기본 구현체입니다.
+ * AuthenticateCodeService의 기본 구현체입니다.
  */
 @Service
 @XRayEnabled
