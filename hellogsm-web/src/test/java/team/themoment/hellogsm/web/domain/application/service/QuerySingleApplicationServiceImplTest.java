@@ -103,8 +103,13 @@ public class QuerySingleApplicationServiceImplTest {
         // given
         given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.of(applicationDummy));
 
-        // when & then
-        assertDoesNotThrow(() -> querySingleApplicationService.execute(1L));
+        // when
+        SingleApplicationRes response = querySingleApplicationService.execute(1L);
+
+        // then
+        assertEquals(response.id(), applicationDummy.getId());
+        assertEquals(response.admissionInfo().applicantPhoneNumber(), applicationDummy.getAdmissionInfo().getApplicantPhoneNumber());
+        assertEquals(response.middleSchoolGrade(), applicationDummy.getMiddleSchoolGrade().getMiddleSchoolGradeText());
     }
 
     @Test
