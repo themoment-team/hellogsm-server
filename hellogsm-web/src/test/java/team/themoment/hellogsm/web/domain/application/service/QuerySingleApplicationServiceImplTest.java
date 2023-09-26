@@ -118,10 +118,10 @@ public class QuerySingleApplicationServiceImplTest {
         given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.empty());
 
         // when & then
-        assertExpectedExceptionWithMessage("존재하지 않는 유저입니다");
+        assertThrowsExpectedExceptionWithMessage("존재하지 않는 유저입니다");
     }
 
-    private void assertExpectedExceptionWithMessage(String expectedMessage) {
+    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage) {
         ExpectedException exception = assertThrows(ExpectedException.class, () ->
                 querySingleApplicationService.execute(1L));
 
