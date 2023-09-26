@@ -21,17 +21,17 @@ public record ApplicationStatusReqDto(
         @NotBlank
         String secondEvaluation,
 
-        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION|)$") // null 포함
+        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION)$")
         String screeningFirstEvaluationAt,
 
-        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION|)$") // null 포함
+        @Pattern(regexp = "^(GENERAL|SOCIAL|SPECIAL_VETERANS|SPECIAL_ADMISSION)$")
         String screeningSecondEvaluationAt,
 
         Long registrationNumber,
 
         BigDecimal secondScore,
 
-        @Pattern(regexp = "^(AI|IOT|SW|)$") // null 포함
+        @Pattern(regexp = "^(AI|IOT|SW)$") 
         String finalMajor
 ) {
 }

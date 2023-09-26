@@ -1,10 +1,10 @@
-name: HelloGSM dev batch CD workflow
+name: HelloGSM prod web CD workflow
 
 on:
   push:
     paths:
-      - "hellogsm-batch/**"
-    branches: [ "develop" ]
+      - "hellogsm-web/**"
+    branches: [ "main" ]
 
 jobs:
   CI:
@@ -27,14 +27,14 @@ jobs:
         run : chmod +x gradlew
 
       - name: make yml file
-        run: touch ./hellogsm-batch/src/main/resources/application-dev.yml
-            
-          echo "${{ secrets.DEV_BATCH_YML }}" > ./hellogsm-batch/src/main/resources/application-dev.yml
+        run: touch ./hellogsm-web/src/main/resources/application-prod.yml
+
+          echo "${{ secrets.PROD_WEB_YML }}" > ./hellogsm-web/src/main/resources/application-prod.yml
 
         shell: bash
 
       - name: Build with Gradle
-        run : ./gradlew clean hellogsm-batch:build
+        run : ./gradlew clean hellogsm-web:build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Upload to S3
-        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/dev/batch/$GITHUB_SHA.zip
+        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/prod/web/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name hellogsm-dev-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name batch-server --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=dev/batch/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name hellogsm-prod-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name web-server --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=prod/web/$GITHUB_SHA.zip

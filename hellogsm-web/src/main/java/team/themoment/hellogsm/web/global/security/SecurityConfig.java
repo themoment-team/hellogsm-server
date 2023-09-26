@@ -21,6 +21,7 @@ import team.themoment.hellogsm.web.global.security.filter.TimeBasedFilter;
 import team.themoment.hellogsm.web.global.security.handler.CustomAccessDeniedHandler;
 import team.themoment.hellogsm.web.global.security.handler.CustomAuthenticationEntryPoint;
 import team.themoment.hellogsm.web.global.security.handler.CustomUrlAuthenticationSuccessHandler;
+import team.themoment.hellogsm.web.global.security.handler.CustomUrlLogoutSuccessHandler;
 import team.themoment.hellogsm.web.global.security.schedule.ScheduleEnvironment;
 
 import java.time.LocalDateTime;
@@ -132,7 +133,7 @@ public class SecurityConfig {
     private void logout(HttpSecurity http) throws Exception {
         http.logout(logout -> logout
                 .logoutUrl(logoutUri)
-                .logoutSuccessUrl(authEnv.redirectBaseUri() + "?logout=success")
+                .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
         );
     }
 
