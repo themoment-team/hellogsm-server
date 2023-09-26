@@ -99,7 +99,7 @@ public class QuerySingleApplicationServiceImplTest {
     );
 
     @Test
-    public void 성공() {
+    public void 원서를_찾고_원서정보를_가공하여_반환합니다() {
         // given
         given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.of(applicationDummy));
 
