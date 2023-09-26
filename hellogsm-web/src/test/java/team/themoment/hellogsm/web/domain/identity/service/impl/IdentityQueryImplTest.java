@@ -23,10 +23,10 @@ import static org.mockito.BDDMockito.given;
 public class IdentityQueryImplTest {
 
     @InjectMocks
-    IdentityQueryImpl identityQuery;
+    private IdentityQueryImpl identityQuery;
 
     @Mock
-    IdentityRepository identityRepository;
+    private IdentityRepository identityRepository;
 
     private final Identity identity = new Identity(1L, "아이유", "01012345678", LocalDate.EPOCH, Gender.FEMALE, 1L);
 
