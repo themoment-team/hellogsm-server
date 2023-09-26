@@ -136,4 +136,19 @@ public class ModifyIdentityServiceImplTest {
         assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId(
                 "유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", 인증코드가_최신이_아닌_IdentityReqDto, identity.getUserId());
     }
+
+    @Test
+    public void 전화번호가_인증된_code와_일치하지_않음(){
+        //given
+        final IdentityReqDto 전화번호가_일치하지_않는_IdentityReqDto = new IdentityReqDto(
+                codes.get(1).getCode(), reqDto.name(), "01099999999", reqDto.gender(), reqDto.birth());
+
+        givenExistingUser(true);
+        givenValidIdentity(true);
+        givenValidCode(codes);
+
+        //when
+        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId(
+                "유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", 전화번호가_일치하지_않는_IdentityReqDto, identity.getUserId());
+    }
 }
