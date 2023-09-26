@@ -8,6 +8,10 @@ if [ "$DEPLOYMENT_GROUP_NAME" == "web-server" ]; then
   chmod +x /home/ec2-user/hellogsm-server/scripts/web-dev-deploy.sh
   /home/ec2-user/hellogsm-server/scripts/web-dev-deploy.sh
 
+if [ "$DEPLOYMENT_GROUP_NAME" == "prod-web-server" ]; then
+  chmod +x /home/ec2-user/hellogsm-server/scripts/web-prod-deploy.sh
+  /home/ec2-user/hellogsm-server/scripts/web-prod-deploy.sh
+
 else
   echo "batch deploy"
   exit 1
