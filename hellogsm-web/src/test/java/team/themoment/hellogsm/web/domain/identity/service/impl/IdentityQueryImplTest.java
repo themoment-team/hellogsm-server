@@ -28,35 +28,36 @@ public class IdentityQueryImplTest {
     @Mock
     private IdentityRepository identityRepository;
 
-    private final Identity identity = new Identity(1L, "아이유", "01012345678", LocalDate.EPOCH, Gender.FEMALE, 1L);
+    private final Identity identityDummy = new Identity(1L, "아이유", "01012345678", LocalDate.EPOCH, Gender.FEMALE, 1L);
 
     private void givenValidIdentity(Boolean identityExists){
         given(identityRepository.findByUserId(any(Long.class)))
-                .willReturn(identityExists ? Optional.of(identity) : Optional.empty());
+                .willReturn(identityExists ? Optional.of(identityDummy) : Optional.empty());
     }
 
     @Test
-    public void 성공(){
+    public void Identity를_찾고_IdentityDto로_변환하여_반환합니다(){
         //given
         givenValidIdentity(true);
 
         //when
-        IdentityDto result = identityQuery.execute(identity.getUserId());
+        IdentityDto result = identityQuery.execute(identityDummy.getUserId());
 
         //then
-        IdentityDto expectedResult = new IdentityDto(identity.getId(), identity.getName(), identity.getPhoneNumber(), identity.getBirth(), identity.getGender(), identity.getUserId());
+        IdentityDto expectedResult = new IdentityDto(
+                identityDummy.getId(), identityDummy.getName(), identityDummy.getPhoneNumber(), identityDummy.getBirth(), identityDummy.getGender(), identityDummy.getUserId());
 
         assertEquals(result, expectedResult);
     }
 
     @Test
-    public void 존재하지_않는_Identity(){
+    public void 존재하지_않는_Identity일때_적절한_ExpectedException을_던진다(){
         //given
         givenValidIdentity(false);
 
         //when & then
         ExpectedException exception = assertThrows(ExpectedException.class,
-                () -> identityQuery.execute(identity.getUserId()));
+                () -> identityQuery.execute(identityDummy.getUserId()));
 
         String expectedMessage = "존재하지 않는 Identity 입니다";
 
