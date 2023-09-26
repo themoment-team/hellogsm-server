@@ -42,25 +42,29 @@ public class ModifyIdentityServiceImplTest {
     private UserRepository userRepository;
 
     private final List<AuthenticationCode> codes = List.of(
-            new AuthenticationCode("123456", 1L, false, "010-1234-5678", LocalDateTime.now()),
-            new AuthenticationCode("654321", 2L, true, "010-8765-4321", LocalDateTime.now()));
+            new AuthenticationCode("123456", 1L, true, "010-1234-5678", LocalDateTime.MAX),
+            new AuthenticationCode("654321", 1L, true, "010-1234-5678", LocalDateTime.MIN));
 
     private final Identity identity = new Identity(1L, "이정우", "01012345678", LocalDate.EPOCH, Gender.MALE, 1L);
 
-    private final IdentityReqDto reqDto = new IdentityReqDto("654321", "이정우", "010-8765-4321", "MALE", LocalDate.EPOCH);
+    private final IdentityReqDto reqDto = new IdentityReqDto("654321", "이정우", "010-1234-5678", "MALE", LocalDate.EPOCH);
 
     private void givenExistingUser(Boolean value){
         given(userRepository.existsById(any(Long.class))).willReturn(value);
     }
 
     private void givenValidIdentity(Boolean identityExists){
-        given(identityRepository.findByUserId(any(Long.class)))
-                .willReturn(identityExists ? Optional.of(identity) : Optional.empty());
+        given(identityRepository.findByUserId(any(Long.class))).willReturn(identityExists ? Optional.of(identity) : Optional.empty());
     }
 
-    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage){
+    private void givenValidCode(List<AuthenticationCode> codes){
+        given(codeRepository.findByUserId(any(Long.class))).willReturn(codes);
+    }
+
+    private void assertThrowsExpectedExceptionWithMessageAndUserId(String expectedMessage, Long userId){
+
         ExpectedException exception = assertThrows(ExpectedException.class,
-                () -> modifyIdentityService.execute(reqDto, identity.getUserId()));;
+                () -> modifyIdentityService.execute(reqDto, userId));;
 
         assertEquals(exception.getMessage(), expectedMessage);
     }
@@ -70,7 +74,7 @@ public class ModifyIdentityServiceImplTest {
         //given
         givenExistingUser(true);
         givenValidIdentity(true);
-        given(codeRepository.findByUserId(any(Long.class))).willReturn(codes);
+        givenValidCode(codes);
         given(identityRepository.save(any(Identity.class))).willReturn(identity);
         doNothing().when(codeRepository).deleteById(any(String.class));
 
@@ -89,7 +93,7 @@ public class ModifyIdentityServiceImplTest {
         givenExistingUser(false);
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("존재하지 않는 User 입니다");
+        assertThrowsExpectedExceptionWithMessageAndUserId("존재하지 않는 User 입니다", identity.getUserId());
     }
 
     @Test
@@ -99,6 +103,20 @@ public class ModifyIdentityServiceImplTest {
         givenValidIdentity(false);
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("존재하지 않는 Identity 입니다");
+        assertThrowsExpectedExceptionWithMessageAndUserId("존재하지 않는 Identity 입니다", identity.getUserId());
+    }
+
+    @Test
+    public void 인증받지_않은_Code(){
+        final List<AuthenticationCode> unauthenticatedCodes = List.of(
+                new AuthenticationCode("123456", 1L, false, "010-1234-5678", LocalDateTime.MAX),
+                new AuthenticationCode("654321", 1L, false, "010-1234-5678", LocalDateTime.MIN));
+
+        //given
+        givenExistingUser(true);
+        givenValidIdentity(true);
+        givenValidCode(unauthenticatedCodes);
+
+        assertThrowsExpectedExceptionWithMessageAndUserId("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", identity.getUserId());
     }
 }
