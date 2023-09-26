@@ -13,6 +13,7 @@ import team.themoment.hellogsm.web.domain.identity.dto.request.IdentityReqDto;
 import team.themoment.hellogsm.web.domain.identity.repository.CodeRepository;
 import team.themoment.hellogsm.web.domain.identity.repository.IdentityRepository;
 import team.themoment.hellogsm.web.domain.user.repository.UserRepository;
+import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -47,10 +49,14 @@ public class ModifyIdentityServiceImplTest {
 
     private final IdentityReqDto reqDto = new IdentityReqDto("654321", "이정우", "010-8765-4321", "MALE", LocalDate.EPOCH);
 
+    private void givenExistingUser(Boolean value){
+        given(userRepository.existsById(any(Long.class))).willReturn(value);
+    }
+
     @Test
     public void 성공(){
         //given
-        given(userRepository.existsById(any(Long.class))).willReturn(true);
+        givenExistingUser(true);
         given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
         given(codeRepository.findByUserId(any(Long.class))).willReturn(codes);
         given(identityRepository.save(any(Identity.class))).willReturn(identity);
@@ -62,5 +68,17 @@ public class ModifyIdentityServiceImplTest {
         //then
         IdentityDto expectedResult = new IdentityDto(identity.getId(), identity.getName(), identity.getPhoneNumber(), identity.getBirth(), identity.getGender(), identity.getUserId());
         assertEquals(result, expectedResult);
+    }
+
+    @Test
+    public void 존재하지_않는_User(){
+        givenExistingUser(false);
+
+        ExpectedException exception = assertThrows(ExpectedException.class,
+                () -> modifyIdentityService.execute(reqDto, identity.getUserId()));
+
+        String expectedMessage = "존재하지 않는 User 입니다";
+
+        assertEquals(exception.getMessage(), expectedMessage);
     }
 }
