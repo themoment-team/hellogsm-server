@@ -11,6 +11,9 @@ import team.themoment.hellogsm.web.domain.identity.service.CascadeDeleteIdentity
 
 import java.util.Optional;
 
+/**
+ * CascadeDeleteIdentityService의 구현체입니다.
+ */
 @Slf4j
 @Service
 @XRayEnabled
@@ -18,6 +21,11 @@ import java.util.Optional;
 public class CascadeDeleteIdentityServiceImpl implements CascadeDeleteIdentityService {
     private final IdentityRepository identityRepository;
 
+    /**
+     * identity를 삭제합니다.
+     *
+     * @param userId 삭제할 identity에 대한 user의 userId
+     */
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void execute(Long userId) {
