@@ -41,13 +41,13 @@ public class ModifyIdentityServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    private final List<AuthenticationCode> codes = List.of(
+    private final List<AuthenticationCode> codesDummy = List.of(
             new AuthenticationCode("123456", 1L, true, "01012345678", LocalDateTime.MIN),
             new AuthenticationCode("654321", 1L, true, "01012345678", LocalDateTime.MAX));
 
-    private final Identity identity = new Identity(1L, "이정우", "01012345678", LocalDate.EPOCH, Gender.MALE, 1L);
+    private final Identity identityDummy = new Identity(1L, "이정우", "01012345678", LocalDate.EPOCH, Gender.MALE, 1L);
 
-    private final IdentityReqDto reqDto = new IdentityReqDto("654321", "이정우", "01012345678", "MALE", LocalDate.EPOCH);
+    private final IdentityReqDto reqDtoDummy = new IdentityReqDto("654321", "이정우", "01012345678", "MALE", LocalDate.EPOCH);
 
     private void givenExistingUser(Boolean value){
         given(userRepository.existsById(any(Long.class))).willReturn(value);
@@ -55,7 +55,7 @@ public class ModifyIdentityServiceImplTest {
 
     private void givenValidIdentity(Boolean identityExists){
         given(identityRepository.findByUserId(any(Long.class)))
-                .willReturn(identityExists ? Optional.of(identity) : Optional.empty());
+                .willReturn(identityExists ? Optional.of(identityDummy) : Optional.empty());
     }
 
     private void givenValidCode(List<AuthenticationCode> codes){
@@ -70,45 +70,45 @@ public class ModifyIdentityServiceImplTest {
     }
 
     @Test
-    public void 성공(){
+    public void Identity를_찾고_Identity를_IdentityDto로_변환하여_반환합니다(){
         //given
         givenExistingUser(true);
         givenValidIdentity(true);
-        givenValidCode(codes);
-        given(identityRepository.save(any(Identity.class))).willReturn(identity);
+        givenValidCode(codesDummy);
+        given(identityRepository.save(any(Identity.class))).willReturn(identityDummy);
         doNothing().when(codeRepository).deleteById(any(String.class));
 
         //when
-        IdentityDto result = modifyIdentityService.execute(reqDto, identity.getUserId());
+        IdentityDto result = modifyIdentityService.execute(reqDtoDummy, identityDummy.getUserId());
 
         //then
         IdentityDto expectedResult = new IdentityDto(
-                identity.getId(), identity.getName(), identity.getPhoneNumber(), identity.getBirth(), identity.getGender(), identity.getUserId());
+                identityDummy.getId(), identityDummy.getName(), identityDummy.getPhoneNumber(), identityDummy.getBirth(), identityDummy.getGender(), identityDummy.getUserId());
 
         assertEquals(result, expectedResult);
     }
 
     @Test
-    public void 존재하지_않는_User(){
+    public void 존재하지_않는_User일때_적절한_ExpectedException을_던진다(){
         //given
         givenExistingUser(false);
 
         //when & then
-        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId("존재하지 않는 User 입니다", reqDto, identity.getUserId());
+        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId("존재하지 않는 User 입니다", reqDtoDummy, identityDummy.getUserId());
     }
 
     @Test
-    public void 존재하지_않는_Identity(){
+    public void 존재하지_않는_Identity일때_적절한_ExpectedException을_던진다(){
         //given
         givenExistingUser(true);
         givenValidIdentity(false);
 
         //when & then
-        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId("존재하지 않는 Identity 입니다", reqDto, identity.getUserId());
+        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId("존재하지 않는 Identity 입니다", reqDtoDummy, identityDummy.getUserId());
     }
 
     @Test
-    public void 인증받지_않은_Code(){
+    public void 인증받지_않은_Code일때_적절한_ExpectedException을_던진다(){
         //given
         final List<AuthenticationCode> unauthenticatedCodes = List.of(
                 new AuthenticationCode("123456", 1L, false, "01012345678", LocalDateTime.MIN),
@@ -119,35 +119,35 @@ public class ModifyIdentityServiceImplTest {
         givenValidCode(unauthenticatedCodes);
 
         //when & then
-        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", reqDto, identity.getUserId());
+        assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId("유효하지 않은 요청입니다. 인증받지 않은 code입니다.", reqDtoDummy, identityDummy.getUserId());
     }
 
     @Test
-    public void 유효하지_않거나_최신이_아닌_Code(){
+    public void 유효하지_않거나_최신이_아닌_Code일때_적절한_ExpectedException을_던진다(){
         //given
         final IdentityReqDto 인증코드가_최신이_아닌_IdentityReqDto = new IdentityReqDto(
-                codes.get(0).getCode(), reqDto.name(), reqDto.phoneNumber(), reqDto.gender(), reqDto.birth());
+                codesDummy.get(0).getCode(), reqDtoDummy.name(), reqDtoDummy.phoneNumber(), reqDtoDummy.gender(), reqDtoDummy.birth());
 
         givenExistingUser(true);
         givenValidIdentity(true);
-        givenValidCode(codes);
+        givenValidCode(codesDummy);
 
         assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId(
-                "유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", 인증코드가_최신이_아닌_IdentityReqDto, identity.getUserId());
+                "유효하지 않은 요청입니다. 이전 혹은 잘못된 형식의 code입니다.", 인증코드가_최신이_아닌_IdentityReqDto, identityDummy.getUserId());
     }
 
     @Test
-    public void 전화번호가_인증된_code와_일치하지_않음(){
+    public void 전화번호가_인증된_code와_일치하지_않을때_적절한_ExpectedException을_던진다(){
         //given
         final IdentityReqDto 전화번호가_일치하지_않는_IdentityReqDto = new IdentityReqDto(
-                codes.get(1).getCode(), reqDto.name(), "01099999999", reqDto.gender(), reqDto.birth());
+                codesDummy.get(1).getCode(), reqDtoDummy.name(), "01099999999", reqDtoDummy.gender(), reqDtoDummy.birth());
 
         givenExistingUser(true);
         givenValidIdentity(true);
-        givenValidCode(codes);
+        givenValidCode(codesDummy);
 
         //when
         assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId(
-                "유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", 전화번호가_일치하지_않는_IdentityReqDto, identity.getUserId());
+                "유효하지 않은 요청입니다. code인증에 사용되었던 전화번호와 요청에 사용한 전화번호가 일치하지 않습니다.", 전화번호가_일치하지_않는_IdentityReqDto, identityDummy.getUserId());
     }
 }
