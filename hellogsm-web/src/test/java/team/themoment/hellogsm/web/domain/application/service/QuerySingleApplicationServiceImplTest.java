@@ -1,11 +1,9 @@
 package team.themoment.hellogsm.web.domain.application.service;
 
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
@@ -13,24 +11,18 @@ import team.themoment.hellogsm.entity.domain.application.entity.admission.Desire
 import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleSchoolGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.status.AdmissionStatus;
 import team.themoment.hellogsm.entity.domain.application.enums.*;
-import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionInfoDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.AdmissionStatusDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.GedAdmissionGradeDto;
-import team.themoment.hellogsm.web.domain.application.dto.domain.SuperGrade;
 import team.themoment.hellogsm.web.domain.application.dto.response.SingleApplicationRes;
 import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.impl.QuerySingleApplicationServiceImpl;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class QuerySingleApplicationServiceImplTest {
