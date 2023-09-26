@@ -766,9 +766,10 @@ class ApplicationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("SESSION", "SESSIONID12345")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(header().stringValues("Content-Type", "applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"))
                 .andDo(this.documentationHandler.document(
                         requestSessionCookie()
                 ));
+
     }
 }

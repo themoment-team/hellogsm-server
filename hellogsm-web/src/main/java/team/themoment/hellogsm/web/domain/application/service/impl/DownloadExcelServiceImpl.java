@@ -91,8 +91,6 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
             }
         }
 
-        response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
-
         try {
             workbook.write(response.getOutputStream());
             workbook.close();
