@@ -8,7 +8,7 @@ import team.themoment.hellogsm.entity.domain.user.enums.Role;
  * 인증/인가 정보를 저장하는 Entity입니다.
  */
 @Entity
-@Table(name = "`user`")
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
