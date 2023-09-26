@@ -27,13 +27,13 @@ public class AuthenticateCodeServiceImplTest {
     @Mock
     private CodeRepository codeRepository;
 
-    private final List<AuthenticationCode> codes = List.of(
+    private final List<AuthenticationCode> codesDummy = List.of(
             new AuthenticationCode("123456", 1L, false, "010-1234-5678", LocalDateTime.now()),
             new AuthenticationCode("654321", 2L, true, "010-8765-4321", LocalDateTime.now()));
 
-    private final AuthenticationCode pastAndInvalidAuthenticationCode = codes.get(0);
+    private final AuthenticationCode pastAndInvalidAuthenticationCode = codesDummy.get(0);
 
-    private final AuthenticationCode recentAuthenticationCode = codes.get(1);
+    private final AuthenticationCode recentAuthenticationCode = codesDummy.get(1);
 
     private AuthenticateCodeReqDto createAuthenticateCodeReqDto(AuthenticationCode authenticationCode){
         return new AuthenticateCodeReqDto(authenticationCode.getCode());
@@ -49,14 +49,14 @@ public class AuthenticateCodeServiceImplTest {
     }
 
     private void givenValidCode(){
-        given(codeRepository.findByUserId(any(Long.class))).willReturn(codes);
+        given(codeRepository.findByUserId(any(Long.class))).willReturn(codesDummy);
     }
 
     @Test
-    public void 성공(){
+    public void Code를_찾고_최신_Code_를_저장합니다(){
         //given
         givenValidCode();
-        given(codeRepository.save(any(AuthenticationCode.class))).willReturn(codes.get(1));
+        given(codeRepository.save(any(AuthenticationCode.class))).willReturn(codesDummy.get(1));
 
         //when & then
         AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(recentAuthenticationCode);
@@ -65,7 +65,7 @@ public class AuthenticateCodeServiceImplTest {
     }
 
     @Test
-    public void 존재하지_않는_AuthenticateCode(){
+    public void 존재하지_않는_AuthenticateCode일때_적절한_ExpectedException을_던진다(){
         //given
         given(codeRepository.findByUserId(any(Long.class))).willReturn(Collections.emptyList());
 
@@ -74,7 +74,7 @@ public class AuthenticateCodeServiceImplTest {
     }
 
     @Test
-    public void 유효하지_않거나_최신이_아닌_AuthenticateCode(){
+    public void 유효하지_않거나_최신이_아닌_AuthenticateCode일때_적절한_ExpectedException을_던진다(){
         //given
         givenValidCode();
 
