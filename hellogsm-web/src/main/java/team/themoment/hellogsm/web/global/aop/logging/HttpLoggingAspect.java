@@ -20,6 +20,8 @@ import java.util.*;
 @Aspect
 @Component
 public class HttpLoggingAspect {
+    //TODO HttpLogging은 Filter or Interceptor 계층에서 진행하도록 변경
+    // 현재 방식은 로깅에 제한이 있기도 하고, Filter 단에서 인증,인가 등의 이유로 요청이 block 된 경우 확인 불가능
 
     @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
     public void onRequest() {
@@ -55,10 +57,19 @@ public class HttpLoggingAspect {
         log.info("At {}#{} [Request:{}] IP: {}, Session-ID: {}, URI: {}, Params: {}, Content-Type: {}, User-Agent: {}, Headers: {}, Parameters: {}, Code: {}",
                 className, methodName, method, ip, sessionId, uri, params, contentType, userAgent, headerSet, params(proceedingJoinPoint), code);
 
-        ResponseEntity result = (ResponseEntity) proceedingJoinPoint.proceed();
+        Object result = proceedingJoinPoint.proceed();
 
-        log.info("At {}#{} [Response:{}] IP: {}, Session-ID: {}, Headers: {}, Response: {}, Status-Code: {}, Code: {}",
-                className, methodName, method, ip, sessionId, result.getHeaders(), result.getBody(), result.getStatusCode(), code);
+        if (result instanceof ResponseEntity) {
+            ResponseEntity responseEntity = (ResponseEntity) result;
+            log.info("At {}#{} [Response:{}] IP: {}, Session-ID: {}, Headers: {}, Response: {}, Status-Code: {}, Code: {}",
+                    className, methodName, method, ip, sessionId, responseEntity.getHeaders(), responseEntity.getBody(), responseEntity.getStatusCode(), code);
+        } else if (result == null) {
+            log.info("At {}#{} [Response: null] IP: {}, Session-ID: {}, Code: {}",
+                    className, methodName, ip, sessionId, code);
+        } else {
+            throw new RuntimeException("유효하지 않은 Controller 반환 타입");
+        }
+
         return result;
     }
     private Map params(JoinPoint joinPoint) {
