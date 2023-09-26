@@ -39,7 +39,7 @@ public class AuthenticateCodeServiceImplTest {
         return new AuthenticateCodeReqDto(authenticationCode.getCode());
     }
 
-    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage, AuthenticationCode authenticationCode){
+    private void assertThrowsExpectedExceptionWithMessageAndAuthenticationCode(String expectedMessage, AuthenticationCode authenticationCode){
         AuthenticateCodeReqDto reqDto = createAuthenticateCodeReqDto(authenticationCode);
 
         ExpectedException exception = assertThrows(ExpectedException.class,
@@ -70,7 +70,7 @@ public class AuthenticateCodeServiceImplTest {
         given(codeRepository.findByUserId(any(Long.class))).willReturn(Collections.emptyList());
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + recentAuthenticationCode.getUserId(), recentAuthenticationCode);
+        assertThrowsExpectedExceptionWithMessageAndAuthenticationCode("사용자의 code가 존재하지 않습니다. 사용자의 ID : " + recentAuthenticationCode.getUserId(), recentAuthenticationCode);
     }
 
     @Test
@@ -79,6 +79,6 @@ public class AuthenticateCodeServiceImplTest {
         givenValidCode();
 
         //when & then
-        assertThrowsExpectedExceptionWithMessage("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", pastAndInvalidAuthenticationCode);
+        assertThrowsExpectedExceptionWithMessageAndAuthenticationCode("유효하지 않은 code 입니다. 이전 혹은 잘못된 code입니다.", pastAndInvalidAuthenticationCode);
     }
 }
