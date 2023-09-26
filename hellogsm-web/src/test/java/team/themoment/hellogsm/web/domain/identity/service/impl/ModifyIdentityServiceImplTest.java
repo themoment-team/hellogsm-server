@@ -63,7 +63,6 @@ public class ModifyIdentityServiceImplTest {
     }
 
     private void assertThrowsExpectedExceptionWithMessageAndReqDtoAndUserId(String expectedMessage, IdentityReqDto reqDto, Long userId){
-
         ExpectedException exception = assertThrows(ExpectedException.class,
                 () -> modifyIdentityService.execute(reqDto, userId));;
 
