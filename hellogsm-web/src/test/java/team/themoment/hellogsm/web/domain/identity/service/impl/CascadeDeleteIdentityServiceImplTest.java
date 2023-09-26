@@ -27,22 +27,22 @@ public class CascadeDeleteIdentityServiceImplTest {
     @Mock
     private IdentityRepository identityRepository;
 
-    private final Identity identity = new Identity(1L, "유재석", "01012345678", LocalDate.EPOCH, Gender.MALE, 1L);
+    private final Identity identityDummy = new Identity(1L, "유재석", "01012345678", LocalDate.EPOCH, Gender.MALE, 1L);
 
     private void verifyIdentityDeletionForUser(Boolean identityExists, Integer wantedNumberOfInvocations){
         //given
         given(identityRepository.findByUserId(any(Long.class)))
-                .willReturn(identityExists ? Optional.of(identity) : Optional.empty());
+                .willReturn(identityExists ? Optional.of(identityDummy) : Optional.empty());
 
         //when
-        cascadeDeleteIdentityService.execute(identity.getUserId());
+        cascadeDeleteIdentityService.execute(identityDummy.getUserId());
 
         //then
         verify(identityRepository, times(wantedNumberOfInvocations)).deleteById(any(Long.class));
     }
 
     @Test
-    public void 성공(){
+    public void Identity를_삭제합니다(){
         verifyIdentityDeletionForUser(true, 1);
     }
 
