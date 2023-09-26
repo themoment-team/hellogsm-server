@@ -50,7 +50,7 @@ public class QuerySingleApplicationServiceImplTest {
             .thirdDesiredMajor(Major.IOT)
             .build();
 
-    private final AdmissionInfo admissionInfo = AdmissionInfo.builder()
+    private final AdmissionInfo admissionInfoDummy = AdmissionInfo.builder()
             .id(1L)
             .applicantImageUri("https://naver.com")
             .applicantName("차무식")
@@ -72,7 +72,7 @@ public class QuerySingleApplicationServiceImplTest {
             .desiredMajor(desiredMajor)
             .build();
 
-    private final AdmissionStatus admissionStatus = AdmissionStatus.builder()
+    private final AdmissionStatus admissionStatusDummy = AdmissionStatus.builder()
             .id(1L)
             .isFinalSubmitted(true)
             .isPrintsArrived(true)
@@ -85,23 +85,23 @@ public class QuerySingleApplicationServiceImplTest {
             .finalMajor(Major.SW)
             .build();
 
-    private final MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(
+    private final MiddleSchoolGrade middleSchoolGradeDummy = new MiddleSchoolGrade(
             1L,
             "{\"curriculumScoreSubtotal\":100,\"nonCurriculumScoreSubtotal\":100,\"rankPercentage\":0,\"scoreTotal\":261}"
     );
 
-    private final Application application = new Application(
+    private final Application applicationDummy = new Application(
             1L,
-            admissionInfo,
-            admissionStatus,
-            middleSchoolGrade,
+            admissionInfoDummy,
+            admissionStatusDummy,
+            middleSchoolGradeDummy,
             1L
     );
 
     @Test
     public void 성공() {
         // given
-        given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.of(application));
+        given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.of(applicationDummy));
 
         // when & then
         assertDoesNotThrow(() -> querySingleApplicationService.execute(1L));
