@@ -113,7 +113,7 @@ public class QuerySingleApplicationServiceImplTest {
     }
 
     @Test
-    public void 존재하지_않는_User() {
+    public void 존재하지_않는_User일때_적절한_ExpectedException을_던진다() {
         // given
         given(applicationRepository.findByUserIdEagerFetch(any(Long.class))).willReturn(Optional.empty());
 
