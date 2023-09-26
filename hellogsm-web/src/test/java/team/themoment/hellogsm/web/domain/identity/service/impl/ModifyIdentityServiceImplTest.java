@@ -53,11 +53,23 @@ public class ModifyIdentityServiceImplTest {
         given(userRepository.existsById(any(Long.class))).willReturn(value);
     }
 
+    private void givenValidIdentity(Boolean identityExists){
+        given(identityRepository.findByUserId(any(Long.class)))
+                .willReturn(identityExists ? Optional.of(identity) : Optional.empty());
+    }
+
+    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage){
+        ExpectedException exception = assertThrows(ExpectedException.class,
+                () -> modifyIdentityService.execute(reqDto, identity.getUserId()));;
+
+        assertEquals(exception.getMessage(), expectedMessage);
+    }
+
     @Test
     public void 성공(){
         //given
         givenExistingUser(true);
-        given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.of(identity));
+        givenValidIdentity(true);
         given(codeRepository.findByUserId(any(Long.class))).willReturn(codes);
         given(identityRepository.save(any(Identity.class))).willReturn(identity);
         doNothing().when(codeRepository).deleteById(any(String.class));
@@ -67,18 +79,26 @@ public class ModifyIdentityServiceImplTest {
 
         //then
         IdentityDto expectedResult = new IdentityDto(identity.getId(), identity.getName(), identity.getPhoneNumber(), identity.getBirth(), identity.getGender(), identity.getUserId());
+
         assertEquals(result, expectedResult);
     }
 
     @Test
     public void 존재하지_않는_User(){
+        //given
         givenExistingUser(false);
 
-        ExpectedException exception = assertThrows(ExpectedException.class,
-                () -> modifyIdentityService.execute(reqDto, identity.getUserId()));
+        //when & then
+        assertThrowsExpectedExceptionWithMessage("존재하지 않는 User 입니다");
+    }
 
-        String expectedMessage = "존재하지 않는 User 입니다";
+    @Test
+    public void 존재하지_않는_Identity(){
+        //given
+        givenExistingUser(true);
+        givenValidIdentity(false);
 
-        assertEquals(exception.getMessage(), expectedMessage);
+        //when & then
+        assertThrowsExpectedExceptionWithMessage("존재하지 않는 Identity 입니다");
     }
 }
