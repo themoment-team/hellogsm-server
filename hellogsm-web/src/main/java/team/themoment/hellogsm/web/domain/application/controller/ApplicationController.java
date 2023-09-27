@@ -65,6 +65,14 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "생성되었습니다"));
     }
 
+    @PutMapping("/application/{userId}")
+    public ResponseEntity<Map<String, String>> modifyOne(
+            @RequestBody @Valid ApplicationReqDto body,
+            @PathVariable Long userId) {
+        modifyApplicationService.execute(body, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
+    }
+
     @PutMapping("/application/me")
     public ResponseEntity<Map<String, String>> modify(
             @RequestBody @Valid ApplicationReqDto body

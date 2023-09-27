@@ -474,6 +474,23 @@ class ApplicationControllerTest {
     }
 
     @Test
+    @DisplayName("입력받은 USER ID로 원서 수정")
+    void modifyById() throws Exception {
+        doNothing().when(modifyApplicationService).execute(any(ApplicationReqDto.class), any(Long.class));
+
+        this.mockMvc.perform(put("/application/v1/application/1")
+                        .content(objectMapper.writeValueAsString(applicationReqDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(this.documentationHandler.document(
+                        requestSessionCookie(),
+                        requestFields(createRequestFields)
+                ));
+    }
+
+    @Test
     @DisplayName("원서 전체 조회")
     void findAll() throws Exception {
         ApplicationListDto applicationListDto = new ApplicationListDto(
