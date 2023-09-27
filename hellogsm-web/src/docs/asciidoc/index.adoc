@@ -549,3 +549,17 @@ operation::application/tickets[snippets='curl-request,http-request']
 
 ==== Response
 operation::application/tickets[snippets='http-response,response-fields']
+
+=== [GET] excel
+엑셀을 다운로드하는 엔드포인트입니다.
+
+시트는 일반전형/사회전형/특별전형/불합격 으로 나뉘어집니다.
+
+==== 사용 가능한 권한
+    ROLE_ADMIN
+
+==== Request
+operation::application/download-excel[snippets='curl-request,http-request']
+
+==== Response
+operation::application/download-excel[snippets='http-response']

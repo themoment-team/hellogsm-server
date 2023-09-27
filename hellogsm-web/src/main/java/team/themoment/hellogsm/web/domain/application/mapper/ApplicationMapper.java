@@ -1,6 +1,7 @@
 package team.themoment.hellogsm.web.domain.application.mapper;
 
 import io.micrometer.common.lang.Nullable;
+import org.hibernate.Hibernate;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import team.themoment.hellogsm.entity.common.util.OptionalUtils;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.AdmissionInfo;
 import team.themoment.hellogsm.entity.domain.application.entity.admission.DesiredMajor;
+import team.themoment.hellogsm.entity.domain.application.entity.grade.AdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GedAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.GraduateAdmissionGrade;
 import team.themoment.hellogsm.entity.domain.application.entity.grade.MiddleSchoolGrade;
@@ -23,7 +25,8 @@ import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationSta
 import team.themoment.hellogsm.web.domain.application.dto.response.*;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * {@link Application}과 관련된 객체를 Mapping하는 역할의 객체입니다.
@@ -311,5 +314,99 @@ public interface ApplicationMapper {
                 new ApplicationListInfoDto(applications.getTotalPages(), applications.getTotalElements()),
                 applicationsToSearchApplicationResDtos(applications.getContent())
         );
+    }
+
+    default List<List<String>> applicationToExcelDataList(List<Application> applicationList, Boolean sortByFinalScore) {
+        List<List<String>> sheetData = new ArrayList<>();
+        List<Application> sortedList;
+
+        if (sortByFinalScore) {
+            sortedList = applicationList.stream()
+                    .sorted(Comparator.comparing(application -> {
+                        BigDecimal totalScore = application.getAdmissionGrade().getTotalScore();
+                        Optional<BigDecimal> secondScore = application.getAdmissionStatus().getSecondScore();
+                        return totalScore.add(secondScore.orElse(BigDecimal.ZERO));
+                    }, Comparator.reverseOrder()))
+                    .toList();
+        } else {
+            sortedList = applicationList.stream()
+                    .sorted(Comparator.comparing(application ->
+                            application.getAdmissionGrade().getTotalScore(),
+                            Comparator.reverseOrder())
+                    )
+                    .toList();
+        }
+
+        int index = 1;
+        for (Application application : sortedList) {
+            AdmissionStatus admissionStatus = application.getAdmissionStatus();
+            AdmissionInfo admissionInfo = application.getAdmissionInfo();
+            AdmissionGrade admissionGrade = (AdmissionGrade) Hibernate.unproxy(application.getAdmissionGrade());
+
+            BigDecimal finalScore;
+            if (admissionStatus.getSecondScore().isEmpty()) {
+                finalScore = null;
+            } else {
+                finalScore = admissionGrade.getTotalScore().add(admissionStatus.getSecondScore().get());
+            }
+
+            BigDecimal curricularSubtotalScore;
+            BigDecimal articleScore;
+            BigDecimal extracurricularSubtotalScore;
+            BigDecimal attendanceScore;
+            BigDecimal volunteerScore;
+            if (admissionInfo.getGraduation().equals(GraduationStatus.GED)) {
+                GedAdmissionGrade gedAdmissionGrade = (GedAdmissionGrade) admissionGrade;
+                curricularSubtotalScore = gedAdmissionGrade.getGedTotalScore();
+                articleScore = null;
+                extracurricularSubtotalScore = gedAdmissionGrade.getGedMaxScore();
+                attendanceScore = null;
+                volunteerScore = null;
+            } else {
+                GraduateAdmissionGrade graduateAdmissionGrade = (GraduateAdmissionGrade) admissionGrade;
+                curricularSubtotalScore = graduateAdmissionGrade.getCurricularSubtotalScore().subtract(graduateAdmissionGrade.getArtisticScore());
+                articleScore = graduateAdmissionGrade.getArtisticScore();
+                extracurricularSubtotalScore = graduateAdmissionGrade.getExtracurricularSubtotalScore();
+                attendanceScore = graduateAdmissionGrade.getAttendanceScore();
+                volunteerScore = graduateAdmissionGrade.getVolunteerScore();
+            }
+
+            List<String> rowData = List.of(
+                    String.valueOf(index),
+                    String.valueOf(admissionStatus.getRegistrationNumber().orElse(null)),
+                    admissionInfo.getApplicantName(),
+                    String.valueOf(admissionInfo.getDesiredMajor().getFirstDesiredMajor()),
+                    String.valueOf(admissionInfo.getDesiredMajor().getSecondDesiredMajor()),
+                    String.valueOf(admissionInfo.getDesiredMajor().getThirdDesiredMajor()),
+                    String.valueOf(admissionInfo.getApplicantBirth()),
+                    String.valueOf(admissionInfo.getApplicantGender()),
+                    admissionInfo.getAddress(),
+                    String.valueOf(admissionInfo.getSchoolName().orElse(null)),
+                    String.valueOf(admissionInfo.getGraduation()),
+                    String.valueOf(admissionInfo.getScreening()),
+                    String.valueOf(admissionStatus.getScreeningFirstEvaluationAt().orElse(null)),
+                    String.valueOf(admissionStatus.getScreeningSecondEvaluationAt().orElse(null)),
+                    String.valueOf(curricularSubtotalScore),
+                    String.valueOf(articleScore),
+                    String.valueOf(extracurricularSubtotalScore),
+                    String.valueOf(attendanceScore),
+                    String.valueOf(volunteerScore),
+                    String.valueOf(admissionGrade.getTotalScore()),
+                    String.valueOf(admissionStatus.getSecondScore().orElse(null)),
+                    String.valueOf(finalScore),
+                    admissionInfo.getApplicantPhoneNumber(),
+                    admissionInfo.getApplicantPhoneNumber(),
+                    String.valueOf(admissionInfo.getTeacherPhoneNumber().orElse(null))
+            );
+
+            rowData = rowData.stream()
+                    .map(value -> value.equals("null") ? "" : value)
+                    .toList();
+
+            sheetData.add(rowData);
+            index++;
+        }
+
+        return sheetData;
     }
 }

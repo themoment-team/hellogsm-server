@@ -205,6 +205,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/application/v1/status/*").hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
                 )
+                .requestMatchers("/application/v1/excel").hasAnyRole(
+                        Role.ROLE_ADMIN.getRole()
+                )
                 .anyRequest().permitAll()
         );
     }

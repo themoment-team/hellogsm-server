@@ -2,6 +2,7 @@ package team.themoment.hellogsm.web.domain.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -15,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,7 +32,6 @@ import team.themoment.hellogsm.web.domain.application.dto.response.*;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationStatusReqDto;
 import team.themoment.hellogsm.web.domain.application.enums.SearchTag;
 import team.themoment.hellogsm.web.domain.application.service.*;
-import team.themoment.hellogsm.web.domain.common.ControllerTestUtil;
 import team.themoment.hellogsm.web.global.security.auth.AuthenticatedUserManager;
 
 import java.math.BigDecimal;
@@ -92,6 +91,8 @@ class ApplicationControllerTest {
     private ImageSaveService imageSaveService;
     @MockBean
     private FinalSubmissionService finalSubmissionService;
+    @MockBean
+    private DownloadExcelService downloadExcelService;
 
 
     protected final FieldDescriptor[] gedResponseFields = new FieldDescriptor[]{
@@ -754,5 +755,21 @@ class ApplicationControllerTest {
                 .andDo(this.documentationHandler.document(
                         requestSessionCookie()
                 ));
+    }
+
+    @Test
+    @DisplayName("엑셀 다운로드")
+    void downloadExcel() throws Exception {
+        doNothing().when(downloadExcelService).execute(any(HttpServletResponse.class));
+
+        this.mockMvc.perform(get("/application/v1/excel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("SESSION", "SESSIONID12345")))
+                .andExpect(status().isOk())
+                .andExpect(header().stringValues("Content-Type", "applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"))
+                .andDo(this.documentationHandler.document(
+                        requestSessionCookie()
+                ));
+
     }
 }
