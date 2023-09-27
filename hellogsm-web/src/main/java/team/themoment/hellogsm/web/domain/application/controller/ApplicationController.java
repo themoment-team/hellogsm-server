@@ -69,7 +69,7 @@ public class ApplicationController {
     public ResponseEntity<Map<String, String>> modifyOne(
             @RequestBody @Valid ApplicationReqDto body,
             @PathVariable Long userId) {
-        modifyApplicationService.execute(body, userId);
+        modifyApplicationService.execute(body, userId, true);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
@@ -77,7 +77,7 @@ public class ApplicationController {
     public ResponseEntity<Map<String, String>> modify(
             @RequestBody @Valid ApplicationReqDto body
     ) {
-        modifyApplicationService.execute(body, manager.getId());
+        modifyApplicationService.execute(body, manager.getId(), false);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
 
