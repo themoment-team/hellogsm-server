@@ -202,6 +202,12 @@ public class SecurityConfig {
                 ).hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
                 )
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/application/v1/application/*"
+                ).hasAnyRole(
+                        Role.ROLE_ADMIN.getRole()
+                )
                 .requestMatchers(HttpMethod.PUT, "/application/v1/status/*").hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
                 )
