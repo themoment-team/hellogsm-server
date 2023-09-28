@@ -48,12 +48,11 @@ public class ModifyApplicationServiceImpl implements ModifyApplicationService {
         if (!isAdmin && application.getAdmissionStatus().isFinalSubmitted())
             throw new ExpectedException("최종제출이 완료된 원서입니다", HttpStatus.BAD_REQUEST);
 
-        Identity identity = identityRepository.findByUserId(userId)
-                .orElseThrow(() -> new ExpectedException("Identity가 존재하지 않습니다", HttpStatus.BAD_REQUEST));
-
-        IdentityDto identityDto = IdentityMapper.INSTANCE.identityToIdentityDto(identity);
+        if(!identityRepository.existsByUserId(userId)) {
+            throw new ExpectedException("Identity가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
+        }
 
         applicationRepository.save(
-                ApplicationMapper.INSTANCE.applicationReqDtoAndIdentityDtoToApplication(body, identityDto, userId, application.getId()));
+                ApplicationMapper.INSTANCE.updateApplicationByApplicationReqDtoAndApplication(body, application));
     }
 }
