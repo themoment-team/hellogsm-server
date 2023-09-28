@@ -259,6 +259,67 @@ public interface ApplicationMapper {
         );
     }
 
+    default Application updateApplicationByApplicationReqDtoAndApplication(ApplicationReqDto applicationReqDto, Application application) {
+
+        Long appId = application.getId();
+        Long userId = application.getUserId();
+        AdmissionInfo oldAdmissionInfo = application.getAdmissionInfo();
+        AdmissionStatus oldAdmissionStatus = application.getAdmissionStatus();
+
+
+        DesiredMajor desiredMajor = DesiredMajor.builder()
+                .firstDesiredMajor(Major.valueOf(applicationReqDto.firstDesiredMajor()))
+                .secondDesiredMajor(Major.valueOf(applicationReqDto.secondDesiredMajor()))
+                .thirdDesiredMajor(Major.valueOf(applicationReqDto.thirdDesiredMajor()))
+                .build();
+
+        AdmissionInfo admissionInfo = AdmissionInfo.builder()
+                .id(userId)
+                .applicantImageUri(applicationReqDto.applicantImageUri())
+                .applicantName(oldAdmissionInfo.getApplicantName())
+                .applicantGender(oldAdmissionInfo.getApplicantGender())
+                .applicantBirth(oldAdmissionInfo.getApplicantBirth())
+                .address(applicationReqDto.address())
+                .detailAddress(applicationReqDto.detailAddress())
+                .graduation(GraduationStatus.valueOf(applicationReqDto.graduation()))
+                .telephone(applicationReqDto.telephone())
+                .applicantPhoneNumber(oldAdmissionInfo.getApplicantPhoneNumber())
+                .guardianName(applicationReqDto.guardianName())
+                .relationWithApplicant(applicationReqDto.relationWithApplicant())
+                .guardianPhoneNumber(applicationReqDto.guardianPhoneNumber())
+                .teacherName(applicationReqDto.teacherName())
+                .teacherPhoneNumber(applicationReqDto.teacherPhoneNumber())
+                .screening(Screening.valueOf(applicationReqDto.screening()))
+                .schoolName(applicationReqDto.schoolName())
+                .schoolLocation(applicationReqDto.schoolLocation())
+                .desiredMajor(desiredMajor)
+                .build();
+
+        AdmissionStatus admissionStatus = AdmissionStatus
+                .builder()
+                .id(oldAdmissionStatus.getId())
+                .isFinalSubmitted(oldAdmissionStatus.isFinalSubmitted())
+                .isPrintsArrived(oldAdmissionStatus.isPrintsArrived())
+                .firstEvaluation(oldAdmissionStatus.getFirstEvaluation())
+                .secondEvaluation(oldAdmissionStatus.getSecondEvaluation())
+                .screeningFirstEvaluationAt(OptionalUtils.fromOptional(oldAdmissionStatus.getScreeningFirstEvaluationAt()))
+                .screeningSecondEvaluationAt(OptionalUtils.fromOptional(oldAdmissionStatus.getScreeningFirstEvaluationAt()))
+                .registrationNumber(OptionalUtils.fromOptional(oldAdmissionStatus.getRegistrationNumber()))
+                .secondScore(OptionalUtils.fromOptional(oldAdmissionStatus.getSecondScore()))
+                .finalMajor(OptionalUtils.fromOptional(oldAdmissionStatus.getFinalMajor()))
+                .build();
+
+        MiddleSchoolGrade middleSchoolGrade = new MiddleSchoolGrade(userId, applicationReqDto.middleSchoolGrade());
+
+        return new Application(
+                appId,
+                admissionInfo,
+                admissionStatus,
+                middleSchoolGrade,
+                userId
+        );
+    }
+
     @BeanMapping(ignoreUnmappedSourceProperties = {
             "userId",
             "applicantName",
@@ -331,7 +392,7 @@ public interface ApplicationMapper {
         } else {
             sortedList = applicationList.stream()
                     .sorted(Comparator.comparing(application ->
-                            application.getAdmissionGrade().getTotalScore(),
+                                    application.getAdmissionGrade().getTotalScore(),
                             Comparator.reverseOrder())
                     )
                     .toList();
