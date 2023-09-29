@@ -1,12 +1,11 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/hellogsm-server/hellogsm-web/build/libs/*.jar)
+BUILD_JAR=$(ls /home/ec2-user/builds/*.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
-DEPLOY_PATH=/home/ec2-user/dev/web/sictak/
+DEPLOY_PATH=/home/ec2-user/
 cp $BUILD_JAR $DEPLOY_PATH
 
 CURRENT_PID=$(pgrep -f $JAR_NAME)
-
 if [ -z $CURRENT_PID ]
 then
   echo "현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
@@ -17,5 +16,7 @@ else
 fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
+
 chmod +x $DEPLOY_JAR
+
 nohup java -jar $DEPLOY_JAR --spring.profiles.active=prod &
