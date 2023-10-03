@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/builds/*.jar)
+BUILD_JAR=$(ls /home/ec2-user/builds/hellogsm-web/build/libs/*.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
 DEPLOY_PATH=/home/ec2-user/

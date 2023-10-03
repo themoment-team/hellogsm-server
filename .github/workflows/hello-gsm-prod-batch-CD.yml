@@ -1,4 +1,4 @@
-name: HelloGSM dev batch CD workflow
+name: HelloGSM prod batch CD workflow
 
 on:
   push:
