@@ -6,8 +6,10 @@ on:
       - "hellogsm-web/**"
     branches: [ "main" ]
 
+  workflow_dispatch:
+
 jobs:
-  CI:
+  CD:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
