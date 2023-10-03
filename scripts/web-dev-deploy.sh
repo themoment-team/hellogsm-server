@@ -2,8 +2,7 @@
 BUILD_JAR=/home/ec2-user/builds/hellogsm-web/build/libs/hellogsm-web-0.0.1-SNAPSHOT.jar
 JAR_NAME=hellogsm-web-0.0.1-SNAPSHOT.jar
 
-DEPLOY_PATH=/home/ec2-user/deploy/
-cp $BUILD_JAR $DEPLOY_PATH
+DEPLOY_PATH=/home/ec2-user/builds/hellogsm-web/build/libs/
 
 CURRENT_PID=$(pgrep -f $JAR_NAME)
 if [ -z $CURRENT_PID ]
