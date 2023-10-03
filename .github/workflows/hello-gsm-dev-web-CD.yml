@@ -7,7 +7,7 @@ on:
     branches: [ "develop" ]
 
 jobs:
-  CI:
+  CD:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
