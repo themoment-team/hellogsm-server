@@ -1,6 +1,6 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/builds/hellogsm-web/build/libs/*.jar)
-JAR_NAME=$(basename $BUILD_JAR)
+BUILD_JAR=/home/ec2-user/builds/hellogsm-web/build/libs/hellogsm-web-0.0.1-SNAPSHOT.jar
+JAR_NAME=hellogsm-web-0.0.1-SNAPSHOT.jar
 
 DEPLOY_PATH=/home/ec2-user/deploy/
 cp $BUILD_JAR $DEPLOY_PATH
