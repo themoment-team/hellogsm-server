@@ -126,10 +126,6 @@
             <appender-ref ref="ROLLING-FILE"/>
             <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
         </logger>
-        <logger name="org.hibernate.orm.jdbc.bind" level="INFO">
-            <appender-ref ref="ROLLING-FILE"/>
-            <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
-        </logger>
         <logger name="team.themoment.hellogsm" level="INFO">
             <appender-ref ref="ROLLING-FILE"/>
             <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
