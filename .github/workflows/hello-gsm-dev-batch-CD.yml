@@ -6,6 +6,8 @@ on:
       - "hellogsm-batch/**"
     branches: [ "develop" ]
 
+  workflow_dispatch:
+
 jobs:
   CD:
     runs-on: ubuntu-latest
