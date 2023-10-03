@@ -77,7 +77,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST, "/identity/v1/identity/me/send-code-test")
                             .hasAnyRole(
                                     Role.ROLE_UNAUTHENTICATED.getRole(),
-                                    Role.ROLE_USER.getRole())
+                                    Role.ROLE_USER.getRole(),
+                                    Role.ROLE_TESTER.getRole())
             );
             authorizeHttpRequests(http);
             exceptionHandling(http);
@@ -151,25 +152,30 @@ public class SecurityConfig {
                 // user
                 .requestMatchers(HttpMethod.GET, "/user/v1/user/me").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.DELETE, "/user/v1/user/me").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.GET, "/user/v1/user/*").hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
                 )
                 // identity
                 .requestMatchers(HttpMethod.GET, "/identity/v1/identity/me").hasAnyRole(
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.PUT, "/identity/v1/identity/me").hasAnyRole(
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.POST, "/identity/v1/identity/me").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole(),
                         Role.ROLE_ADMIN.getRole()
                 )
                 .requestMatchers(
@@ -177,20 +183,24 @@ public class SecurityConfig {
                         "/identity/v1/identity/me/send-code",
                         "/identity/me/auth-code").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.GET, "/identity/v1/identity/*").hasAnyRole(
                         Role.ROLE_ADMIN.getRole()
                 )
                 // application
                 .requestMatchers("/application/v1/application/me").hasAnyRole(
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.PUT, "/application/v1/final-submit").hasAnyRole(
-                        Role.ROLE_USER.getRole()
+                        Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole()
                 )
                 .requestMatchers(HttpMethod.POST, "/application/v1/image").hasAnyRole(
                         Role.ROLE_USER.getRole(),
+                        Role.ROLE_TESTER.getRole(),
                         Role.ROLE_ADMIN.getRole()
                 )
                 .requestMatchers(
