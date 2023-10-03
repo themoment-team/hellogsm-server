@@ -1,8 +1,8 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/builds/hellogsm-web/build/libs/*.jar)
+BUILD_JAR=$(ls hellogsm-web/build/libs/*.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
-DEPLOY_PATH=/home/ec2-user/
+DEPLOY_PATH=deploy/
 cp $BUILD_JAR $DEPLOY_PATH
 
 CURRENT_PID=$(pgrep -f $JAR_NAME)
