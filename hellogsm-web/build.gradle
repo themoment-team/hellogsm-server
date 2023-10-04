@@ -65,6 +65,7 @@ dependencies {
     /** production **/
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'com.amazonaws:aws-xray-recorder-sdk-spring'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-slf4j'
 }
 
 task restDocsTest(type: Test) {
