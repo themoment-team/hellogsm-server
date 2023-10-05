@@ -3,6 +3,8 @@ package team.themoment.hellogsm.web.domain.application.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -760,7 +762,8 @@ class ApplicationControllerTest {
     @Test
     @DisplayName("엑셀 다운로드")
     void downloadExcel() throws Exception {
-        doNothing().when(downloadExcelService).execute(any(HttpServletResponse.class));
+        Workbook workbook = new SXSSFWorkbook();
+        Mockito.when(downloadExcelService.execute()).thenReturn(workbook);
 
         this.mockMvc.perform(get("/application/v1/excel")
                         .contentType(MediaType.APPLICATION_JSON)

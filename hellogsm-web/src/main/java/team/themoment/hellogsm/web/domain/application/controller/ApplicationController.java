@@ -2,6 +2,7 @@ package team.themoment.hellogsm.web.domain.application.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.web.domain.application.dto.request.ApplicationReqDto;
 import team.themoment.hellogsm.web.domain.application.dto.response.ApplicationListDto;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -134,11 +136,18 @@ public class ApplicationController {
         finalSubmissionService.execute(manager.getId());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "수정되었습니다"));
     }
+
     @GetMapping("/excel")
     public ResponseEntity<Void> downloadExcel(HttpServletResponse response) {
-        downloadExcelService.execute(response);
-        response.setHeader("Content-Type","applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
-        response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
+        Workbook workbook = downloadExcelService.execute();
+        try {
+            response.setContentType("applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
+            workbook.write(response.getOutputStream());
+            workbook.close();
+        } catch (IOException ex) {
+            throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.");
+        }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
