@@ -1,13 +1,11 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
@@ -16,7 +14,6 @@ import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.DownloadExcelService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
