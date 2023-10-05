@@ -26,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -142,7 +144,7 @@ public class ApplicationController {
         Workbook workbook = downloadExcelService.execute();
         try {
             response.setContentType("applicaton/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
-            response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("지원자 입학정보.xlsx", StandardCharsets.UTF_8).replace("+", "%20"));
             workbook.write(response.getOutputStream());
             workbook.close();
         } catch (IOException ex) {
