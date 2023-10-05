@@ -67,7 +67,7 @@ public class CreateApplicationServiceImplTest {
     }
 
     @Test
-    public void 성공() {
+    public void 본인인증정보와_사용자정보를_바탕으로_원서를_생성합니다() {
         // given
         verifyExistence();
         given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.ofNullable(identity));
@@ -77,35 +77,35 @@ public class CreateApplicationServiceImplTest {
     }
 
     @Test
-    public void 존재하지_않는_User() {
+    public void 존재하지_않는_User일때_적절한_ExpectedException을_던진다() {
         // given
         given(userRepository.existsById(any(Long.class))).willReturn(false);
 
         // when & then
-        assertExpectedExceptionWithMessage("존재하지 않는 유저입니다");
+        assertThrowsExpectedExceptionWithMessage("존재하지 않는 유저입니다");
     }
 
     @Test
-    public void 이미_존재하는_Application() {
+    public void 이미_존재하는_Application일때_적절한_ExpectedException을_던진다() {
         // given
         given(userRepository.existsById(any(Long.class))).willReturn(true);
         given(applicationRepository.existsByUserId(any(Long.class))).willReturn(true);
 
         // when & then
-        assertExpectedExceptionWithMessage("원서가 이미 존재합니다");
+        assertThrowsExpectedExceptionWithMessage("원서가 이미 존재합니다");
     }
 
     @Test
-    public void 존재하지_않는_Identity() {
+    public void 존재하지_않는_Identity일때_적절한_ExpectedException을_던진다() {
         //given
         verifyExistence();
         given(identityRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
 
         // when & then
-        assertExpectedExceptionWithMessage("Identity가 존재하지 않습니다");
+        assertThrowsExpectedExceptionWithMessage("Identity가 존재하지 않습니다");
     }
 
-    private void assertExpectedExceptionWithMessage(String expectedMessage) {
+    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage) {
         ExpectedException exception = assertThrows(ExpectedException.class, () ->
                 createApplicationService.execute(applicationReqDto, 1L));
       

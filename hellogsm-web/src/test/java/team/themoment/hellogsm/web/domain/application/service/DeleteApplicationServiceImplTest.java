@@ -31,7 +31,7 @@ public class DeleteApplicationServiceImplTest {
     private final AdmissionStatus admissionStatus = mock(AdmissionStatus.class);
 
     @Test
-    public void 성공() {
+    public void 원서를_찾고_원서가_최종제출되지_않았다면_삭제합니다() {
         // given
         givenApplicationAndAdmissionStatus();
         given(application.getAdmissionStatus().isFinalSubmitted()).willReturn(false);
@@ -41,22 +41,22 @@ public class DeleteApplicationServiceImplTest {
     }
 
     @Test
-    public void 존재하지_않는_Application() {
+    public void 존재하지_않는_Application일때_적절한_ExpectedException을_던진다() {
         // given
         given(applicationRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
 
         //when & then
-        assertExpectedExceptionWithMessage("원서가 존재하지 않습니다");
+        assertThrowsExpectedExceptionWithMessage("원서가 존재하지 않습니다");
     }
 
     @Test
-    public void 최종제출_완료된_Application() {
+    public void 최종제출_완료된_Application일때_적절한_ExpectedException을_던진다() {
         // given
         givenApplicationAndAdmissionStatus();
         given(application.getAdmissionStatus().isFinalSubmitted()).willReturn(true);
 
         //when & then
-        assertExpectedExceptionWithMessage("최종제출이 완료된 원서입니다");
+        assertThrowsExpectedExceptionWithMessage("최종제출이 완료된 원서입니다");
     }
 
     private void givenApplicationAndAdmissionStatus() {
@@ -64,7 +64,7 @@ public class DeleteApplicationServiceImplTest {
         given(application.getAdmissionStatus()).willReturn(admissionStatus);
     }
 
-    private void assertExpectedExceptionWithMessage(String expectedMessage) {
+    private void assertThrowsExpectedExceptionWithMessage(String expectedMessage) {
         ExpectedException exception = assertThrows(ExpectedException.class, () ->
                 deleteApplicationService.execute(1L));
 
