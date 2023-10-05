@@ -28,13 +28,6 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
 
-    Workbook workbook = new SXSSFWorkbook();
-    Sheet generalUserSheet = workbook.createSheet("일반전형");
-    Sheet socialUserSheet = workbook.createSheet("사회전형");
-    Sheet specialUserSheet = workbook.createSheet("특별전형");
-    Sheet failedUsersheet = workbook.createSheet("불합격");
-    List<Sheet> sheetList = List.of(generalUserSheet, socialUserSheet, specialUserSheet, failedUsersheet);
-
     List<String> headerNameList = List.of(
             "순번",
             "접수번호",
@@ -70,6 +63,8 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
      */
     @Override
     public Workbook execute() {
+        Workbook workbook = new SXSSFWorkbook();
+        List<Sheet> sheetList = createSheet(workbook);
         List<List<List<String>>> sheetDataList = getSheetDataList();
 
         for (int i = 0; i < sheetList.size(); i++) {
@@ -89,6 +84,14 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
         }
 
         return workbook;
+    }
+
+    private List<Sheet> createSheet(Workbook workbook) {
+        Sheet generalUserSheet = workbook.createSheet("일반전형");
+        Sheet socialUserSheet = workbook.createSheet("사회전형");
+        Sheet specialUserSheet = workbook.createSheet("특별전형");
+        Sheet failedUsersheet = workbook.createSheet("불합격");
+        return List.of(generalUserSheet, socialUserSheet, specialUserSheet, failedUsersheet);
     }
 
     private List<List<List<String>>> getSheetDataList() {
