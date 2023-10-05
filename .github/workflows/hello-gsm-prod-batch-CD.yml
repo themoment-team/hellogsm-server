@@ -1,4 +1,4 @@
-name: HelloGSM dev batch CD workflow
+name: HelloGSM prod batch CD workflow
 
 on:
   push:
@@ -6,8 +6,10 @@ on:
       - "hellogsm-batch/**"
     branches: [ "main" ]
 
+  workflow_dispatch:
+
 jobs:
-  CI:
+  CD:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -51,4 +53,4 @@ jobs:
         run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/prod/batch/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name hellogsm-prod-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name batch-server --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=prod/batch/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name hellogsm-prod-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name prod-batch-server --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=prod/batch/$GITHUB_SHA.zip

@@ -12,7 +12,7 @@ import team.themoment.hellogsm.entity.domain.identity.event.UpdateIdentityEvent;
  * 본인인증 정보를 저장하는 Identity Entity입니다.
  */
 @Entity
-@Table(name = "identity")
+@Table(name = "identities")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
