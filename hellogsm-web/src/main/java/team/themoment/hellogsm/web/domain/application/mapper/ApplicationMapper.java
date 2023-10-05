@@ -392,7 +392,7 @@ public interface ApplicationMapper {
         } else {
             sortedList = applicationList.stream()
                     .sorted(Comparator.comparing(application ->
-                                    application.getAdmissionGrade().getTotalScore(),
+                            application.getAdmissionGrade().getTotalScore(),
                             Comparator.reverseOrder())
                     )
                     .toList();

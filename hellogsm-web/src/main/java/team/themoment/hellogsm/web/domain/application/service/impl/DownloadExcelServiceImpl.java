@@ -1,13 +1,11 @@
 package team.themoment.hellogsm.web.domain.application.service.impl;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import team.themoment.hellogsm.entity.domain.application.entity.Application;
 import team.themoment.hellogsm.entity.domain.application.enums.EvaluationStatus;
@@ -16,7 +14,6 @@ import team.themoment.hellogsm.web.domain.application.mapper.ApplicationMapper;
 import team.themoment.hellogsm.web.domain.application.repository.ApplicationRepository;
 import team.themoment.hellogsm.web.domain.application.service.DownloadExcelService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -69,10 +66,10 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
     /**
      * 일반전형/사회전형/특별전형/불합격 총 4개의 시트를 포함한 엑셀을 생성하여 반환합니다.
      *
-     * @param response (HttpServletResponse) 엑셀을 담는 용도
+     * @Return 엑셀 파일을 반환합니다.
      */
     @Override
-    public void execute(HttpServletResponse response) {
+    public Workbook execute() {
         List<List<List<String>>> sheetDataList = getSheetDataList();
 
         for (int i = 0; i < sheetList.size(); i++) {
@@ -91,12 +88,7 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
             }
         }
 
-        try {
-            workbook.write(response.getOutputStream());
-            workbook.close();
-        } catch (IOException ex) {
-            throw new RuntimeException("파일 작성과정에서 예외가 발생하였습니다.");
-        }
+        return workbook;
     }
 
     private List<List<List<String>>> getSheetDataList() {
