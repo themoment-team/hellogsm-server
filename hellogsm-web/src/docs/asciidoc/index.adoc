@@ -473,6 +473,18 @@ operation::application/modify[snippets='curl-request,http-request,request-fields
 ==== Response
 operation::application/modify[snippets='http-response']
 
+=== [PUT] application/{userId}
+USER ID를 사용하여 특정 사용자의 원서를 수정하는 엔드포인트입니다.
+
+==== 사용 가능한 권한
+    ROLE_ADMIN
+
+==== Request
+operation::application/modify-by-id[snippets='curl-request,http-request,request-fields']
+
+==== Response
+operation::application/modify-by-id[snippets='http-response']
+
 === [DELETE] application/me
 현재 사용자의 원서를 삭제하는 엔드포인트입니다.
 

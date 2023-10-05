@@ -18,7 +18,6 @@ import team.themoment.hellogsm.web.global.thirdParty.aws.service.template.AwsTem
 @RequiredArgsConstructor
 @Slf4j
 public class SendSmsServiceImpl implements SendSmsService {
-    private final static String MAX_PRICE = "1.00"; // 서버에서 이게 필요한가? 어차피 AWS 설정하면 되는데
     private final static String SENDER_ID = "hello-gsm";
     private final static String KR_CODE = "+82";
     private final SnsSmsTemplate smsTemplate;
@@ -38,7 +37,6 @@ public class SendSmsServiceImpl implements SendSmsService {
                     message,
                     SmsMessageAttributes.builder()
                             .smsType(SmsType.TRANSACTIONAL)
-                            .maxPrice(MAX_PRICE)
                             .senderID(SENDER_ID)
                             .build()
             );

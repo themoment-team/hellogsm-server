@@ -39,21 +39,20 @@ public class ModifyApplicationServiceImpl implements ModifyApplicationService {
      *      4. 본인인증 정보가 존재하지 않을 경우 <br>
      */
     @Override
-    public void execute(ApplicationReqDto body, Long userId) {
+    public void execute(ApplicationReqDto body, Long userId, boolean isAdmin) {
         if (!userRepository.existsById(userId))
             throw new ExpectedException("존재하지 않는 유저입니다", HttpStatus.BAD_REQUEST);
 
         Application application = applicationRepository.findByUserId(userId)
                 .orElseThrow(() -> new ExpectedException("원서가 존재하지 않습니다", HttpStatus.BAD_REQUEST));
-        if (application.getAdmissionStatus().isFinalSubmitted())
+        if (!isAdmin && application.getAdmissionStatus().isFinalSubmitted())
             throw new ExpectedException("최종제출이 완료된 원서입니다", HttpStatus.BAD_REQUEST);
 
-        Identity identity = identityRepository.findByUserId(userId)
-                .orElseThrow(() -> new ExpectedException("Identity가 존재하지 않습니다", HttpStatus.BAD_REQUEST));
-
-        IdentityDto identityDto = IdentityMapper.INSTANCE.identityToIdentityDto(identity);
+        if(!identityRepository.existsByUserId(userId)) {
+            throw new ExpectedException("Identity가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
+        }
 
         applicationRepository.save(
-                ApplicationMapper.INSTANCE.applicationReqDtoAndIdentityDtoToApplication(body, identityDto, userId, application.getId()));
+                ApplicationMapper.INSTANCE.updateApplicationByApplicationReqDtoAndApplication(body, application));
     }
 }

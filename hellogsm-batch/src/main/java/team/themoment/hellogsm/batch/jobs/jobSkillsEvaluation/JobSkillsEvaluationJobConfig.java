@@ -155,7 +155,7 @@ public class JobSkillsEvaluationJobConfig {
                 .queryString(
                         "SELECT a " +
                                 "FROM Application a " + // TODO 테스트 코드 추가하기
-                                "WHERE a.admissionStatus.firstEvaluation = 'PASS' " +
+                                "WHERE a.admissionStatus.firstEvaluation = 'PASS' AND a.admissionStatus.screeningFirstEvaluationAt IS NOT NULL " +
                                 "ORDER BY a.admissionGrade.totalScore DESC ," +
                                 "(a.admissionGrade.curricularSubtotalScore + a.admissionGrade.artisticScore) DESC, " +
                                 "a.admissionGrade.grade3Semester1Score DESC, " +

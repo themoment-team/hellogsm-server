@@ -18,4 +18,4 @@ DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 
 chmod +x $DEPLOY_JAR
 
-nohup java -jar $DEPLOY_JAR --spring.profiles.active=dev > /dev/null 2> /dev/null < /dev/null &
+nohup java -jar $DEPLOY_JAR --spring.profiles.active=prod > /dev/null 2> /dev/null < /dev/null &
