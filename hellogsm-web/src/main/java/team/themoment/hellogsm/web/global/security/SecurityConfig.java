@@ -153,7 +153,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/user/v1/user/me").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),
                         Role.ROLE_USER.getRole(),
-                        Role.ROLE_TESTER.getRole()
+                        Role.ROLE_TESTER.getRole(),
+                        Role.ROLE_ADMIN.getRole()
                 )
                 .requestMatchers(HttpMethod.DELETE, "/user/v1/user/me").hasAnyRole(
                         Role.ROLE_UNAUTHENTICATED.getRole(),

@@ -26,18 +26,72 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     Page<Application> findAll(Pageable pageable);
 
-    Page<Application> findAllByAdmissionInfoApplicantNameContainingAndAdmissionStatus_IsFinalSubmitted(String keyword, Boolean isFinalSubmitted, Pageable pageable);
+    @Query("SELECT a FROM Application a " +
+            "WHERE a.admissionInfo.applicantName LIKE %:keyword% " +
+            "AND a.admissionStatus.isFinalSubmitted = :isFinalSubmitted " +
+            "ORDER BY " +
+            "   CASE " +
+            "       WHEN a.admissionStatus.secondEvaluation = 'PASS' THEN 30 " +
+            "       WHEN a.admissionStatus.secondEvaluation = 'FALL' THEN 20 " +
+            "       ELSE 10 " +
+            "   END DESC, " +
+            "   CASE " +
+            "       WHEN a.admissionStatus.firstEvaluation = 'PASS' THEN 3 " +
+            "       WHEN a.admissionStatus.firstEvaluation = 'FALL' THEN 2 " +
+            "       ELSE 1 " +
+            "   END DESC")
+    Page<Application> findAllByIsFinalSubmittedAndApplicantNameContaining(@Param("keyword") String keyword, @Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
 
-    Page<Application> findAllByAdmissionInfoSchoolNameContainingAndAdmissionStatus_IsFinalSubmitted(String keyword, Boolean isFinalSubmitted, Pageable pageable);
+    @Query("SELECT a FROM Application a " +
+            "WHERE a.admissionInfo.schoolName LIKE %:keyword% " +
+            "AND a.admissionStatus.isFinalSubmitted = :isFinalSubmitted " +
+            "ORDER BY " +
+            "    CASE " +
+            "        WHEN a.admissionStatus.secondEvaluation = 'PASS' THEN 30 " +
+            "        WHEN a.admissionStatus.secondEvaluation = 'FALL' THEN 20 " +
+            "        ELSE 10 " +
+            "    END DESC, " +
+            "    CASE " +
+            "        WHEN a.admissionStatus.firstEvaluation = 'PASS' THEN 3 " +
+            "        WHEN a.admissionStatus.firstEvaluation = 'FALL' THEN 2 " +
+            "        ELSE 1 " +
+            "    END DESC")
+    Page<Application> findAllByIsFinalSubmittedAndSchoolNameContaining(@Param("keyword") String keyword, @Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
 
-    @Query("SELECT a FROM Application a WHERE " +
+    @Query("SELECT a FROM Application a " +
+            "WHERE " +
             "(a.admissionInfo.applicantPhoneNumber LIKE %:keyword% OR " +
             "a.admissionInfo.guardianPhoneNumber LIKE %:keyword% OR " +
             "a.admissionInfo.teacherPhoneNumber LIKE %:keyword%) " +
-            "AND a.admissionStatus.isFinalSubmitted = TRUE")
+            "AND a.admissionStatus.isFinalSubmitted = TRUE " +
+            "ORDER BY " +
+            "   CASE " +
+            "       WHEN a.admissionStatus.secondEvaluation = 'PASS' THEN 30 " +
+            "       WHEN a.admissionStatus.secondEvaluation = 'FALL' THEN 20 " +
+            "       ELSE 10 " +
+            "   END DESC, " +
+            "       CASE " +
+            "       WHEN a.admissionStatus.firstEvaluation = 'PASS' THEN 3 " +
+            "       WHEN a.admissionStatus.firstEvaluation = 'FALL' THEN 2 " +
+            "       ELSE 1 " +
+            "   END DESC")
     Page<Application> findAllByIsFinalSubmittedAndPhoneNumberContaining(@Param("keyword") String keyword, Pageable pageable);
 
-    Page<Application> findAllByAdmissionStatusIsFinalSubmitted(Boolean isFinalSubmitted, Pageable pageable);
+    @Query("SELECT a FROM Application a " +
+            "WHERE " +
+            "a.admissionStatus.isFinalSubmitted = :isFinalSubmitted " +
+            "ORDER BY " +
+            "    CASE " +
+            "        WHEN a.admissionStatus.secondEvaluation = 'PASS' THEN 30 " +
+            "        WHEN a.admissionStatus.secondEvaluation = 'FALL' THEN 20 " +
+            "        ELSE 10 " +
+            "    END DESC, " +
+            "    CASE " +
+            "        WHEN a.admissionStatus.firstEvaluation = 'PASS' THEN 3 " +
+            "        WHEN a.admissionStatus.firstEvaluation = 'FALL' THEN 2 " +
+            "        ELSE 1 " +
+            "    END DESC")
+    Page<Application> findAllByIsFinalSubmitted(@Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
 
     void deleteApplicationByUserId(Long userId);
 
