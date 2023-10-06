@@ -150,17 +150,34 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
     }
 
     private BigDecimal calcArtSports(List<BigDecimal> scoreArray) {
-        if (scoreArray == null) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
+        int aCount = 0;
+        int bCount = 0;
+        int cCount = 0;
 
-        // (A의 개수 * 5) + (B의 개수 * 4) + (C의 개수 * 3)
-        BigDecimal reduceResult = scoreArray.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        // reduceResult / (개수 * 5) (소수점 4째 자리에서 반올림)
-        scoreArray = scoreArray.stream()
-                .filter(score -> BigDecimal.ZERO.compareTo(score) != 0)
-                .collect(Collectors.toList());
-        BigDecimal divideResult = reduceResult.divide(BigDecimal.valueOf(scoreArray.size() * 5L), 3, RoundingMode.HALF_UP);
-        return BigDecimal.valueOf(60).multiply(divideResult).setScale(3, RoundingMode.HALF_UP);
+        for (BigDecimal score : scoreArray) {
+            if (score.equals(BigDecimal.ZERO)) {
+                continue;
+            } else if (score.equals(BigDecimal.valueOf(5))) {
+                aCount++;
+            } else if (score.equals(BigDecimal.valueOf(4))) {
+                bCount++;
+            } else if (score.equals(BigDecimal.valueOf(3))) {
+                cCount++;
+            }
+        }
+
+        int totalScores = (aCount * 5) + (bCount * 4) + (cCount * 3);
+        int totalSubjects = aCount + bCount + cCount;
+        int maxScore = 5 * totalSubjects;
+
+        if (totalSubjects == 0) {
+            return BigDecimal.valueOf(36).setScale(3, RoundingMode.HALF_UP);
+        }
+
+        BigDecimal accuracyRate = BigDecimal.valueOf(totalScores).divide(BigDecimal.valueOf(maxScore), 3, RoundingMode.HALF_UP);
+        return BigDecimal.valueOf(60).multiply(accuracyRate).setScale(3, RoundingMode.HALF_UP);
     }
+
 
     private BigDecimal calcAttendance(List<BigDecimal> absentScore, List<BigDecimal> attendanceScore) {
         BigDecimal absent = absentScore.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
