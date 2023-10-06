@@ -34,7 +34,7 @@
         <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_PATH}/backup/${LOG_NAME}.log</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
                 <charset>${FILE_LOG_CHARSET}</charset>
             </encoder>
             <!-- ${LOG_NAME}이 이름인 파일(<file> 로 정의한)에 작성되다가 Rolling 조건이 되면
@@ -55,7 +55,7 @@
         <appender name="FILE-FOR-CLOUD-WATCH" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_PATH}/cloudwatch/${LOG_NAME}.log</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
                 <charset>${FILE_LOG_CHARSET}</charset>
             </encoder>
             <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
@@ -88,7 +88,7 @@
         <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_PATH}/backup/${LOG_NAME}.log</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
                 <charset>${FILE_LOG_CHARSET}</charset>
             </encoder>
             <!-- ${LOG_NAME}이 이름인 파일(<file> 로 정의한)에 작성되다가 Rolling 조건이 되면
@@ -109,7 +109,7 @@
         <appender name="FILE-FOR-CLOUD-WATCH" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_PATH}/cloudwatch/${LOG_NAME}.log</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
                 <charset>${FILE_LOG_CHARSET}</charset>
             </encoder>
             <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
