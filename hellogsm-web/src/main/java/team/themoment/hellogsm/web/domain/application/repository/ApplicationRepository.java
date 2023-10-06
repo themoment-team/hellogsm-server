@@ -43,7 +43,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);
 
-    List<Application> findAllByAdmissionStatusSecondEvaluation(EvaluationStatus evaluationStatus);
+    List<Application> findAllByAdmissionStatusFirstEvaluationOrAdmissionStatusSecondEvaluation(EvaluationStatus firstEvaluationStatus, EvaluationStatus secondEvaluationStatus);
 
     Boolean existsByAdmissionStatusFirstEvaluation(EvaluationStatus evaluationStatus);
 
@@ -53,5 +53,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     List<Application> findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening screening);
 
-    List<Application> findAllByAdmissionStatusScreeningSecondEvaluationAt(Screening screening);
+    List<Application> findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening screening, EvaluationStatus evaluationStatus);
 }
