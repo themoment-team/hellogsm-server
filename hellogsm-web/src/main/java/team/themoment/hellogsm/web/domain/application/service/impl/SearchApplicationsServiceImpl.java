@@ -41,11 +41,11 @@ public class SearchApplicationsServiceImpl implements SearchApplicationsService 
 
     public Page<Application> applicationPage(SearchTag tag, String keyword, Pageable pageable) {
         if (tag == null) {
-            return applicationRepository.findAllByAdmissionStatusIsFinalSubmitted(true, pageable);
+            return applicationRepository.findAllByIsFinalSubmitted(true, pageable);
         }
         return switch (tag) {
-            case APPLICANT -> applicationRepository.findAllByAdmissionInfoApplicantNameContainingAndAdmissionStatus_IsFinalSubmitted(keyword, true, pageable);
-            case SCHOOL -> applicationRepository.findAllByAdmissionInfoSchoolNameContainingAndAdmissionStatus_IsFinalSubmitted(keyword, true, pageable);
+            case APPLICANT -> applicationRepository.findAllByIsFinalSubmittedAndApplicantNameContaining(keyword, true, pageable);
+            case SCHOOL -> applicationRepository.findAllByIsFinalSubmittedAndSchoolNameContaining(keyword, true, pageable);
             case PHONE_NUMBER -> applicationRepository.findAllByIsFinalSubmittedAndPhoneNumberContaining(keyword, pageable);
         };
     }

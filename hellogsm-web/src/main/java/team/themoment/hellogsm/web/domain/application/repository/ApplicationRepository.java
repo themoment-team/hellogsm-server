@@ -40,7 +40,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             "WHEN a.admissionStatus.firstEvaluation='FALL' THEN 2 " +
             "ELSE 1" +
             "END DESC")
-    Page<Application> findAllByAdmissionInfoApplicantNameContainingAndAdmissionStatus_IsFinalSubmitted(@Param("keyword") String keyword, @Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
+    Page<Application> findAllByIsFinalSubmittedAndApplicantNameContaining(@Param("keyword") String keyword, @Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
 
     @Query("SELECT a FROM Application a " +
             "WHERE a.admissionInfo.schoolName LIKE %:keyword% " +
@@ -56,7 +56,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             "WHEN a.admissionStatus.firstEvaluation='FALL' THEN 2 " +
             "ELSE 1" +
             "END DESC")
-    Page<Application> findAllByAdmissionInfoSchoolNameContainingAndAdmissionStatus_IsFinalSubmitted(@Param("keyword") String keyword, @Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
+    Page<Application> findAllByIsFinalSubmittedAndSchoolNameContaining(@Param("keyword") String keyword, @Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
 
     @Query("SELECT a FROM Application a " +
             "WHERE " +
@@ -91,7 +91,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             "WHEN a.admissionStatus.firstEvaluation='FALL' THEN 2 " +
             "ELSE 1" +
             "END DESC")
-    Page<Application> findAllByAdmissionStatusIsFinalSubmitted(@Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
+    Page<Application> findAllByIsFinalSubmitted(@Param("isFinalSubmitted") Boolean isFinalSubmitted, Pageable pageable);
 
     void deleteApplicationByUserId(Long userId);
 
