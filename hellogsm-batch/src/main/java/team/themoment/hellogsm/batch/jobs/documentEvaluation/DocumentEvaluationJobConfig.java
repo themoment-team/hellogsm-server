@@ -177,6 +177,12 @@ public class DocumentEvaluationJobConfig {
             Screening screening = application.getAdmissionInfo().getScreening();
 
             EvaluationResult rs = decisionProvider.evaluate(screening);
+            if (rs.evaluationStatus().equals(EvaluationStatus.FALL)) {
+                rs = new EvaluationResult(
+                        EvaluationStatus.FALL,
+                        null
+                );
+            }
 
             return newAdmissionStatus(oldAdmissionStatus, rs);
         };

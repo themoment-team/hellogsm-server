@@ -176,6 +176,12 @@ public class JobSkillsEvaluationJobConfig {
             Screening screening = oldAdmissionStatus.getScreeningFirstEvaluationAt().get();
 
             EvaluationResult rs = decisionProvider.evaluate(screening);
+            if (rs.evaluationStatus().equals(EvaluationStatus.FALL)) {
+                rs = new EvaluationResult(
+                        EvaluationStatus.FALL,
+                        null
+                );
+            }
 
             return newAdmissionStatus(oldAdmissionStatus, rs);
         };
