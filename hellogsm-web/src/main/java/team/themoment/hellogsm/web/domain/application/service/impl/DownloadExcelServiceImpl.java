@@ -28,13 +28,6 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
 
-    Workbook workbook = new SXSSFWorkbook();
-    Sheet generalUserSheet = workbook.createSheet("일반전형");
-    Sheet socialUserSheet = workbook.createSheet("사회전형");
-    Sheet specialUserSheet = workbook.createSheet("특별전형");
-    Sheet failedUsersheet = workbook.createSheet("불합격");
-    List<Sheet> sheetList = List.of(generalUserSheet, socialUserSheet, specialUserSheet, failedUsersheet);
-
     List<String> headerNameList = List.of(
             "순번",
             "접수번호",
@@ -70,6 +63,8 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
      */
     @Override
     public Workbook execute() {
+        Workbook workbook = new SXSSFWorkbook();
+        List<Sheet> sheetList = createSheet(workbook);
         List<List<List<String>>> sheetDataList = getSheetDataList();
 
         for (int i = 0; i < sheetList.size(); i++) {
@@ -91,13 +86,21 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
         return workbook;
     }
 
+    private List<Sheet> createSheet(Workbook workbook) {
+        Sheet generalUserSheet = workbook.createSheet("일반전형");
+        Sheet socialUserSheet = workbook.createSheet("사회전형");
+        Sheet specialUserSheet = workbook.createSheet("특별전형");
+        Sheet failedUsersheet = workbook.createSheet("불합격");
+        return List.of(generalUserSheet, socialUserSheet, specialUserSheet, failedUsersheet);
+    }
+
     private List<List<List<String>>> getSheetDataList() {
         List<List<String>> generalSheetData;
         List<List<String>> socialSheetData;
         List<List<String>> specialSheetData;
         List<List<String>> falledSheetData = new ArrayList<>();
 
-        if (applicationRepository.existsByAdmissionStatusFirstEvaluation(EvaluationStatus.NOT_YET)) {
+        if (!applicationRepository.existsByAdmissionStatusFirstEvaluation(EvaluationStatus.PASS)) {
             generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionInfoScreening(Screening.GENERAL), false);
             socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionInfoScreening(Screening.SOCIAL), false);
             List<Application> combinedSpecialAppList = Stream.concat(
@@ -107,7 +110,18 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
                     .toList();
             specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, false);
         } else {
-            if (applicationRepository.existsByAdmissionStatusSecondEvaluation(EvaluationStatus.NOT_YET)) {
+            if (applicationRepository.existsByAdmissionStatusSecondEvaluation(EvaluationStatus.PASS)) {
+                generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.GENERAL, EvaluationStatus.NOT_YET), true);
+                socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.SOCIAL, EvaluationStatus.NOT_YET), true);
+                List<Application> combinedSpecialAppList = Stream.concat(
+                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.SPECIAL_VETERANS, EvaluationStatus.NOT_YET).stream(),
+                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.SPECIAL_ADMISSION, EvaluationStatus.NOT_YET).stream()
+                        )
+                        .toList();
+                specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, true);
+                falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusFirstEvaluationOrAdmissionStatusSecondEvaluation(EvaluationStatus.FALL, EvaluationStatus.FALL), true);
+
+            } else {
                 generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening.GENERAL), false);
                 socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening.SOCIAL), false);
                 List<Application> combinedSpecialAppList = Stream.concat(
@@ -117,17 +131,6 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
                         .toList();
                 specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, false);
                 falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.FALL), false);
-
-            } else {
-                generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAt(Screening.GENERAL), true);
-                socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAt(Screening.SOCIAL), true);
-                List<Application> combinedSpecialAppList = Stream.concat(
-                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAt(Screening.SPECIAL_VETERANS).stream(),
-                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAt(Screening.SPECIAL_ADMISSION).stream()
-                        )
-                        .toList();
-                specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, true);
-                falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusSecondEvaluation(EvaluationStatus.FALL), true);
             }
         }
 
