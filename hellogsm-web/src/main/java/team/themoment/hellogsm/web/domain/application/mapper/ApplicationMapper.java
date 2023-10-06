@@ -456,7 +456,7 @@ public interface ApplicationMapper {
                     String.valueOf(admissionStatus.getSecondScore().orElse(null)),
                     String.valueOf(finalScore),
                     admissionInfo.getApplicantPhoneNumber(),
-                    admissionInfo.getApplicantPhoneNumber(),
+                    admissionInfo.getGuardianPhoneNumber(),
                     String.valueOf(admissionInfo.getTeacherPhoneNumber().orElse(null))
             );
 
