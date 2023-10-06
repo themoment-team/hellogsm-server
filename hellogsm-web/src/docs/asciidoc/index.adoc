@@ -197,7 +197,7 @@ operation::user/find-by-user-id[snippets='http-response,response-fields']
 현재 사용자 정보를 가져오는 엔드포인트입니다.
 
 ==== 사용 가능한 권한
-    ROLE_UNAUTHENTICATED, ROLE_USER
+    ROLE_UNAUTHENTICATED, ROLE_USER, ROLE_ADMIN
 
 ==== Request
 operation::user/find-by-authenticated[snippets='curl-request,http-request']
