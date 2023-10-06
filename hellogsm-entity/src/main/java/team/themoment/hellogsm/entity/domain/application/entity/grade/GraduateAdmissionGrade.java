@@ -150,8 +150,7 @@ public class GraduateAdmissionGrade extends AdmissionGrade {
     }
 
     private BigDecimal calcArtSports(List<BigDecimal> scoreArray) {
-        if (scoreArray == null) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
-
+        if (scoreArray == null || scoreArray.isEmpty()) return BigDecimal.valueOf(0).setScale(3, RoundingMode.HALF_UP);
         // (A의 개수 * 5) + (B의 개수 * 4) + (C의 개수 * 3)
         BigDecimal reduceResult = scoreArray.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         // reduceResult / (개수 * 5) (소수점 4째 자리에서 반올림)
