@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds"> <!-- 30초 간격으로 SCAN -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    
+    <!--로그 파일 저장 위치-->
+    <property name="LOG_PATH" value="/var/log/hellogsm/web"/>
+    <property name="LOG_NAME" value="log"/>
+
+    <!--로그 콘솔 출력-->
+    <springProfile name="local | dev | prod">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>${CONSOLE_LOG_CHARSET}</charset>
+            </encoder>
+        </appender>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="org.hibernate.orm.jdbc.bind" level="TRACE">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="team.themoment.hellogsm" level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
+
+
+    <springProfile name="dev">
+
+        <!--로그 파일 저장, 혹시 모를 Backup 용 -->
+        <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/backup/${LOG_NAME}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <charset>${FILE_LOG_CHARSET}</charset>
+            </encoder>
+            <!-- ${LOG_NAME}이 이름인 파일(<file> 로 정의한)에 작성되다가 Rolling 조건이 되면
+            파일 이름이 ${LOG_NAME}-2022-02-22.0 으로 변경되어 저장, 이후 새로운 파일 ${LOG_NAME} 파일에 로그가 작성됨 -->
+            <!-- cloudwatch 조건으로 ${LOG_NAME}이 prefix인 로그를 저장하라고 설정하기 -->
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/backup/${LOG_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>365</maxHistory>
+                <totalSizeCap>10GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+
+        <!-- 로그 AWS CloudWatch Logs 에 등록하기 위한 로그 파일, 데이터가 많이 발생하면 기존 데이터를 대체함 -->
+        <!-- CloudWatch Agent 가 해당 파일을 읽고 로그를 전송함 -->
+        <appender name="FILE-FOR-CLOUD-WATCH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/cloudwatch/${LOG_NAME}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <charset>${FILE_LOG_CHARSET}</charset>
+            </encoder>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>10MB</maxFileSize> <!-- 각 파일의 최대 크기 -->
+            </triggeringPolicy>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/cloudwatch/${LOG_NAME}.%i.log</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>10</maxIndex> <!-- 최대 파일 수 (10개로 설정) -->
+            </rollingPolicy>
+        </appender>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="ROLLING-FILE"/>
+            <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
+        </logger>
+        <logger name="org.hibernate.orm.jdbc.bind" level="trace">
+            <appender-ref ref="ROLLING-FILE"/>
+            <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
+        </logger>
+        <logger name="team.themoment.hellogsm" level="trace">
+            <appender-ref ref="ROLLING-FILE"/>
+            <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+
+        <!--로그 파일 저장, 혹시 모를 Backup 용 -->
+        <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/backup/${LOG_NAME}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <charset>${FILE_LOG_CHARSET}</charset>
+            </encoder>
+            <!-- ${LOG_NAME}이 이름인 파일(<file> 로 정의한)에 작성되다가 Rolling 조건이 되면
+            파일 이름이 ${LOG_NAME}-2022-02-22.0 으로 변경되어 저장, 이후 새로운 파일 ${LOG_NAME} 파일에 로그가 작성됨 -->
+            <!-- cloudwatch 조건으로 ${LOG_NAME}이 prefix인 로그를 저장하라고 설정하기 -->
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/backup/${LOG_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>365</maxHistory>
+                <totalSizeCap>10GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+
+        <!-- 로그 AWS CloudWatch Logs 에 등록하기 위한 로그 파일, 데이터가 많이 발생하면 기존 데이터를 대체함 -->
+        <!-- CloudWatch Agent 가 해당 파일을 읽고 로그를 전송함 -->
+        <appender name="FILE-FOR-CLOUD-WATCH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/cloudwatch/${LOG_NAME}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>%X{AWS-XRAY-TRACE-ID} ${FILE_LOG_PATTERN}</pattern>
+                <charset>${FILE_LOG_CHARSET}</charset>
+            </encoder>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>10MB</maxFileSize> <!-- 각 파일의 최대 크기 -->
+            </triggeringPolicy>
+            <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/cloudwatch/${LOG_NAME}.%i.log</fileNamePattern>
+                <minIndex>1</minIndex>
+                <maxIndex>10</maxIndex> <!-- 최대 파일 수 (10개로 설정) -->
+            </rollingPolicy>
+        </appender>
+
+        <logger name="org.springframework" level="INFO">
+            <appender-ref ref="ROLLING-FILE"/>
+            <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
+        </logger>
+        <logger name="team.themoment.hellogsm" level="INFO">
+            <appender-ref ref="ROLLING-FILE"/>
+            <appender-ref ref="FILE-FOR-CLOUD-WATCH"/>
+        </logger>
+    </springProfile>
+</configuration>

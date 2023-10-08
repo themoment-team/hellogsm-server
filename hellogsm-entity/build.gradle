@@ -1,0 +1,12 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // TODO 나중에 여유 될 때 의존성 지우기
+	implementation 'com.fasterxml.jackson.core:jackson-databind' // 2024년에 원서 성적 관련 부분 로직 개편하면서 의존성 지우기
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

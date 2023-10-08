@@ -1,0 +1,4 @@
+rootProject.name = 'back_v2'
+include 'hellogsm-entity'
+include 'hellogsm-web'
+include 'hellogsm-batch'
