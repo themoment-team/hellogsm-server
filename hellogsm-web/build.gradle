@@ -1,0 +1,87 @@
+plugins {
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+bootJar {
+    enabled = true
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
+}
+jar { enabled = true }
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
+configurations {
+    asciidoctorExt
+}
+
+dependencyManagement {
+    imports {
+        mavenBom ('com.amazonaws:aws-xray-recorder-sdk-bom:2.14.0')
+    }
+}
+
+dependencies {
+    /** entity **/
+    implementation project(':hellogsm-entity')
+
+    /** security **/
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    /** persistence **/
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    /** for spring app **/
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    /** for business **/
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
+
+    /** for test **/
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'io.awspring.cloud:spring-cloud-aws-test:3.0.1'
+
+    /** code generator **/
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    /** aws **/
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns:3.0.1'
+
+    /** production **/
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-spring'
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-slf4j'
+}
+
+task restDocsTest(type: Test) {
+    outputs.dir snippetsDir
+    useJUnitPlatform {
+            includeTags 'restDocsTest'
+    }
+}
+
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}

@@ -1,0 +1,4 @@
+name: Hello,GSM Back-V2 WEB Module CI
+
+on:
+  push:
