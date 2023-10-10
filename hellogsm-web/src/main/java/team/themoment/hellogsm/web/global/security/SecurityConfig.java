@@ -97,8 +97,7 @@ public class SecurityConfig {
                     .formLogin().disable()
                     .httpBasic().disable()
                     .cors().configurationSource(corsConfigurationSource()).and()
-                    .csrf().disable()
-                    .addFilterBefore(timeBasedFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .csrf().disable();
             logout(http);
             oauth2Login(http);
             authorizeHttpRequests(http);
