@@ -97,15 +97,18 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     List<Application> findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus evaluationStatus);
 
-    List<Application> findAllByAdmissionStatusFirstEvaluationOrAdmissionStatusSecondEvaluation(EvaluationStatus firstEvaluationStatus, EvaluationStatus secondEvaluationStatus);
+    List<Application> findAllByAdmissionStatusFirstEvaluationOrAdmissionStatusSecondEvaluationAndAdmissionStatusIsFinalSubmitted(EvaluationStatus firstEvaluationStatus, EvaluationStatus secondEvaluationStatus, Boolean isFinalSubmitted);
 
     Boolean existsByAdmissionStatusFirstEvaluation(EvaluationStatus evaluationStatus);
 
     Boolean existsByAdmissionStatusSecondEvaluation(EvaluationStatus evaluationStatus);
 
-    List<Application> findAllByAdmissionInfoScreening(Screening screening);
+    List<Application> findAllByAdmissionInfoScreeningAndAdmissionStatusIsFinalSubmitted(Screening screening, Boolean isFinalSubmitted);
 
-    List<Application> findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening screening);
+    List<Application> findAllByAdmissionStatusScreeningFirstEvaluationAtAndAdmissionStatusIsFinalSubmitted(Screening screening, Boolean isFinalSubmitted);
 
-    List<Application> findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening screening, EvaluationStatus evaluationStatus);
+    List<Application> findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNotAndAdmissionStatusIsFinalSubmitted(Screening screening, EvaluationStatus evaluationStatus, Boolean isFinalSubmitted);
+
+    List<Application> findAllByAdmissionStatusFirstEvaluationAndAdmissionStatusIsFinalSubmitted(EvaluationStatus evaluationStatus, Boolean isFinalSubmitted);
+
 }

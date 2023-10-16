@@ -101,36 +101,36 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
         List<List<String>> falledSheetData = new ArrayList<>();
 
         if (!applicationRepository.existsByAdmissionStatusFirstEvaluation(EvaluationStatus.PASS)) {
-            generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionInfoScreening(Screening.GENERAL), false);
-            socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionInfoScreening(Screening.SOCIAL), false);
+            generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionInfoScreeningAndAdmissionStatusIsFinalSubmitted(Screening.GENERAL, true), false);
+            socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionInfoScreeningAndAdmissionStatusIsFinalSubmitted(Screening.SOCIAL, true), false);
             List<Application> combinedSpecialAppList = Stream.concat(
-                            applicationRepository.findAllByAdmissionInfoScreening(Screening.SPECIAL_VETERANS).stream(),
-                            applicationRepository.findAllByAdmissionInfoScreening(Screening.SPECIAL_ADMISSION).stream()
+                            applicationRepository.findAllByAdmissionInfoScreeningAndAdmissionStatusIsFinalSubmitted(Screening.SPECIAL_VETERANS, true).stream(),
+                            applicationRepository.findAllByAdmissionInfoScreeningAndAdmissionStatusIsFinalSubmitted(Screening.SPECIAL_ADMISSION, true).stream()
                     )
                     .toList();
             specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, false);
         } else {
             if (applicationRepository.existsByAdmissionStatusSecondEvaluation(EvaluationStatus.PASS)) {
-                generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.GENERAL, EvaluationStatus.NOT_YET), true);
-                socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.SOCIAL, EvaluationStatus.NOT_YET), true);
+                generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNotAndAdmissionStatusIsFinalSubmitted(Screening.GENERAL, EvaluationStatus.NOT_YET, true), true);
+                socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNotAndAdmissionStatusIsFinalSubmitted(Screening.SOCIAL, EvaluationStatus.NOT_YET, true), true);
                 List<Application> combinedSpecialAppList = Stream.concat(
-                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.SPECIAL_VETERANS, EvaluationStatus.NOT_YET).stream(),
-                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNot(Screening.SPECIAL_ADMISSION, EvaluationStatus.NOT_YET).stream()
+                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNotAndAdmissionStatusIsFinalSubmitted(Screening.SPECIAL_VETERANS, EvaluationStatus.NOT_YET, true).stream(),
+                                applicationRepository.findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNotAndAdmissionStatusIsFinalSubmitted(Screening.SPECIAL_ADMISSION, EvaluationStatus.NOT_YET, true).stream()
                         )
                         .toList();
                 specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, true);
-                falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusFirstEvaluationOrAdmissionStatusSecondEvaluation(EvaluationStatus.FALL, EvaluationStatus.FALL), true);
+                falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusFirstEvaluationOrAdmissionStatusSecondEvaluationAndAdmissionStatusIsFinalSubmitted(EvaluationStatus.FALL, EvaluationStatus.FALL, true), true);
 
             } else {
-                generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening.GENERAL), false);
-                socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening.SOCIAL), false);
+                generalSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAtAndAdmissionStatusIsFinalSubmitted(Screening.GENERAL, true), false);
+                socialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAtAndAdmissionStatusIsFinalSubmitted(Screening.SOCIAL, true), false);
                 List<Application> combinedSpecialAppList = Stream.concat(
-                                applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening.SPECIAL_VETERANS).stream(),
-                                applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAt(Screening.SPECIAL_ADMISSION).stream()
+                                applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAtAndAdmissionStatusIsFinalSubmitted(Screening.SPECIAL_VETERANS, true).stream(),
+                                applicationRepository.findAllByAdmissionStatusScreeningFirstEvaluationAtAndAdmissionStatusIsFinalSubmitted(Screening.SPECIAL_ADMISSION, true).stream()
                         )
                         .toList();
                 specialSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(combinedSpecialAppList, false);
-                falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatus_FirstEvaluation(EvaluationStatus.FALL), false);
+                falledSheetData = applicationMapper.INSTANCE.applicationToExcelDataList(applicationRepository.findAllByAdmissionStatusFirstEvaluationAndAdmissionStatusIsFinalSubmitted(EvaluationStatus.FALL, true), false);
             }
         }
 
