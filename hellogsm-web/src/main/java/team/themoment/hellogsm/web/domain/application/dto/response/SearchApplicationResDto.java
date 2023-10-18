@@ -17,6 +17,7 @@ public record SearchApplicationResDto(
         String teacherPhoneNumber,
         EvaluationStatus firstEvaluation,
         EvaluationStatus secondEvaluation,
+        Long registrationNumber,
         BigDecimal secondScore
 ){
 
