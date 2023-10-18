@@ -364,6 +364,7 @@ public interface ApplicationMapper {
             @Mapping(source = "admissionInfo.teacherPhoneNumber", target = "teacherPhoneNumber"),
             @Mapping(source = "admissionStatus.firstEvaluation", target = "firstEvaluation"),
             @Mapping(source = "admissionStatus.secondEvaluation", target = "secondEvaluation"),
+            @Mapping(source = "admissionStatus.registrationNumber", target = "registrationNumber"),
             @Mapping(source = "admissionStatus.secondScore", target = "secondScore"),
     })
     SearchApplicationResDto applicationToSearchApplicationResDto(Application application);
