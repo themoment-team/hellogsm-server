@@ -110,5 +110,4 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findAllByAdmissionStatusScreeningSecondEvaluationAtAndAdmissionStatusSecondEvaluationNotAndAdmissionStatusIsFinalSubmitted(Screening screening, EvaluationStatus evaluationStatus, Boolean isFinalSubmitted);
 
     List<Application> findAllByAdmissionStatusFirstEvaluationAndAdmissionStatusIsFinalSubmitted(EvaluationStatus evaluationStatus, Boolean isFinalSubmitted);
-
 }
