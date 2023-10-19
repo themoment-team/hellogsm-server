@@ -586,6 +586,7 @@ class ApplicationControllerTest {
                         "01012341234",
                         EvaluationStatus.PASS,
                         EvaluationStatus.NOT_YET,
+                        2002L,
                         BigDecimal.valueOf(100)
                 ))
         );
@@ -614,6 +615,7 @@ class ApplicationControllerTest {
                 .andExpect(jsonPath("$.applications[0].guardianPhoneNumber").value(searchApplicationsResDto.applications().get(0).guardianPhoneNumber()))
                 .andExpect(jsonPath("$.applications[0].firstEvaluation").value(searchApplicationsResDto.applications().get(0).firstEvaluation().name()))
                 .andExpect(jsonPath("$.applications[0].secondEvaluation").value(searchApplicationsResDto.applications().get(0).secondEvaluation().name()))
+                .andExpect(jsonPath("$.applications[0].registrationNumber").value(searchApplicationsResDto.applications().get(0).registrationNumber()))
                 .andExpect(jsonPath("$.applications[0].secondScore").value(searchApplicationsResDto.applications().get(0).secondScore()))
                 .andDo(this.documentationHandler.document(
                         queryParameters(
@@ -637,6 +639,7 @@ class ApplicationControllerTest {
                                 fieldWithPath("applications[].teacherPhoneNumber").type(STRING).description("선생님 전화번호"),
                                 fieldWithPath("applications[].firstEvaluation").type(enumAsString(EvaluationStatus.class)).description("1차 평가 결과"),
                                 fieldWithPath("applications[].secondEvaluation").type(enumAsString(EvaluationStatus.class)).description("2차 평가 결과"),
+                                fieldWithPath("applications[].registrationNumber").type(enumAsString(EvaluationStatus.class)).description("접수번호"),
                                 fieldWithPath("applications[].secondScore").type(NUMBER).description("2차 시험 점수")
                         )
                 ));

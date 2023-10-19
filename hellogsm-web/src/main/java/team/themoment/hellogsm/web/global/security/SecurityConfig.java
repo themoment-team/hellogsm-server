@@ -131,10 +131,11 @@ public class SecurityConfig {
     }
 
     private void logout(HttpSecurity http) throws Exception {
-        http.logout(logout -> logout
-                .logoutUrl(logoutUri)
-                .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
-        );
+//        http.logout(logout -> logout
+//                .logoutUrl(logoutUri)
+//                .logoutSuccessHandler(new CustomUrlLogoutSuccessHandler(authEnv.redirectBaseUri(), authEnv.redirectAdminUri()))
+//        );
+        //TODO session 없이 요청하는 경우에 에러 발생하지 않도록 수정하고 적용하기
     }
 
     private void exceptionHandling(HttpSecurity http) throws Exception {
