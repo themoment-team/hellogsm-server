@@ -26,6 +26,7 @@ import team.themoment.hellogsm.web.domain.application.dto.response.*;
 import team.themoment.hellogsm.web.domain.identity.dto.domain.IdentityDto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -409,7 +410,7 @@ public interface ApplicationMapper {
             if (admissionStatus.getSecondScore().isEmpty()) {
                 finalScore = null;
             } else {
-                finalScore = admissionGrade.getTotalScore().add(admissionStatus.getSecondScore().get());
+                finalScore = admissionGrade.getTotalScore().divide(BigDecimal.valueOf(3), 3, RoundingMode.HALF_UP).add(admissionStatus.getSecondScore().get());
             }
 
             BigDecimal curricularSubtotalScore;
