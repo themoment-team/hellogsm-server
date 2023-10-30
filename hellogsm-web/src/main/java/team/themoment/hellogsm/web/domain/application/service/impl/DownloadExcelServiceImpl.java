@@ -51,6 +51,7 @@ public class DownloadExcelServiceImpl implements DownloadExcelService {
             "전형총점",
             "인적성평가점수",
             "최종점수",
+            "최종학과",
             "지원자연락처",
             "부모연락처",
             "담임연락처"
