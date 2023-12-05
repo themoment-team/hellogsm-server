@@ -1,4 +1,4 @@
-package team.themoment.hellogsm.web.global.thirdParty.aws.service.aws;
+package team.themoment.hellogsm.web.domain.application.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
