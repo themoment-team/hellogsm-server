@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.ImageUploadService;
+import team.themoment.hellogsm.web.domain.application.service.ImageUploadService;
 import team.themoment.hellogsm.web.global.thirdParty.aws.service.template.AwsTemplate;
 
 import java.time.LocalDateTime;

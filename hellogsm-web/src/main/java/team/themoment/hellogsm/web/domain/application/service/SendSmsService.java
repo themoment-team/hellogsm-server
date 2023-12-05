@@ -1,4 +1,4 @@
-package team.themoment.hellogsm.web.global.thirdParty.aws.service.aws;
+package team.themoment.hellogsm.web.domain.application.service;
 
 /**
  * phoneNumber와 message를 받아서 message를 보내는 인터페이스입니다.

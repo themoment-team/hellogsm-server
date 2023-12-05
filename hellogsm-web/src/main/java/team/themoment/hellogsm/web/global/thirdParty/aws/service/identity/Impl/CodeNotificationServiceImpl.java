@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import team.themoment.hellogsm.web.domain.identity.service.CodeNotificationService;
-import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.SendSmsService;
+import team.themoment.hellogsm.web.domain.application.service.SendSmsService;
 
 /**
  * CodeNotificationService의 구현체입니다.

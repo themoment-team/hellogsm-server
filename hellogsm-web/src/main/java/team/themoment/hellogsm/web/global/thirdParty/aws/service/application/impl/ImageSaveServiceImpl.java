@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import team.themoment.hellogsm.web.domain.application.service.ImageSaveService;
 import team.themoment.hellogsm.web.global.exception.error.ExpectedException;
-import team.themoment.hellogsm.web.global.thirdParty.aws.service.aws.ImageUploadService;
+import team.themoment.hellogsm.web.domain.application.service.ImageUploadService;
 
 import java.util.Objects;
 
